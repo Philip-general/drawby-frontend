@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import { BrowserRouter, Route, Link, Routes } from "react-router-dom";
-import Home from "./components/Home";
-import Photo from "./components/Photo";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./screens/Home";
+import Login from "./screens/Login";
+import NotFound from "./screens/NotFound";
 
 function App() {
-  const isLoggedIn = false;
+  const isLoggedIn = true;
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/photo" element={<Photo />} />
+          <Route path="/" element={isLoggedIn ? <Home /> : <Login />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
