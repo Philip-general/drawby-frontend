@@ -12,3 +12,9 @@ react-helmet
 --save @fortawesome/react-fontawesome
 --save @fortawesome/free-brands-svg-icons
 --save @fortawesome/free-regular-svg-icons
+
+## To do
+
+- [ ] Router
+- [ ] Authentication
+- [ ]
