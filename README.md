@@ -1,5 +1,7 @@
 # Getting Started with Create React App
 
+오예 나도 이젠 프론트엔드 한다~~
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
