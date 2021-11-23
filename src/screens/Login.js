@@ -1,4 +1,4 @@
-import { useQuery, gql, useMutation } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { logUserIn } from "../Apollo";
@@ -15,13 +15,18 @@ const LOGIN_MUTATION = gql`
 
 export default function Login() {
   const onCompleted = data => {
-    const { token, ok, error } = data;
-    if (ok) {
-      logUserIn(token);
-    } else {
+    const {
+      login: { token, ok, error }
+    } = data;
+    console.log(token, ok, error);
+    if (!ok) {
       return setError("result", {
         message: error
       });
+    }
+    if (token) {
+      console.log(token);
+      logUserIn(token);
     }
   };
   const [login, { data, loading, error }] = useMutation(LOGIN_MUTATION, {
@@ -38,6 +43,7 @@ export default function Login() {
   const onSubmit = data => {
     const { username, password } = data;
     if (data) {
+      console.log(username, password);
       login({
         variables: { username, password }
       });
