@@ -1,7 +1,9 @@
 import { gql, useMutation } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { logUserIn } from "../Apollo";
+import routes from "../routes";
 
 const LOGIN_MUTATION = gql`
   mutation login($username: String!, $password: String!) {
@@ -58,6 +60,10 @@ export default function Login() {
         <input placeholder="password" {...register("password")} />
         <input type="submit" value="로그인" />
       </form>
+      <div>
+        <span>회원이 아니신가요?</span>
+        <Link to={routes.signUp}>회원가입하기</Link>
+      </div>
     </div>
   );
 }
