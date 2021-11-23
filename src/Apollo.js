@@ -6,7 +6,7 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
-const TOKEN = "TOKEN";
+const TOKEN = "authorization";
 const DARK_MODE = "DARK_MODE";
 
 export const isLoggedInVar = makeVar(Boolean(localStorage.getItem(TOKEN)));
@@ -37,10 +37,11 @@ const httpLink = createHttpLink({
 
 //http header로 보내기 위해서 사용
 const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem(TOKEN);
   return {
     headers: {
       ...headers,
-      token: localStorage.getItem(TOKEN)
+      authorization: token ? `Bearer ${token}` : ""
     }
   };
 });
