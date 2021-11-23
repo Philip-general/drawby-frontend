@@ -4,7 +4,7 @@ import Login from "./screens/Login";
 import NotFound from "./screens/NotFound";
 
 function App() {
-  const isLoggedIn = true;
+  const isLoggedIn = false;
   return (
     <div className="App">
       <BrowserRouter>
