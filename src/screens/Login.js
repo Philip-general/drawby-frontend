@@ -3,8 +3,9 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { logUserIn } from "../Apollo";
+import Input from "../auth/Input";
 import routes from "../routes";
-
+import { useLocation } from "react-router";
 const LOGIN_MUTATION = gql`
   mutation login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
@@ -16,6 +17,10 @@ const LOGIN_MUTATION = gql`
 `;
 
 export default function Login() {
+  // 회원가입 완료되었을 때 완료되었다는 메세지를 넘겨줘서 받아주는 것
+  const location = useLocation();
+  const createAccountSuccess = location?.state?.message;
+
   const onCompleted = data => {
     const {
       login: { token, ok, error }
@@ -55,10 +60,11 @@ export default function Login() {
   return (
     <div>
       <span>로그인 페이지</span>
+      {createAccountSuccess ? <div>{createAccountSuccess}</div> : null}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input placeholder="username" {...register("username")} />
-        <input placeholder="password" {...register("password")} />
-        <input type="submit" value="로그인" />
+        <Input placeholder="username" {...register("username")} />
+        <Input placeholder="password" {...register("password")} />
+        <Input type="submit" value="로그인" />
       </form>
       <div>
         <span>회원이 아니신가요?</span>
