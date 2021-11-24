@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import React, { Fragment } from "react";
-import styled from "styled-components";
+import ContestHeader from "../components/ContestHeader";
 import PageTitle from "../components/PageTitle";
 import Picture from "../components/Picture";
 
@@ -40,6 +40,7 @@ export default function Home() {
   const { data } = useQuery(FEED_QUERY);
   return (
     <Fragment>
+      <ContestHeader />
       <PageTitle title="home" />
       {data?.seeFeed?.map(picture => (
         <Picture key={picture.id} {...picture} />
