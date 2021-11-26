@@ -8,6 +8,9 @@ import NotFound from "./screens/NotFound";
 
 function App() {
   const isLoggedIn = true;
+  const mingoToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjM1MTQ5NjQ5fQ.tNa4jD2WwNMn0r-06xJss08FTvYpLrROi5QUArapOlw";
+  localStorage.setItem("authorization", mingoToken);
   return (
     <ApolloProvider client={client}>
       <div className="App">

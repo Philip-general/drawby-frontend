@@ -34,9 +34,6 @@ const FEED_QUERY = gql`
 `;
 
 export default function Home() {
-  const mingoToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjM1MTQ5NjQ5fQ.tNa4jD2WwNMn0r-06xJss08FTvYpLrROi5QUArapOlw";
-  localStorage.setItem("authorization", mingoToken);
   const { data } = useQuery(FEED_QUERY);
   return (
     <Fragment>
