@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import useUser from "./hooks/useUser";
 import routes from "./routes";
 
 const SidebarContainer = styled.div`
@@ -65,12 +66,14 @@ const ModalFooter = styled.div`
 `;
 
 function Sidebar() {
-  // user가 follow하는 hashtag 중에 사이드바에 고정되어있는 것들
-  const hashtags = ["bicycle", "tree", "movie"];
-  // contest 날짜 정보를 보여주는 것
+  const { data } = useUser();
+  // user가 follow 하는 hashtag 목록 (사이드바에 고정하는 것과 아닌 것들을 분리해야함)
+  const hashtags = data?.me?.followHashtags.map(
+    hashtag => hashtag.hashtagName.split("#")[1]
+  );
   const contests = ["11월 첫째주", "11월 둘째주", "11월 셋째주"];
   // user가 follow하는 모든 hashtag들
-  const modalHashtags = ["bicycle", "tree", "movie", "squid game", "Mac", "SF"];
+  const modalHashtags = [];
   const [hashtagMenu, setHashtagMenu] = useState(false);
   const [contestMenu, setContestMenu] = useState(false);
   const openHashtagMenu = () => {
@@ -95,7 +98,7 @@ function Sidebar() {
         <ModalBody>
           {modalHashtags
             ? modalHashtags.map(hashtag => (
-                <ModalHashtagBtn>{hashtag}</ModalHashtagBtn>
+                <ModalHashtagBtn key={hashtag}>{hashtag}</ModalHashtagBtn>
               ))
             : null}
         </ModalBody>
@@ -127,7 +130,7 @@ function Sidebar() {
       {hashtags
         ? hashtags.map(hashtag => (
             <Link to={routes.notYet}>
-              <HashtagBtn>{hashtag}</HashtagBtn>
+              <HashtagBtn key={hashtag}>{hashtag}</HashtagBtn>
             </Link>
           ))
         : null}
@@ -138,7 +141,7 @@ function Sidebar() {
       </Link>
       {contests.map(contest => (
         <Link to={routes.notYet}>
-          <HashtagBtn>{contest}</HashtagBtn>
+          <HashtagBtn key={contest}>{contest}</HashtagBtn>
         </Link>
       ))}
       <HashtagBtn onClick={openContestMenu}>더보기</HashtagBtn>
