@@ -27,7 +27,7 @@ function ContestHeader() {
       <ContestName>#12월 첫째주</ContestName>
       <RankedPictures>
         {rankedPictures.map(picture => (
-          <RankedPicture>{picture}</RankedPicture>
+          <RankedPicture key={picture}>{picture}</RankedPicture>
         ))}
       </RankedPictures>
     </ContestHeaderContainer>

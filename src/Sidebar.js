@@ -129,7 +129,7 @@ function Sidebar() {
       </Link>
       {hashtags
         ? hashtags.map(hashtag => (
-            <Link to={routes.notYet}>
+            <Link to={routes.notYet} key={hashtag}>
               <HashtagBtn key={hashtag}>{hashtag}</HashtagBtn>
             </Link>
           ))
@@ -140,7 +140,7 @@ function Sidebar() {
         <SidebarBtn>Go to ContestFeed</SidebarBtn>
       </Link>
       {contests.map(contest => (
-        <Link to={routes.notYet}>
+        <Link to={routes.notYet} key={contest}>
           <HashtagBtn key={contest}>{contest}</HashtagBtn>
         </Link>
       ))}
