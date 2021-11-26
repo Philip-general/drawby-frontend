@@ -9,7 +9,7 @@ import NotFound from "./screens/NotFound";
 function App() {
   const isLoggedIn = true;
   const mingoToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjM1MTQ5NjQ5fQ.tNa4jD2WwNMn0r-06xJss08FTvYpLrROi5QUArapOlw";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjM3OTQxMzU3fQ.Kd9iqHAuLbaZGvS5lYO20wxohhA3Gf1VatqabgvF-Ko";
   localStorage.setItem("authorization", mingoToken);
   return (
     <ApolloProvider client={client}>
