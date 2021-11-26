@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Comments from "./Comments";
 import UserIcon from "./Common/Avatar";
 import Username from "./Common/Username";
+import { gql, useMutation } from "@apollo/client";
 
 const PictureContainer = styled.div`
   max-width: 800px;
@@ -31,11 +32,24 @@ const LeftContainer = styled.div`
   display: flex;
 `;
 
+const IconAction = styled.div``;
+
 const Icon = styled.div`
   margin-left: 5px;
 `;
 
 const TotalLike = styled.div``;
+
+const Caption = styled.div``;
+
+const TOGGLE_LIKE_2_PICTURE_MUTATION = gql`
+  mutation toggleLike2Picture($id: Int!) {
+    toggleLike2Picture(id: $id) {
+      ok
+      error
+    }
+  }
+`;
 
 export default function Picture({
   author,
@@ -49,6 +63,35 @@ export default function Picture({
   totalComment,
   totalLike
 }) {
+  let okLike = isLiked;
+  const toggleLike2PictureUpdate = (cache, result) => {
+    const {
+      data: {
+        toggleLike2Picture: { ok }
+      }
+    } = result;
+    if (ok) {
+      cache.modify({
+        id: `Picture:${id}`,
+        fields: {
+          isLiked(prev) {
+            okLike = !okLike;
+            return !prev;
+          },
+          totalLike(prev) {
+            if (okLike) {
+              return prev - 1;
+            }
+            return prev + 1;
+          }
+        }
+      });
+    }
+  };
+  const [toggleLike2Picture] = useMutation(TOGGLE_LIKE_2_PICTURE_MUTATION, {
+    variables: { id },
+    update: toggleLike2PictureUpdate
+  });
   return (
     <PictureContainer>
       <PictureHeader>
@@ -61,13 +104,16 @@ export default function Picture({
       <PictureImage src={file} />
       <IconContainer>
         <LeftContainer>
-          <Icon>하트</Icon>
+          <IconAction onClick={toggleLike2Picture}>
+            {isLiked ? <Icon>하트</Icon> : <Icon>X하트X</Icon>}
+          </IconAction>
           <Icon>댓글</Icon>
           <Icon>DM</Icon>
         </LeftContainer>
         <Icon>북마크</Icon>
       </IconContainer>
       <TotalLike>좋아요 개수: {totalLike}</TotalLike>
+      <Caption>{caption}</Caption>
       <Comments
         pictureId={id}
         comments={comments}
