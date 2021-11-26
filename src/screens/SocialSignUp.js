@@ -5,21 +5,23 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import Input from "../auth/Input";
 import routes from "../routes";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 const CREATE_ACCOUNT_MUTATION = gql`
   mutation Mutation(
     $username: String!
-    $password: String!
     $email: String!
+    $socialId: String
+    $password: String
     $phoneNumber: String
     $avatar: String
     $bio: String
   ) {
     createAccount(
       username: $username
-      password: $password
       email: $email
+      socialId: $socialId
+      password: $password
       phoneNumber: $phoneNumber
       avatar: $avatar
       bio: $bio
@@ -30,14 +32,15 @@ const CREATE_ACCOUNT_MUTATION = gql`
   }
 `;
 
-export default function SignUp() {
+export default function SocialSignUp() {
+  const location = useLocation();
   const navigate = useNavigate();
+  const { socialId, email } = location.state;
   const onCompleted = data => {
     const {
       createAccount: { ok, error }
     } = data;
     if (!ok) {
-      console.log(error);
       return setError("result", {
         message: error
       });
@@ -61,7 +64,9 @@ export default function SignUp() {
   const onValid = data => {
     createAccount({
       variables: {
-        ...data
+        ...data,
+        socialId,
+        email
       }
     });
   };
@@ -73,18 +78,6 @@ export default function SignUp() {
           placeholder="username"
           {...register("username", {
             required: "username이 필요합니다."
-          })}
-        />
-        <Input
-          placeholder="password"
-          {...register("password", {
-            required: "password가 필요합니다."
-          })}
-        />
-        <Input
-          placeholder="email"
-          {...register("email", {
-            required: "email이 필요합니다."
           })}
         />
         <Input placeholder="phoneNumber" {...register("phoneNumber")} />

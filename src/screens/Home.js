@@ -5,8 +5,6 @@ import PageTitle from "../components/PageTitle";
 
 const Feed = styled.div``;
 
-const PictureContainer = styled.div``;
-
 export default function Home() {
   console.log(isLoggedInVar);
   return (

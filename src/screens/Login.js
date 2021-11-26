@@ -6,6 +6,7 @@ import { logUserIn } from "../Apollo";
 import Input from "../auth/Input";
 import routes from "../routes";
 import { useLocation } from "react-router";
+import Facebook from "../auth/Facebook";
 const LOGIN_MUTATION = gql`
   mutation login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
@@ -25,32 +26,28 @@ export default function Login() {
     const {
       login: { token, ok, error }
     } = data;
-    console.log(token, ok, error);
     if (!ok) {
       return setError("result", {
         message: error
       });
     }
     if (token) {
-      console.log(token);
       logUserIn(token);
     }
   };
-  const [login, { data, loading, error }] = useMutation(LOGIN_MUTATION, {
+  const [login] = useMutation(LOGIN_MUTATION, {
     onCompleted
   });
   const {
     setError,
     register,
     handleSubmit,
-    watch,
     formState: { errors, isValid }
   } = useForm();
 
   const onSubmit = data => {
     const { username, password } = data;
     if (data) {
-      console.log(username, password);
       login({
         variables: { username, password }
       });
@@ -69,6 +66,7 @@ export default function Login() {
       <div>
         <span>회원이 아니신가요?</span>
         <Link to={routes.signUp}>회원가입하기</Link>
+        <Facebook />
       </div>
     </div>
   );

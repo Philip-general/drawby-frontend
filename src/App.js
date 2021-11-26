@@ -1,11 +1,13 @@
 import { ApolloProvider, useReactiveVar } from "@apollo/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { client, isLoggedInVar, logUserOut } from "./Apollo";
+import { client, isLoggedInVar } from "./Apollo";
+import Facebook from "./auth/Facebook";
 import routes from "./routes";
 import Home from "./screens/Home";
 import Login from "./screens/Login";
 import NotFound from "./screens/NotFound";
 import SignUp from "./screens/SignUp";
+import SocialSignUp from "./screens/SocialSignUp";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -18,6 +20,8 @@ function App() {
               path={routes.home}
               element={isLoggedIn ? <Home /> : <Login />}
             />
+            <Route path={routes.FacebookLogin} element={<Facebook />} />
+            <Route path={routes.socialSignUp} element={<SocialSignUp />} />
             <Route path={routes.signUp} element={<SignUp />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
