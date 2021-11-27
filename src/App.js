@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { client, isLoggedInVar } from "./Apollo";
 import Facebook from "./auth/Facebook";
 import routes from "./routes";
+import Layout from "./Layout";
 import Home from "./screens/Home";
 import Login from "./screens/Login";
 import NotFound from "./screens/NotFound";
@@ -18,7 +19,15 @@ function App() {
           <Routes>
             <Route
               path={routes.home}
-              element={isLoggedIn ? <Home /> : <Login />}
+              element={
+                isLoggedIn ? (
+                  <Layout>
+                    <Home />
+                  </Layout>
+                ) : (
+                  <Login />
+                )
+              }
             />
             <Route path={routes.FacebookLogin} element={<Facebook />} />
             <Route path={routes.socialSignUp} element={<SocialSignUp />} />
