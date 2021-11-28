@@ -62,11 +62,12 @@ export default function SocialSignUp() {
     formState: { errors }
   } = useForm();
   const onValid = data => {
+    console.log(data, socialId);
     createAccount({
       variables: {
         ...data,
-        socialId,
-        email
+        socialId
+        // email
       }
     });
   };
@@ -80,6 +81,14 @@ export default function SocialSignUp() {
             required: "username이 필요합니다."
           })}
         />
+        {!email ? (
+          <Input
+            placeholder="email"
+            {...register("email", {
+              required: "email이 필요합니다."
+            })}
+          />
+        ) : null}
         <Input placeholder="phoneNumber" {...register("phoneNumber")} />
         <Input placeholder="avatar" {...register("avatar")} />
         <Input placeholder="bio" {...register("bio")} />
