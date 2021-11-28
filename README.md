@@ -61,6 +61,7 @@ API 환경변수를 거기서 관리해주면 된다고 함
 
 ## To do
 
+- [ ] social login mutation 바꾸기 (무조건 social id만 가지고 로그인을 진행한다. 보낼때는 "platform" + socialId 로 보내기)
 - [x] social login (FACEBOOK)
 - [ ] social login (KAKAO, GOOGLE)
 - [ ] Feed 구성

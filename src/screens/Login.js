@@ -7,6 +7,7 @@ import Input from "../auth/Input";
 import routes from "../routes";
 import { useLocation } from "react-router";
 import Facebook from "../auth/Facebook";
+import Kakao from "../auth/Kakao";
 const LOGIN_MUTATION = gql`
   mutation login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
@@ -67,6 +68,7 @@ export default function Login() {
         <span>회원이 아니신가요?</span>
         <Link to={routes.signUp}>회원가입하기</Link>
         <Facebook />
+        <Kakao />
       </div>
     </div>
   );

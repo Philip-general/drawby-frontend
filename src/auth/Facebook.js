@@ -7,7 +7,7 @@ import { logUserIn } from "../Apollo";
 import routes from "../routes";
 
 const SOCIAL_LOGIN_MUTATION = gql`
-  mutation Mutation($socialId: String!, $email: String!) {
+  mutation Mutation($socialId: String!, $email: String) {
     socialLogin(socialId: $socialId, email: $email) {
       ok
       error
