@@ -25,6 +25,7 @@ function NestedComments({ id, payload, isMine, author }) {
   const [deleteNestedMutation] = useMutation(DELETE_NESTED_COMMENT_MUTATION, {
     variables: { id }
   });
+
   return (
     <NestedCommentContainer>
       <UserInfo>
