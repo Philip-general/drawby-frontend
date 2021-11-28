@@ -95,7 +95,7 @@ export default function Comments({ pictureId, comments, totalComment }) {
       {comments?.map(comment => (
         <Comment
           key={comment.id}
-          id={comment.id}
+          commentId={comment.id}
           pictureId={pictureId}
           payload={comment.payload}
           author={comment.author}
