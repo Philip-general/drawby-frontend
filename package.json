@@ -18,6 +18,7 @@
     "react-facebook-login": "^4.1.1",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.19.5",
+    "react-kakao-login": "^2.1.0",
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
     "styled-components": "^5.3.3",
