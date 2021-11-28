@@ -21,9 +21,20 @@ const DELETE_NESTED_COMMENT_MUTATION = gql`
   }
 `;
 
-function NestedComments({ id, payload, isMine, author, createdAt }) {
+function NestedComments({ commentId, id, payload, isMine, author, createdAt }) {
+  const deleteNestedCommentUpdate = (cache, result) => {
+    const {
+      data: {
+        deleteNestedComment: { ok }
+      }
+    } = result;
+    if (ok) {
+      cache.evict({ id: `NestedComment:${id}` });
+    }
+  };
   const [deleteNestedMutation] = useMutation(DELETE_NESTED_COMMENT_MUTATION, {
-    variables: { id }
+    variables: { id },
+    update: deleteNestedCommentUpdate
   });
 
   return (
@@ -41,6 +52,7 @@ function NestedComments({ id, payload, isMine, author, createdAt }) {
 }
 
 NestedComments.propTypes = {
+  commentId: PropTypes.number.isRequired,
   id: PropTypes.number.isRequired,
   payload: PropTypes.string.isRequired,
   isMine: PropTypes.bool.isRequired,

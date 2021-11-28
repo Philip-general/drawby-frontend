@@ -78,7 +78,7 @@ export default function Comment({
 
   // 댓글 삭제 뮤테이션
   const [deleteCommentMutation] = useMutation(DELETE_COMMENT_MUTATION, {
-    variables: { commentId },
+    variables: { id: commentId },
     update: deleteCommentUpdate
   });
   const [showCommentBox, setShowCommentBox] = useState(false);
@@ -123,7 +123,7 @@ export default function Comment({
         id: `Comment:${commentId}`,
         fields: {
           nestedComments(prev) {
-            return [...prev, newNestedComment];
+            return [...prev, newCacheNestedComment];
           }
         }
       });
@@ -168,7 +168,11 @@ export default function Comment({
       {showNestedComments
         ? nestedComments
           ? nestedComments.map(nestedComment => (
-              <NestedComments key={nestedComment.id} {...nestedComment} />
+              <NestedComments
+                key={nestedComment.id}
+                commentId={commentId}
+                {...nestedComment}
+              />
             ))
           : null
         : null}
