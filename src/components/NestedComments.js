@@ -3,15 +3,28 @@ import UserIcon from "./Common/Avatar";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Username from "./Common/Username";
-import { Payload, UserInfo } from "./Comment";
+import { DeleteBtn, Payload, UserInfo } from "./Comment";
+import { gql, useMutation } from "@apollo/client";
 
 const NestedCommentContainer = styled.div`
   display: flex;
-  margin-left: 150px;
+  margin-left: 70px;
   margin-bottom: 10px;
 `;
 
+const DELETE_NESTED_COMMENT_MUTATION = gql`
+  mutation deleteNestedComment($id: Int!) {
+    deleteNestedComment(id: $id) {
+      ok
+      error
+    }
+  }
+`;
+
 function NestedComments({ id, payload, isMine, author }) {
+  const [deleteNestedMutation] = useMutation(DELETE_NESTED_COMMENT_MUTATION, {
+    variables: { id }
+  });
   return (
     <NestedCommentContainer>
       <UserInfo>
@@ -19,6 +32,9 @@ function NestedComments({ id, payload, isMine, author }) {
         <Username>{author.username}</Username>
       </UserInfo>
       <Payload>{payload}</Payload>
+      {isMine ? (
+        <DeleteBtn onClick={deleteNestedMutation}>삭제</DeleteBtn>
+      ) : null}
     </NestedCommentContainer>
   );
 }
