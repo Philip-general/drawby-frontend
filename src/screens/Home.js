@@ -28,6 +28,7 @@ const FEED_QUERY = gql`
           id
           payload
           isMine
+          createdAt
           author {
             avatar
             username

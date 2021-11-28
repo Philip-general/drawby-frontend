@@ -21,7 +21,7 @@ const DELETE_NESTED_COMMENT_MUTATION = gql`
   }
 `;
 
-function NestedComments({ id, payload, isMine, author }) {
+function NestedComments({ id, payload, isMine, author, createdAt }) {
   const [deleteNestedMutation] = useMutation(DELETE_NESTED_COMMENT_MUTATION, {
     variables: { id }
   });
@@ -47,7 +47,8 @@ NestedComments.propTypes = {
   author: PropTypes.shape({
     avatar: PropTypes.string,
     username: PropTypes.string.isRequired
-  })
+  }),
+  createdAt: PropTypes.string.isRequired
 };
 
 export default NestedComments;
