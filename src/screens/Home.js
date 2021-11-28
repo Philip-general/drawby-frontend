@@ -24,6 +24,15 @@ const FEED_QUERY = gql`
           username
           avatar
         }
+        nestedComments {
+          id
+          payload
+          isMine
+          author {
+            avatar
+            username
+          }
+        }
       }
       totalComment
       totalLike

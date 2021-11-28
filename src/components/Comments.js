@@ -11,7 +11,7 @@ const TotalComment = styled.div``;
 
 const CommentBox = styled.input``;
 
-const CREATE_COMMENT_MUTATION = gql`
+export const CREATE_COMMENT_MUTATION = gql`
   mutation createComment($payload: String!, $pictureId: Int!, $commentId: Int) {
     createComment(
       payload: $payload
@@ -89,7 +89,6 @@ export default function Comments({ pictureId, comments, totalComment }) {
       }
     });
   };
-
   return (
     <CommentContainer>
       <TotalComment>댓글 개수: {totalComment}</TotalComment>
@@ -101,10 +100,14 @@ export default function Comments({ pictureId, comments, totalComment }) {
           payload={comment.payload}
           author={comment.author}
           isMine={comment.isMine}
+          nestedComments={comment.nestedComments}
         />
       ))}
       <form onSubmit={handleSubmit(onVaild)}>
-        <CommentBox {...register("payload", { required: true })} />
+        <CommentBox
+          placeholder="댓글 작성하기"
+          {...register("payload", { required: true })}
+        />
       </form>
     </CommentContainer>
   );
