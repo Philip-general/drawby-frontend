@@ -28,8 +28,8 @@ const ButtoninnerText = styled.h3`
 `;
 
 const SOCIAL_LOGIN_MUTATION = gql`
-  mutation Mutation($socialId: String!, $email: String) {
-    socialLogin(socialId: $socialId, email: $email) {
+  mutation Mutation($socialId: String!) {
+    socialLogin(socialId: $socialId) {
       ok
       error
       token
@@ -41,17 +41,16 @@ const Kakao = () => {
   const navigate = useNavigate();
   const [socialLogin] = useMutation(SOCIAL_LOGIN_MUTATION);
   const oAuthLoginHandler = async response => {
-    console.log(response);
-    const { email, id } = response.profile;
+    const { id, email } = response.profile;
     const {
       data: {
         socialLogin: { error, ok, token }
       }
-    } = await socialLogin({ variables: { socialId: "id", email } });
+    } = await socialLogin({ variables: { socialId: "kakao" + id } });
 
     if (error && !ok) {
       navigate(routes.socialSignUp, {
-        state: { socialId: String(id), email }
+        state: { socialId: "kakao" + id, email }
       });
     }
     if (ok) {

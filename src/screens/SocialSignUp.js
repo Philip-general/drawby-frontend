@@ -35,7 +35,7 @@ const CREATE_ACCOUNT_MUTATION = gql`
 export default function SocialSignUp() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { socialId, email } = location.state;
+  const { socialId, email: socialEmail } = location.state;
   const onCompleted = data => {
     const {
       createAccount: { ok, error }
@@ -62,13 +62,26 @@ export default function SocialSignUp() {
     formState: { errors }
   } = useForm();
   const onValid = data => {
-    createAccount({
-      variables: {
-        ...data,
-        socialId,
-        email
-      }
-    });
+    const { username, phoneNumber, bio, avatar } = data;
+    if (!socialEmail) {
+      createAccount({
+        variables: {
+          ...data,
+          socialId
+        }
+      });
+    } else {
+      createAccount({
+        variables: {
+          socialId,
+          username,
+          phoneNumber,
+          bio,
+          avatar,
+          email: socialEmail
+        }
+      });
+    }
   };
   return (
     <div>
@@ -80,7 +93,7 @@ export default function SocialSignUp() {
             required: "username이 필요합니다."
           })}
         />
-        {!email ? (
+        {!socialEmail ? (
           <Input
             placeholder="email"
             {...register("email", {

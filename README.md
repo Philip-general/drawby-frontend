@@ -65,3 +65,4 @@ API 환경변수를 거기서 관리해주면 된다고 함
 - [x] social login (FACEBOOK)
 - [ ] social login (KAKAO, GOOGLE)
 - [ ] Feed 구성
+- [ ] Upload photo (https://ichi.pro/ko/reacteseo-aws-s3e-pail-eul-eoblodeuhaneun-bangbeob-97986780422494) 다중업로드도 생각해야함
