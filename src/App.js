@@ -9,6 +9,7 @@ import Login from "./screens/Login";
 import NotFound from "./screens/NotFound";
 import SignUp from "./screens/SignUp";
 import SocialSignUp from "./screens/SocialSignUp";
+import Upload from "./screens/Upload";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -32,6 +33,7 @@ function App() {
             <Route path={routes.FacebookLogin} element={<Facebook />} />
             <Route path={routes.socialSignUp} element={<SocialSignUp />} />
             <Route path={routes.signUp} element={<SignUp />} />
+            <Route path={routes.uploadPhoto} element={<Upload />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
