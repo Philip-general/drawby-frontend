@@ -71,7 +71,6 @@ export default function SocialSignUp() {
         }
       });
     } else {
-      console.log(socialEmail);
       createAccount({
         variables: {
           socialId,

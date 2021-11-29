@@ -49,7 +49,6 @@ const Kakao = () => {
     } = await socialLogin({ variables: { socialId: "kakao" + id } });
 
     if (error && !ok) {
-      console.log(error);
       navigate(routes.socialSignUp, {
         state: { socialId: "kakao" + id, email }
       });

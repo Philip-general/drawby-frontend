@@ -27,7 +27,6 @@ export default function Facebook() {
       }
     } = await socialLogin({ variables: { socialId: "fb" + id } });
     if (error && !ok) {
-      console.log(error);
       navigate(routes.socialSignUp, {
         state: { socialId: "fb" + id, email }
       });
