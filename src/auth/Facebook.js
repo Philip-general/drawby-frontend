@@ -7,8 +7,8 @@ import { logUserIn } from "../Apollo";
 import routes from "../routes";
 
 const SOCIAL_LOGIN_MUTATION = gql`
-  mutation Mutation($socialId: String!, $email: String) {
-    socialLogin(socialId: $socialId, email: $email) {
+  mutation Mutation($socialId: String!) {
+    socialLogin(socialId: $socialId) {
       ok
       error
       token
@@ -25,10 +25,11 @@ export default function Facebook() {
       data: {
         socialLogin: { error, ok, token }
       }
-    } = await socialLogin({ variables: { socialId: id, email } });
-    if (error === "This email is not existed." && !ok) {
+    } = await socialLogin({ variables: { socialId: "fb" + id } });
+    if (error && !ok) {
+      console.log(error);
       navigate(routes.socialSignUp, {
-        state: { socialId: id, email }
+        state: { socialId: "fb" + id, email }
       });
     }
     if (ok) {
