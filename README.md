@@ -63,6 +63,6 @@ API 환경변수를 거기서 관리해주면 된다고 함
 
 - [ ] social login mutation 바꾸기 (무조건 social id만 가지고 로그인을 진행한다. 보낼때는 "platform" + socialId 로 보내기)
 - [x] social login (FACEBOOK)
-- [ ] social login (KAKAO, GOOGLE)
+- [x] social login (KAKAO)
 - [ ] Feed 구성
 - [ ] Upload photo (https://ichi.pro/ko/reacteseo-aws-s3e-pail-eul-eoblodeuhaneun-bangbeob-97986780422494) 다중업로드도 생각해야함
