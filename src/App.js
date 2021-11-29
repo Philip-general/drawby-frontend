@@ -10,6 +10,7 @@ import NotFound from "./screens/NotFound";
 import SignUp from "./screens/SignUp";
 import SocialSignUp from "./screens/SocialSignUp";
 import Upload from "./screens/Upload";
+import { Reset } from "styled-reset";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -17,6 +18,7 @@ function App() {
     <ApolloProvider client={client}>
       <div className="App">
         <BrowserRouter>
+          <Reset />
           <Routes>
             <Route
               path={routes.home}
