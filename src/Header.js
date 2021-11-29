@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import routes from "./routes";
-
+import { useNavigate } from "react-router";
 const SHeader = styled.header`
   margin-bottom: 10px;
 `;
@@ -26,11 +26,16 @@ const BtnContainer = styled.div`
 `;
 
 const Button = styled.div`
+  cursor: pointer;
   margin-right: 10px;
 `;
 
 export default function Header() {
   const isLoggedIn = true;
+  const navigate = useNavigate();
+  const goUpload = () => {
+    navigate(routes.uploadPhoto);
+  };
   return (
     <SHeader>
       <Wrapper>
@@ -45,7 +50,7 @@ export default function Header() {
         {isLoggedIn ? (
           <Column>
             <BtnContainer>
-              <Button>업로드</Button>
+              <Button onClick={goUpload}>업로드</Button>
               <Button>DM</Button>
               <Button>내 프로필</Button>
             </BtnContainer>
