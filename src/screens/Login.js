@@ -57,6 +57,8 @@ export default function Login() {
 
   return (
     <div>
+      <input type="file" />
+
       <span>로그인 페이지</span>
       {createAccountSuccess ? <div>{createAccountSuccess}</div> : null}
       <form onSubmit={handleSubmit(onSubmit)}>
