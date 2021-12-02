@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Comments from "./Comments";
@@ -63,6 +63,11 @@ export default function Picture({
   totalComment,
   totalLike
 }) {
+  const focusCommentInputRef = useRef(null);
+  const focusCommentInput = () => {
+    focusCommentInputRef.current.focusCommentInput();
+  };
+
   let okLike = isLiked;
   const toggleLike2PictureUpdate = (cache, result) => {
     const {
@@ -107,7 +112,9 @@ export default function Picture({
           <IconAction onClick={toggleLike2Picture}>
             {isLiked ? <Icon>하트</Icon> : <Icon>X하트X</Icon>}
           </IconAction>
-          <Icon>댓글</Icon>
+          <IconAction onClick={focusCommentInput}>
+            <Icon>댓글</Icon>
+          </IconAction>
           <Icon>DM</Icon>
         </LeftContainer>
         <Icon>북마크</Icon>
@@ -118,6 +125,7 @@ export default function Picture({
         pictureId={id}
         comments={comments}
         totalComment={totalComment}
+        ref={focusCommentInputRef}
       />
     </PictureContainer>
   );

@@ -4,6 +4,7 @@ import Comment from "./Comment";
 import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import useUser from "../hooks/useUser";
+import { forwardRef, useImperativeHandle } from "react";
 
 const CommentContainer = styled.div``;
 
@@ -25,9 +26,14 @@ export const CREATE_COMMENT_MUTATION = gql`
   }
 `;
 
-export default function Comments({ pictureId, comments, totalComment }) {
+const Comments = forwardRef(({ pictureId, comments, totalComment }, ref) => {
+  useImperativeHandle(ref, () => ({
+    focusCommentInput() {
+      setFocus("payload");
+    }
+  }));
   const { data: userData } = useUser();
-  const { register, handleSubmit, getValues, setValue } = useForm();
+  const { register, handleSubmit, getValues, setValue, setFocus } = useForm();
   const createCommentUpdate = (cache, result) => {
     const { payload } = getValues();
     setValue("payload", "");
@@ -100,6 +106,7 @@ export default function Comments({ pictureId, comments, totalComment }) {
           payload={comment.payload}
           author={comment.author}
           isMine={comment.isMine}
+          isLiked={comment.isLiked}
           nestedComments={comment.nestedComments}
         />
       ))}
@@ -111,7 +118,7 @@ export default function Comments({ pictureId, comments, totalComment }) {
       </form>
     </CommentContainer>
   );
-}
+});
 
 Comments.propTypes = {
   pictureId: PropTypes.number.isRequired,
@@ -128,3 +135,5 @@ Comments.propTypes = {
     })
   )
 };
+
+export default Comments;
