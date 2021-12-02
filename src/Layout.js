@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Sidebar from "./Sidebar";
 
 const Main = styled.main`
+  background-color: #f2f3f4;
   display: flex;
 `;
 

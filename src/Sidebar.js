@@ -5,24 +5,80 @@ import useUser from "./hooks/useUser";
 import routes from "./routes";
 
 const SidebarContainer = styled.div`
-  width: 300px;
-  background-color: #292929;
-  margin-right: 10px;
+  width: 240px;
+  height: 400px;
   max-height: 1000px;
+  margin: 0 180px 0 0;
+  padding: 20px 0 200px;
+  box-shadow: 3px 0 30px 0 rgba(0, 0, 0, 0.06);
+  background-color: #fff;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+`;
+
+const Icon = styled.img`
+  width: ${props => (props.width ? props.width : "30px")};
+  height: ${props => (props.height ? props.height : "30px")};
+  margin-right: 10px;
+  margin-left: ${props => (props.left ? props.left : "0px")};
+  object-fit: contain;
+`;
+
+const PassIcon = styled.img`
+  width: 6px;
+  height: 12px;
+`;
+
+const MenuBtn = styled(Link)`
+  text-decoration-line: none;
+  width: 240px;
+  height: 50px;
+  margin-left: 20px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
 `;
 
 const SidebarBtn = styled.div`
-  background-color: gray;
+  padding: 10px 14px 10px 0;
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 15px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.4;
+  letter-spacing: normal;
+  text-align: left;
+  color: #333;
+`;
+
+const DetailContainer = styled.div`
+  background-color: #fafafa;
+  padding: 18px 0 20px 27px;
+  text-align: center;
+`;
+const DetailBox = styled.div`
   margin-top: 10px;
-  font-size: 30px;
-  color: blue;
+  align-items: center;
+  display: flex;
 `;
 
 const HashtagBtn = styled.div`
-  background-color: gray;
-  margin-left: 50px;
-  margin-top: 10px;
+  text-align: center;
+  font-family: "Noto Sans KR", sans-serif;
+  align-items: center;
+  min-width: 160px;
+  height: 20px;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.43;
+  letter-spacing: normal;
+  text-align: left;
+  color: #555;
 `;
+
 const Modal = styled.div`
   position: fixed;
   top: 20%;
@@ -121,30 +177,59 @@ function Sidebar() {
   }
   return (
     <SidebarContainer>
-      <Link to={routes.home}>
-        <SidebarBtn>Go to Home</SidebarBtn>
-      </Link>
-      <Link to={routes.notYet}>
-        <SidebarBtn>Go to LikeFeed</SidebarBtn>
-      </Link>
-      {hashtags
-        ? hashtags.map(hashtag => (
-            <Link to={routes.notYet} key={hashtag}>
-              <HashtagBtn key={hashtag}>{hashtag}</HashtagBtn>
-            </Link>
-          ))
-        : null}
-      <HashtagBtn onClick={openHashtagMenu}>follow 하러 가기</HashtagBtn>
+      <MenuBtn to={routes.home}>
+        <Icon src="/PictureSrc/HomeBtn.png" />
+        <SidebarBtn>홈으로 가기</SidebarBtn>
+      </MenuBtn>
+      <MenuBtn to={routes.notYet}>
+        <Icon src="/PictureSrc/LikeBtn.png" />
+        <SidebarBtn>관심사 피드</SidebarBtn>
+      </MenuBtn>
+      <DetailContainer>
+        {hashtags
+          ? hashtags.map(hashtag => (
+              <Link to={routes.notYet} key={hashtag}>
+                <Icon
+                  width="18px"
+                  height="23px"
+                  left="-20px"
+                  src="/PictureSrc/LikeBtn.png"
+                />
+                <HashtagBtn key={hashtag}>{hashtag}</HashtagBtn>
+                <PassIcon src="/PictureSrc/Pass.png" />
+              </Link>
+            ))
+          : null}
+        <DetailBox>
+          <Icon width="18px" height="23px" src="/PictureSrc/IMark.png" />
+          <HashtagBtn onClick={openHashtagMenu}>follow 하러 가기</HashtagBtn>
+          <PassIcon src="/PictureSrc/Pass.png" />
+        </DetailBox>
+      </DetailContainer>
       {hashtagMenu ? <HashtagMenu /> : null}
-      <Link to={routes.notYet}>
-        <SidebarBtn>Go to ContestFeed</SidebarBtn>
-      </Link>
-      {contests.map(contest => (
-        <Link to={routes.notYet} key={contest}>
-          <HashtagBtn key={contest}>{contest}</HashtagBtn>
-        </Link>
-      ))}
-      <HashtagBtn onClick={openContestMenu}>더보기</HashtagBtn>
+      <MenuBtn to={routes.notYet}>
+        <Icon src="/PictureSrc/ContestBtn.png" />
+        <SidebarBtn>콘테스트 피드</SidebarBtn>
+      </MenuBtn>
+      <DetailContainer>
+        {contests.map(contest => (
+          <MenuBtn to={routes.notYet} key={contest}>
+            <Icon
+              width="18px"
+              height="23px"
+              left="-20px"
+              src="/PictureSrc/Calender.png"
+            />
+            <HashtagBtn key={contest}>{contest}</HashtagBtn>
+            <PassIcon src="/PictureSrc/Pass.png" />
+          </MenuBtn>
+        ))}
+        <DetailBox>
+          <Icon width="18px" height="23px" src="/PictureSrc/IMark.png" />
+          <HashtagBtn onClick={openContestMenu}>더보기</HashtagBtn>
+          <PassIcon src="/PictureSrc/Pass.png" />
+        </DetailBox>
+      </DetailContainer>
       {contestMenu ? <ContestMenu /> : null}
     </SidebarContainer>
   );
