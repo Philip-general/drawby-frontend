@@ -41,6 +41,7 @@ const FEED_QUERY = gql`
       totalLike
       isMine
       isLiked
+      isBookmarked
     }
   }
 `;
