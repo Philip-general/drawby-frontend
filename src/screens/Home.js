@@ -19,6 +19,7 @@ const FEED_QUERY = gql`
         id
         payload
         isMine
+        isLiked
         createdAt
         author {
           username
@@ -29,6 +30,7 @@ const FEED_QUERY = gql`
           payload
           isMine
           createdAt
+          isLiked
           author {
             avatar
             username

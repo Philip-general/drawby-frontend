@@ -20,8 +20,51 @@ const DELETE_NESTED_COMMENT_MUTATION = gql`
     }
   }
 `;
-
-function NestedComments({ commentId, id, payload, isMine, author, createdAt }) {
+const TOGGLE_LIKE_2_NESTED_COMMENT_MUTATION = gql`
+  mutation toggleLike2NestedComment($id: Int!) {
+    toggleLike2NestedComment(id: $id) {
+      ok
+      error
+    }
+  }
+`;
+function NestedComments({
+  commentId,
+  id,
+  payload,
+  isMine,
+  author,
+  createdAt,
+  isLiked
+}) {
+  // 대댓글 좋아요 토글 캐시 업데이트
+  const toggleLike2NestedCommentUpdate = (cache, result) => {
+    const {
+      data: {
+        toggleLike2NestedComment: { ok }
+      }
+    } = result;
+    if (ok) {
+      cache.modify({
+        id: `NestedComment:${id}`,
+        fields: {
+          isLiked(prev) {
+            return !prev;
+          }
+        }
+      });
+    }
+  };
+  // 대댓글 좋아요 토글 뮤테이션
+  const [toggleLike2NestedCommentMutation] = useMutation(
+    TOGGLE_LIKE_2_NESTED_COMMENT_MUTATION,
+    {
+      variables: {
+        id
+      },
+      update: toggleLike2NestedCommentUpdate
+    }
+  );
   const deleteNestedCommentUpdate = (cache, result) => {
     const {
       data: {
@@ -47,6 +90,9 @@ function NestedComments({ commentId, id, payload, isMine, author, createdAt }) {
       {isMine ? (
         <DeleteBtn onClick={deleteNestedMutation}>삭제</DeleteBtn>
       ) : null}
+      <div onClick={toggleLike2NestedCommentMutation}>
+        {isLiked ? "💖" : "🤍"}
+      </div>
     </NestedCommentContainer>
   );
 }
@@ -56,6 +102,7 @@ NestedComments.propTypes = {
   id: PropTypes.number.isRequired,
   payload: PropTypes.string.isRequired,
   isMine: PropTypes.bool.isRequired,
+  isLiked: PropTypes.bool.isRequired,
   author: PropTypes.shape({
     avatar: PropTypes.string,
     username: PropTypes.string.isRequired

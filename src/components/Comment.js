@@ -40,12 +40,22 @@ const DELETE_COMMENT_MUTATION = gql`
   }
 `;
 
+const TOGGLE_LIKE_2_COMMENT_MUTATION = gql`
+  mutation toggleLike2Comment($id: Int!) {
+    toggleLike2Comment(id: $id) {
+      ok
+      error
+    }
+  }
+`;
+
 export default function Comment({
   commentId,
   pictureId,
   payload,
   author,
   isMine,
+  isLiked,
   nestedComments
 }) {
   const { data: userData } = useUser();
@@ -150,6 +160,34 @@ export default function Comment({
       }
     });
   };
+  //댓글 좋아요 토글 캐시 업데이트
+  const toggleLike2CommentUpdatae = (cache, result) => {
+    const {
+      data: {
+        toggleLike2Comment: { ok }
+      }
+    } = result;
+    if (ok) {
+      cache.modify({
+        id: `Comment:${commentId}`,
+        fields: {
+          isLiked(prev) {
+            return !prev;
+          }
+        }
+      });
+    }
+  };
+  //댓글 좋아요 토글 뮤테이션
+  const [toggleLike2CommentMutation] = useMutation(
+    TOGGLE_LIKE_2_COMMENT_MUTATION,
+    {
+      variables: {
+        id: commentId
+      },
+      update: toggleLike2CommentUpdatae
+    }
+  );
 
   return (
     <Fragment>
@@ -164,6 +202,7 @@ export default function Comment({
         {isMine ? (
           <DeleteBtn onClick={deleteCommentMutation}>댓글삭제</DeleteBtn>
         ) : null}
+        <div onClick={toggleLike2CommentMutation}>{isLiked ? "💖" : "🤍"}</div>
       </CommentContainer>
       {showNestedComments
         ? nestedComments
@@ -208,5 +247,6 @@ Comment.propTypes = {
     })
   ),
   pictureId: PropTypes.number.isRequired,
-  isMine: PropTypes.bool.isRequired
+  isMine: PropTypes.bool.isRequired,
+  isLiked: PropTypes.bool.isRequired
 };
