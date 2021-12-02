@@ -51,6 +51,15 @@ const TOGGLE_LIKE_2_PICTURE_MUTATION = gql`
   }
 `;
 
+const TOGGLE_BOOKMARK = gql`
+  mutation toggleBookmark($pictureId: Int!) {
+    toggleBookmark(pictureId: $pictureId) {
+      ok
+      error
+    }
+  }
+`;
+
 export default function Picture({
   author,
   caption,
@@ -59,6 +68,7 @@ export default function Picture({
   id,
   isLiked,
   isMine,
+  isBookmarked,
   name,
   totalComment,
   totalLike
@@ -97,6 +107,27 @@ export default function Picture({
     variables: { id },
     update: toggleLike2PictureUpdate
   });
+  const toggleBookmarkUpdate = (cache, result) => {
+    const {
+      data: {
+        toggleBookmark: { ok }
+      }
+    } = result;
+    if (ok) {
+      cache.modify({
+        id: `Picture:${id}`,
+        fields: {
+          isBookmarked(prev) {
+            return !prev;
+          }
+        }
+      });
+    }
+  };
+  const [toggleBookmark] = useMutation(TOGGLE_BOOKMARK, {
+    variables: { pictureId: id },
+    update: toggleBookmarkUpdate
+  });
   return (
     <PictureContainer>
       <PictureHeader>
@@ -110,14 +141,16 @@ export default function Picture({
       <IconContainer>
         <LeftContainer>
           <IconAction onClick={toggleLike2Picture}>
-            {isLiked ? <Icon>하트</Icon> : <Icon>X하트X</Icon>}
+            <Icon>{isLiked ? "하트" : "X하트X"}</Icon>
           </IconAction>
           <IconAction onClick={focusCommentInput}>
             <Icon>댓글</Icon>
           </IconAction>
           <Icon>DM</Icon>
         </LeftContainer>
-        <Icon>북마크</Icon>
+        <IconAction onClick={toggleBookmark}>
+          <Icon>{isBookmarked ? "북마크✅" : "북마크❌"}</Icon>
+        </IconAction>
       </IconContainer>
       <TotalLike>좋아요 개수: {totalLike}</TotalLike>
       <Caption>{caption}</Caption>
@@ -141,6 +174,7 @@ Picture.propTypes = {
   id: PropTypes.number.isRequired,
   isLiked: PropTypes.bool.isRequired,
   isMine: PropTypes.bool.isRequired,
+  isBookmarked: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   totalComment: PropTypes.number.isRequired,
   totalLike: PropTypes.number.isRequired
