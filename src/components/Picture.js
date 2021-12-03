@@ -7,20 +7,31 @@ import Username from "./Common/Username";
 import { gql, useMutation } from "@apollo/client";
 
 const PictureContainer = styled.div`
-  max-width: 800px;
+  max-width: 680px;
+  border-radius: 8px;
+  margin: 40px 0 30px;
+  background-color: #fff;
+  box-shadow: 0 3px 30px 0 rgba(0, 0, 0, 0.06);
 `;
 
-const PictureHeader = styled.div``;
+const PictureHeader = styled.div`
+  justify-content: space-between;
+  height: 72px;
+  padding: 14px 0;
+  margin: 0 16px;
+`;
 
 const UserContainer = styled.div`
   justify-content: left;
+  align-items: center;
   display: flex;
 `;
 
 const PictureTitle = styled.div``;
 
 const PictureImage = styled.img`
-  max-width: 100%;
+  width: 680px;
+  height: 680px;
 `;
 
 const IconContainer = styled.div`
@@ -34,11 +45,19 @@ const LeftContainer = styled.div`
 
 const IconAction = styled.div``;
 
-const Icon = styled.div`
+const Icon = styled.img`
+  width: 24px;
+  max-height: 24px;
   margin-left: 5px;
+  opacity: ${props => (props.color === "red" ? "1" : "0.3")};
+  filter: opacity(0.5) drop-shadow(0 0 0 ${props => props.color});
+  color: ${props => props.color};
 `;
 
-const TotalLike = styled.div``;
+const TotalLike = styled.div`
+  height: 21px;
+  margin: 12px;
+`;
 
 const Caption = styled.div``;
 
@@ -132,8 +151,8 @@ export default function Picture({
     <PictureContainer>
       <PictureHeader>
         <UserContainer>
-          <UserIcon />
-          <Username>{author.username} (유저이름)</Username>
+          <UserIcon size="46px" />
+          <Username>{author.username}</Username>
         </UserContainer>
         <PictureTitle>그림 제목: {name}</PictureTitle>
       </PictureHeader>
@@ -141,15 +160,18 @@ export default function Picture({
       <IconContainer>
         <LeftContainer>
           <IconAction onClick={toggleLike2Picture}>
-            <Icon>{isLiked ? "하트" : "X하트X"}</Icon>
+            <Icon
+              src="/PictureSrc/LikeBtn.png"
+              color={isLiked ? "red" : "white"}
+            />
           </IconAction>
           <IconAction onClick={focusCommentInput}>
-            <Icon>댓글</Icon>
+            <Icon src="/PictureSrc/Comment.png" />
           </IconAction>
-          <Icon>DM</Icon>
+          <Icon src="/PictureSrc/DM.png" />
         </LeftContainer>
         <IconAction onClick={toggleBookmark}>
-          <Icon>{isBookmarked ? "북마크✅" : "북마크❌"}</Icon>
+          <Icon />
         </IconAction>
       </IconContainer>
       <TotalLike>좋아요 개수: {totalLike}</TotalLike>

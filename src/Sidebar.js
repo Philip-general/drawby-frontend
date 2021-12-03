@@ -182,7 +182,7 @@ function Sidebar() {
         <SidebarBtn>홈으로 가기</SidebarBtn>
       </MenuBtn>
       <MenuBtn to={routes.notYet}>
-        <Icon src="/PictureSrc/LikeBtn.png" />
+        <Icon src="/PictureSrc/HashtagBtn.png" />
         <SidebarBtn>관심사 피드</SidebarBtn>
       </MenuBtn>
       <DetailContainer>
