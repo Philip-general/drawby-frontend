@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+# Drawby frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## setting
 
-## Available Scripts
+> --save styled-components
+> react-hook-form
+> react-router-dom
+> @apollo/client graphql
+> react-helmet
+> --save @fortawesome/fontawesome-svg-core
+> --save @fortawesome/free-solid-svg-icons
+> --save @fortawesome/react-fontawesome
+> --save @fortawesome/free-brands-svg-icons
+> --save @fortawesome/free-regular-svg-icons
 
-In the project directory, you can run:
+## 기억할 것
 
-### `yarn start`
+1. instagram 연동하는법 facebook developers
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+   [https://developers.facebook.com/docs/permissions/reference/?translation](https://developers.facebook.com/docs/permissions/reference/?translation)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+   [instagram_content_publish](https://developers.facebook.com/docs/permissions/reference/instagram_content_publish) 이게 인스타 게시 권한 허락받는거임
 
-### `yarn test`
+   연동하려면 https 주소가 필요하다고 함.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   ngrok 사용하기
 
-### `yarn build`
+   [https://joshua-dev-story.blogspot.com/2020/10/localhost-https-ngrok.html](https://joshua-dev-story.blogspot.com/2020/10/localhost-https-ngrok.html)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+페이스북으로 로그인
+[https://velog.io/@nomadhash/사이드-프로젝트-리액트에서-카카오-로그인-구현하기](https://velog.io/@nomadhash/%EC%82%AC%EC%9D%B4%EB%93%9C-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%EC%B9%B4%EC%B9%B4%EC%98%A4-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0)
+[https://velog.io/@nomadhash/사이드-프로젝트-리액트에서-페이스북-로그인-구현-하기](https://velog.io/@nomadhash/%EC%82%AC%EC%9D%B4%EB%93%9C-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%ED%8E%98%EC%9D%B4%EC%8A%A4%EB%B6%81-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84-%ED%95%98%EA%B8%B0)
+[https://nachwon.github.io/insta-facebook/](https://nachwon.github.io/insta-facebook/)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<참고 카카오 로그인>
+[https://developers.kakao.com/docs/latest/ko/kakaologin/common](https://developers.kakao.com/docs/latest/ko/kakaologin/common)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- react-facebook-login
+  [https://developers.facebook.com/docs/facebook-login/](https://developers.facebook.com/docs/facebook-login/)
 
-### `yarn eject`
+2. 인스타에도 글이 자동게시되도록 만들기 (회의때 얘기하자!)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+3. React에서 .env 사용하는 방법
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```jsx
+// .env
+REACT_APP_BLABLA = blabla;
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+// code 에서 활용
+process.env.REACT_APP_BLABLA;
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+4. frontend에서 api key 숨기기
 
-## Learn More
+기본적으로 숨기는게 불가능
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+> > 대신에 개발할때는 그냥 env파일 안에서 변수로 사용해도 됨
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+gitignore에 env 추가해서 서버에 올릴때(ex. Netlify) 서버리스로 구성해서
+API 환경변수를 거기서 관리해주면 된다고 함
 
-### Code Splitting
+## To do
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [ ] social login mutation 바꾸기 (무조건 social id만 가지고 로그인을 진행한다. 보낼때는 "platform" + socialId 로 보내기)
+- [x] social login (FACEBOOK)
+- [x] social login (KAKAO)
+- [ ] Feed 구성
+- [ ] Upload photo (https://ichi.pro/ko/reacteseo-aws-s3e-pail-eul-eoblodeuhaneun-bangbeob-97986780422494) 다중업로드도 생각해야함
