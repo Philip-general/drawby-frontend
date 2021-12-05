@@ -5,6 +5,8 @@ import UserIcon from "../components/Common/Avatar";
 import Username from "../components/Common/Username";
 import useUser from "../hooks/useUser";
 import Gallery from "../components/Gallery";
+import { useNavigate } from "react-router";
+import routes from "../routes";
 
 const SUserProfile = styled.div`
   display: flex;
@@ -52,8 +54,12 @@ const SEE_PROFILE_QUERY = gql`
 `;
 
 function UserProfile() {
+  const navigate = useNavigate();
   const usernameMingo = "dabin";
   const { data: userData } = useUser();
+  if (!userData) {
+    navigate(routes.home);
+  }
   const { data } = useQuery(SEE_PROFILE_QUERY, {
     variables: {
       username: usernameMingo
