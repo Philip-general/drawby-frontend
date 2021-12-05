@@ -96,5 +96,11 @@ export const client = new ApolloClient({
   // link,
   link: authLink.concat(onErrorLink).concat(uploadLink),
   // link: authLink.concat(httpLink).concat(onErrorLink),
-  cache: new InMemoryCache()
+  cache: new InMemoryCache({
+    typePolicies: {
+      User: {
+        keyFields: obj => `User:${obj.username}`
+      }
+    }
+  })
 });
