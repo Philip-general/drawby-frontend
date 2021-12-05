@@ -6,12 +6,14 @@ import { useNavigate } from "react-router";
 import { logUserOut } from "./Apollo";
 const SHeader = styled.header`
   width: 100%;
+  max-width: 1440px;
   height: 36px;
-  padding: 12px 40px 12px 19px;
+  padding: 12px 0 12px;
   background: #fff;
 `;
 
 const Wrapper = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -20,6 +22,7 @@ const Wrapper = styled.div`
 const Logo = styled.img`
   width: 102.7px;
   height: 30.3px;
+  margin-left: 19px;
 `;
 
 const Column = styled.div``;
@@ -28,6 +31,7 @@ const SearchBox = styled.div``;
 
 const BtnContainer = styled.div`
   display: flex;
+  margin-right: 40px;
 `;
 
 const Button = styled.div`

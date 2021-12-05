@@ -1,20 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { FontSpan } from "./Common/Commons";
 
 const ContestHeaderContainer = styled.div``;
 
 const RankedPictures = styled.div`
-  width: 100%;
+  max-width: 680px;
   height: 200px;
   display: flex;
 `;
 const HiddenContainer = styled.div`
+  max-width: 680px;
   overflow: hidden;
 `;
-const ContestName = styled.div``;
+const ContestName = styled(FontSpan)`
+  margin: 30px 0 16px;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1.44;
+  color: #333;
+`;
 
 const PictureContainer = styled.div`
   display: flex;
+  align-content: center;
   width: 680px;
 `;
 
@@ -23,11 +32,19 @@ const RankedPicture = styled.div`
   max-width: 150px;
   min-height: 150px;
   max-height: 150px;
+  border-radius: 8px;
   background-color: skyblue;
   margin-right: 10px;
 `;
 
-const SlideBtn = styled.button``;
+const SlideBtn = styled.img`
+  width: 66px;
+  height: 66px;
+  position: absolute;
+  top: 183px;
+  z-index: 1;
+  left: ${props => props.x};
+`;
 
 function ContestHeader() {
   const TOTAL_SLIDE = 7;
@@ -70,7 +87,11 @@ function ContestHeader() {
     <ContestHeaderContainer>
       <ContestName>#12월 첫째주</ContestName>
       <PictureContainer>
-        <SlideBtn onClick={prevSlide}>👈</SlideBtn>
+        <SlideBtn
+          onClick={prevSlide}
+          x="390px"
+          src="/PictureSrc/LeftArrow.png"
+        />
         <HiddenContainer>
           <RankedPictures ref={slideRef}>
             {rankedPictures.map(picture => (
@@ -78,7 +99,11 @@ function ContestHeader() {
             ))}
           </RankedPictures>
         </HiddenContainer>
-        <SlideBtn onClick={nextSlide}>👉</SlideBtn>
+        <SlideBtn
+          onClick={nextSlide}
+          x="1082px"
+          src="/PictureSrc/RightArrow.png"
+        />
       </PictureContainer>
     </ContestHeaderContainer>
   );
