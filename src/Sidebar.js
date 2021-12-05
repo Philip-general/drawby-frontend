@@ -80,14 +80,18 @@ const HashtagBtn = styled.div`
 `;
 
 const Modal = styled.div`
+  box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.2);
   position: fixed;
+  z-index: 2;
   top: 20%;
-  left: 25%;
-  width: 50%;
+  left: 36%;
+  width: 500px;
   height: 60%;
+  padding: 12px 12px 12px 16px;
   justify-content: center;
   align-items: center;
-  background-color: gray;
+  border-radius: 10px;
+  background-color: #ffffff;
 `;
 
 const ModalHeader = styled.div`
