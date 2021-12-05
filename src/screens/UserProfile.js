@@ -4,8 +4,7 @@ import { gql, useQuery, useMutation } from "@apollo/client";
 import UserIcon from "../components/Common/Avatar";
 import useUser from "../hooks/useUser";
 import Gallery from "../components/Gallery";
-import { useNavigate, useParams } from "react-router";
-import routes from "../routes";
+import { useParams } from "react-router";
 import { FontSpan } from "../components/Common/Commons";
 
 const SUserProfile = styled.div`
@@ -148,16 +147,8 @@ const UNFOLLOW_USER_MUTATION = gql`
 `;
 
 function UserProfile() {
-  const navigate = useNavigate();
   const { username } = useParams();
-
-  // username을 동적으로 받아와서 변경가능하게끔 해야함!
   const { data: userData } = useUser();
-
-  // 로그인이 안되어있다면 홈으로 이동
-  if (!userData) {
-    navigate(routes.home);
-  }
   const { data } = useQuery(SEE_PROFILE_QUERY, {
     variables: {
       username
@@ -184,6 +175,15 @@ function UserProfile() {
         }
       }
     });
+    const { me } = userData;
+    cache.modify({
+      id: `User:${me.username}`,
+      fields: {
+        totalFollowings(prev) {
+          return prev + 1;
+        }
+      }
+    });
   };
   const [followUserMutation, { loading: followLoading, data: followData }] =
     useMutation(FOLLOW_USER_MUTATION, {
@@ -191,6 +191,7 @@ function UserProfile() {
     });
 
   const unfollowUserUpdate = (cache, result) => {
+    console.log("here");
     const {
       data: {
         unfollowUser: { ok }
@@ -207,6 +208,15 @@ function UserProfile() {
         },
         isFollowing(prev) {
           return !prev;
+        }
+      }
+    });
+    const { me } = userData;
+    cache.modify({
+      id: `User:${me.username}`,
+      fields: {
+        totalFollowings(prev) {
+          return prev - 1;
         }
       }
     });
