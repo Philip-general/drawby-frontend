@@ -148,12 +148,73 @@ const UNFOLLOW_USER_MUTATION = gql`
 `;
 
 function UserProfile() {
+  const navigate = useNavigate();
+
+  // username을 동적으로 받아와서 변경가능하게끔 해야함!
+  const usernameMingo = "dabin";
+  const { data: userData } = useUser();
+
+  // 로그인이 안되어있다면 홈으로 이동
+  if (!userData) {
+    navigate(routes.home);
+  }
+  const { data } = useQuery(SEE_PROFILE_QUERY, {
+    variables: {
+      username: usernameMingo
+    }
+  });
+
+  const followUserUpdate = (cache, result) => {
+    const {
+      data: {
+        followUser: { ok }
+      }
+    } = result;
+    if (ok) {
+      cache.modify({
+        id: `User:${data.seeProfile.id}`,
+        fields: {
+          totalFollowers(prev) {
+            return prev + 1;
+          },
+          isFollowing(prev) {
+            return !prev;
+          }
+        }
+      });
+    }
+  };
   const [followUserMutation, { loading: followLoading, data: followData }] =
-    useMutation(FOLLOW_USER_MUTATION);
+    useMutation(FOLLOW_USER_MUTATION, {
+      update: followUserUpdate
+    });
+
+  const unfollowUserUpdate = (cache, result) => {
+    const {
+      data: {
+        unfollowUser: { ok }
+      }
+    } = result;
+    if (ok) {
+      cache.modify({
+        id: `User:${data.seeProfile.id}`,
+        fields: {
+          totalFollowers(prev) {
+            return prev - 1;
+          },
+          isFollowing(prev) {
+            return !prev;
+          }
+        }
+      });
+    }
+  };
   const [
     unfollowUserMutation,
     { loading: unfollowLoading, data: unfollowData }
-  ] = useMutation(UNFOLLOW_USER_MUTATION);
+  ] = useMutation(UNFOLLOW_USER_MUTATION, {
+    update: unfollowUserUpdate
+  });
 
   const followEditClick = () => {
     if (data?.seeProfile?.isMe) {
@@ -170,17 +231,6 @@ function UserProfile() {
       console.log("follow button");
     }
   };
-  const navigate = useNavigate();
-  const usernameMingo = "dabin";
-  const { data: userData } = useUser();
-  if (!userData) {
-    navigate(routes.home);
-  }
-  const { data } = useQuery(SEE_PROFILE_QUERY, {
-    variables: {
-      username: usernameMingo
-    }
-  });
 
   const [gallery, setGallery] = useState(0);
   return (
