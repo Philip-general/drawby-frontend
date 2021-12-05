@@ -15,7 +15,7 @@ const ContestName = styled.div``;
 
 const PictureContainer = styled.div`
   display: flex;
-  width: 800px;
+  width: 680px;
 `;
 
 const RankedPicture = styled.div`
@@ -30,7 +30,7 @@ const RankedPicture = styled.div`
 const SlideBtn = styled.button``;
 
 function ContestHeader() {
-  const TOTAL_SLIDE = 6;
+  const TOTAL_SLIDE = 7;
   const [currentSlide, setCurrentSlide] = useState(0);
   const slideRef = useRef(null);
   const nextSlide = () => {
