@@ -17,7 +17,6 @@ const Line = styled.div`
 const Feed = styled.div``;
 
 export default function Layout({ children }) {
-  console.log(children[0]);
   return (
     <Fragment>
       <Header />
