@@ -2,17 +2,18 @@ import React from "react";
 import styled from "styled-components";
 
 const Grid = styled.div`
-  display: flex;
-  width: 650px;
+  margin-top: 40px;
+  display: grid;
+  grid-auto-rows: 228.3px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 `;
 
 const SmallPicture = styled.div`
   background-image: url(${props => props.bg});
   background-size: cover;
-  position: relative;
-  min-width: 213.3px;
-  min-height: 213.3px;
-  margin: 0 20px 15px 0;
+  width: 213.3px;
+  height: 213.3px;
   border-radius: 8px;
 `;
 
