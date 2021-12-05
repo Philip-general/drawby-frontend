@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import styled from "styled-components";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 import UserIcon from "../components/Common/Avatar";
 import useUser from "../hooks/useUser";
 import Gallery from "../components/Gallery";
@@ -92,7 +92,7 @@ const OnLine = styled.div`
   height: 2px;
   position: relative;
   bottom: 16px;
-  background-color: ${props => (props.color ? "#0e3870" : "#eee")};
+  background-color: ${props => props.color};
 `;
 
 const GalleryIcon = styled.img`
@@ -129,8 +129,47 @@ const SEE_PROFILE_QUERY = gql`
     }
   }
 `;
+const FOLLOW_USER_MUTATION = gql`
+  mutation followUser($username: String!) {
+    followUser(username: $username) {
+      ok
+      error
+    }
+  }
+`;
+
+const UNFOLLOW_USER_MUTATION = gql`
+  mutation unfollowUser($username: String!) {
+    unfollowUser(username: $username) {
+      ok
+      error
+    }
+  }
+`;
 
 function UserProfile() {
+  const [followUserMutation, { loading: followLoading, data: followData }] =
+    useMutation(FOLLOW_USER_MUTATION);
+  const [
+    unfollowUserMutation,
+    { loading: unfollowLoading, data: unfollowData }
+  ] = useMutation(UNFOLLOW_USER_MUTATION);
+
+  const followEditClick = () => {
+    if (data?.seeProfile?.isMe) {
+      console.log("Profile Edit");
+    } else if (data?.seeProfile?.isFollowing) {
+      unfollowUserMutation({
+        variables: { username: data?.seeProfile?.username }
+      });
+      console.log("unfollow button");
+    } else {
+      followUserMutation({
+        variables: { username: data?.seeProfile?.username }
+      });
+      console.log("follow button");
+    }
+  };
   const navigate = useNavigate();
   const usernameMingo = "dabin";
   const { data: userData } = useUser();
@@ -144,9 +183,6 @@ function UserProfile() {
   });
 
   const [gallery, setGallery] = useState(0);
-  const changeGallery = e => {
-    setGallery(e);
-  };
   return (
     <Fragment>
       <SUserProfile>
@@ -154,17 +190,17 @@ function UserProfile() {
           <UserIcon size="140px" />
           <UserInfo>
             <Username>{data?.seeProfile?.username}</Username>
-            <Bio>bio</Bio>
+            <Bio>{data?.seeProfile?.bio}</Bio>
             <FollowContainer>
               <FollowText>팔로워 {data?.seeProfile?.totalFollowers}</FollowText>
               <FollowText>
-                팔로잉 {data?.seeProfile?.totalFollowings}{" "}
+                팔로잉 {data?.seeProfile?.totalFollowings}
               </FollowText>
             </FollowContainer>
           </UserInfo>
         </UserContainer>
         <FollowBox>
-          <FollowBtn>
+          <FollowBtn onClick={() => followEditClick()}>
             {data?.seeProfile?.isMe
               ? "Edit Profile"
               : data?.seeProfile?.isFollowing
@@ -177,45 +213,60 @@ function UserProfile() {
         <Line />
         <GalleryBtns>
           <div onClick={() => setGallery(0)}>
-            <OnLine color={gallery === 0} />
             {gallery === 0 ? (
-              <GalleryBtn>
-                <GalleryIcon src="/PictureSrc/UserGalleryOn.png" />
-                <GalleryText color="#0e3870">개인 갤러리</GalleryText>
-              </GalleryBtn>
+              <>
+                <OnLine color="#0e3870" />
+                <GalleryBtn>
+                  <GalleryIcon src="/PictureSrc/UserGalleryOn.png" />
+                  <GalleryText color="#0e3870">개인 갤러리</GalleryText>
+                </GalleryBtn>
+              </>
             ) : (
-              <GalleryBtn>
-                <GalleryIcon src="/PictureSrc/UserGalleryOff.png" />
-                <GalleryText>개인 갤러리</GalleryText>
-              </GalleryBtn>
+              <>
+                <OnLine color="#eee" />
+                <GalleryBtn>
+                  <GalleryIcon src="/PictureSrc/UserGalleryOff.png" />
+                  <GalleryText>개인 갤러리</GalleryText>
+                </GalleryBtn>
+              </>
             )}
           </div>
           <div onClick={() => setGallery(1)}>
-            <OnLine color={gallery === 1} />
             {gallery === 1 ? (
-              <GalleryBtn>
-                <GalleryIcon src="/PictureSrc/ContestGalleryOn.png" />
-                <GalleryText color="#0e3870">콘테스트 작품</GalleryText>
-              </GalleryBtn>
+              <>
+                <OnLine color="#0e3870" />
+                <GalleryBtn>
+                  <GalleryIcon src="/PictureSrc/ContestGalleryOn.png" />
+                  <GalleryText color="#0e3870">콘테스트 작품</GalleryText>
+                </GalleryBtn>
+              </>
             ) : (
-              <GalleryBtn>
-                <GalleryIcon src="/PictureSrc/ContestGalleryOff.png" />
-                <GalleryText>콘테스트 작품</GalleryText>
-              </GalleryBtn>
+              <>
+                <OnLine color="#eee" />
+                <GalleryBtn>
+                  <GalleryIcon src="/PictureSrc/ContestGalleryOff.png" />
+                  <GalleryText>콘테스트 작품</GalleryText>
+                </GalleryBtn>
+              </>
             )}
           </div>
           <div onClick={() => setGallery(2)}>
-            <OnLine color={gallery === 2} />
             {gallery === 2 ? (
-              <GalleryBtn>
-                <GalleryIcon src="/PictureSrc/BookmarkOn.png" />
-                <GalleryText color="#0e3870">북마크한 작품</GalleryText>
-              </GalleryBtn>
+              <>
+                <OnLine color="#0e3870" />
+                <GalleryBtn>
+                  <GalleryIcon src="/PictureSrc/BookmarkOn.png" />
+                  <GalleryText color="#0e3870">북마크한 작품</GalleryText>
+                </GalleryBtn>
+              </>
             ) : (
-              <GalleryBtn>
-                <GalleryIcon src="/PictureSrc/BookmarkOff.png" />
-                <GalleryText>북마크한 작품</GalleryText>
-              </GalleryBtn>
+              <>
+                <OnLine color="#eee" />
+                <GalleryBtn>
+                  <GalleryIcon src="/PictureSrc/BookmarkOff.png" />
+                  <GalleryText>북마크한 작품</GalleryText>
+                </GalleryBtn>
+              </>
             )}
           </div>
         </GalleryBtns>
