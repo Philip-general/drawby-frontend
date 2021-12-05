@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Username from "./Common/Username";
 import { DeleteBtn, Payload, UserInfo } from "./Comment";
 import { gql, useMutation } from "@apollo/client";
+import { Link } from "react-router-dom";
 
 const NestedCommentContainer = styled.div`
   display: flex;
@@ -82,10 +83,12 @@ function NestedComments({
 
   return (
     <NestedCommentContainer>
-      <UserInfo>
-        <UserIcon color="tomato" />
-        <Username>{author.username}</Username>
-      </UserInfo>
+      <Link to={`/profile/${author.username}`}>
+        <UserInfo>
+          <UserIcon color="tomato" />
+          <Username>{author.username}</Username>
+        </UserInfo>
+      </Link>
       <Payload>{payload}</Payload>
       {isMine ? (
         <DeleteBtn onClick={deleteNestedMutation}>삭제</DeleteBtn>

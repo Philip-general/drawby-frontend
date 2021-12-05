@@ -9,6 +9,7 @@ import { CREATE_COMMENT_MUTATION } from "./Comments";
 import { useForm } from "react-hook-form";
 import NestedComments from "./NestedComments";
 import useUser from "../hooks/useUser";
+import { Link } from "react-router-dom";
 
 const CommentContainer = styled.div`
   display: flex;
@@ -192,10 +193,12 @@ export default function Comment({
   return (
     <Fragment>
       <CommentContainer>
-        <UserInfo>
-          <UserIcon color="orange" />
-          <Username>{author.username}</Username>
-        </UserInfo>
+        <Link to={`/profile/${author.username}`}>
+          <UserInfo>
+            <UserIcon color="orange" />
+            <Username>{author.username}</Username>
+          </UserInfo>
+        </Link>
         <Payload>{payload}</Payload>
         <button onClick={toggleShowNestedComments}>대댓글보기</button>
         <button onClick={toggleCommentBox}>대댓글달기</button>

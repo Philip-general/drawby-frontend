@@ -5,6 +5,7 @@ import Comments from "./Comments";
 import UserIcon from "./Common/Avatar";
 import Username from "./Common/Username";
 import { gql, useMutation } from "@apollo/client";
+import { Link } from "react-router-dom";
 
 const PictureContainer = styled.div`
   max-width: 680px;
@@ -150,10 +151,12 @@ export default function Picture({
   return (
     <PictureContainer>
       <PictureHeader>
-        <UserContainer>
-          <UserIcon size="46px" />
-          <Username>{author.username}</Username>
-        </UserContainer>
+        <Link to={`/profile/${author.username}`}>
+          <UserContainer>
+            <UserIcon size="46px" />
+            <Username>{author.username}</Username>
+          </UserContainer>
+        </Link>
         <PictureTitle>그림 제목: {name}</PictureTitle>
       </PictureHeader>
       <PictureImage src={file} />

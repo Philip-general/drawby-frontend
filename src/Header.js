@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import routes from "./routes";
 import { useNavigate } from "react-router";
-import { logUserOut } from "./Apollo";
+import { isLoggedInVar, logUserOut } from "./Apollo";
+import useUser from "./hooks/useUser";
+import { useReactiveVar } from "@apollo/client";
 const SHeader = styled.header`
   width: 100%;
   max-width: 1440px;
@@ -40,7 +42,8 @@ const Button = styled.div`
 `;
 
 export default function Header() {
-  const isLoggedIn = true;
+  const isLoggedIn = useReactiveVar(isLoggedInVar);
+  const { data } = useUser();
   const navigate = useNavigate();
   const goUpload = () => {
     navigate(routes.uploadPhoto);
@@ -48,9 +51,6 @@ export default function Header() {
   const logout = () => {
     logUserOut();
     navigate(routes.home);
-  };
-  const goProfile = () => {
-    navigate(routes.profile);
   };
   return (
     <SHeader>
@@ -68,7 +68,9 @@ export default function Header() {
             <BtnContainer>
               <Button onClick={goUpload}>업로드</Button>
               <Button>DM</Button>
-              <Button onClick={goProfile}>내 프로필</Button>
+              <Link to={`/profile/${data?.me?.username}`}>
+                <Button>내 프로필</Button>
+              </Link>
               <Button onClick={logout}>로그아웃</Button>
             </BtnContainer>
           </Column>

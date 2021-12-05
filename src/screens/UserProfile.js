@@ -4,7 +4,7 @@ import { gql, useQuery, useMutation } from "@apollo/client";
 import UserIcon from "../components/Common/Avatar";
 import useUser from "../hooks/useUser";
 import Gallery from "../components/Gallery";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import routes from "../routes";
 import { FontSpan } from "../components/Common/Commons";
 
@@ -149,9 +149,9 @@ const UNFOLLOW_USER_MUTATION = gql`
 
 function UserProfile() {
   const navigate = useNavigate();
+  const { username } = useParams();
 
   // username을 동적으로 받아와서 변경가능하게끔 해야함!
-  const usernameMingo = "dabin";
   const { data: userData } = useUser();
 
   // 로그인이 안되어있다면 홈으로 이동
@@ -160,7 +160,7 @@ function UserProfile() {
   }
   const { data } = useQuery(SEE_PROFILE_QUERY, {
     variables: {
-      username: usernameMingo
+      username
     }
   });
 
@@ -170,19 +170,20 @@ function UserProfile() {
         followUser: { ok }
       }
     } = result;
-    if (ok) {
-      cache.modify({
-        id: `User:${data.seeProfile.id}`,
-        fields: {
-          totalFollowers(prev) {
-            return prev + 1;
-          },
-          isFollowing(prev) {
-            return !prev;
-          }
-        }
-      });
+    if (!ok) {
+      return;
     }
+    cache.modify({
+      id: `User:${username}`,
+      fields: {
+        totalFollowers(prev) {
+          return prev + 1;
+        },
+        isFollowing(prev) {
+          return !prev;
+        }
+      }
+    });
   };
   const [followUserMutation, { loading: followLoading, data: followData }] =
     useMutation(FOLLOW_USER_MUTATION, {
@@ -195,19 +196,20 @@ function UserProfile() {
         unfollowUser: { ok }
       }
     } = result;
-    if (ok) {
-      cache.modify({
-        id: `User:${data.seeProfile.id}`,
-        fields: {
-          totalFollowers(prev) {
-            return prev - 1;
-          },
-          isFollowing(prev) {
-            return !prev;
-          }
-        }
-      });
+    if (!ok) {
+      return;
     }
+    cache.modify({
+      id: `User:${username}`,
+      fields: {
+        totalFollowers(prev) {
+          return prev - 1;
+        },
+        isFollowing(prev) {
+          return !prev;
+        }
+      }
+    });
   };
   const [
     unfollowUserMutation,
@@ -221,12 +223,12 @@ function UserProfile() {
       console.log("Profile Edit");
     } else if (data?.seeProfile?.isFollowing) {
       unfollowUserMutation({
-        variables: { username: data?.seeProfile?.username }
+        variables: { username }
       });
       console.log("unfollow button");
     } else {
       followUserMutation({
-        variables: { username: data?.seeProfile?.username }
+        variables: { username }
       });
       console.log("follow button");
     }
@@ -239,7 +241,7 @@ function UserProfile() {
         <UserContainer>
           <UserIcon size="140px" />
           <UserInfo>
-            <Username>{data?.seeProfile?.username}</Username>
+            <Username>{username}</Username>
             <Bio>{data?.seeProfile?.bio}</Bio>
             <FollowContainer>
               <FollowText>팔로워 {data?.seeProfile?.totalFollowers}</FollowText>

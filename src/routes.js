@@ -5,7 +5,7 @@ const routes = {
   FacebookLogin: "/facebook-login",
   socialSignUp: "/social-sign-up",
   uploadPhoto: "/uploadPhoto",
-  profile: "/profile"
+  profile: "/profile/:username"
 };
 
 export default routes;
