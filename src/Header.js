@@ -6,10 +6,9 @@ import { useNavigate } from "react-router";
 import { logUserOut } from "./Apollo";
 const SHeader = styled.header`
   width: 100%;
-  height: 60px;
+  height: 36px;
   padding: 12px 40px 12px 19px;
-  background-color: #fff;
-  box-shadow: 0 10px 0px 0 rgba(0, 0, 0, 0.06);
+  background: #fff;
 `;
 
 const Wrapper = styled.div`
@@ -21,7 +20,6 @@ const Wrapper = styled.div`
 const Logo = styled.img`
   width: 102.7px;
   height: 30.3px;
-  margin: 2.8px 678.3px 2.8px 0;
 `;
 
 const Column = styled.div``;

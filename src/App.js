@@ -24,6 +24,7 @@ function App() {
               element={
                 isLoggedIn ? (
                   <Layout>
+                    {"#f1f2f3"}
                     <Home />
                   </Layout>
                 ) : (
@@ -39,6 +40,7 @@ function App() {
               path={routes.profile}
               element={
                 <Layout>
+                  {"#fff"}
                   <UserProfile />
                 </Layout>
               }
