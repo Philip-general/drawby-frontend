@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { FontSpan } from "./components/Common/Commons";
 import useUser from "./hooks/useUser";
 import routes from "./routes";
 
 const SidebarContainer = styled.div`
   width: 240px;
-  height: 400px;
-  max-height: 1000px;
+
+  max-height: 1400px;
   margin: 0 180px 0 0;
   padding: 20px 0 200px;
   box-shadow: 3px 0 30px 0 rgba(0, 0, 0, 0.06);
@@ -31,30 +32,25 @@ const PassIcon = styled.img`
 
 const MenuBtn = styled(Link)`
   text-decoration-line: none;
-  width: 240px;
   height: 50px;
-  margin-left: 20px;
+  margin-left: ${props => (props.sub ? "0px" : "20px")};
   margin-right: 10px;
   display: flex;
   align-items: center;
 `;
 
-const SidebarBtn = styled.div`
+const SidebarBtn = styled(FontSpan)`
   padding: 10px 14px 10px 0;
-  font-family: "Noto Sans KR", sans-serif;
   font-size: 15px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
+  font-weight: regular;
   line-height: 1.4;
-  letter-spacing: normal;
   text-align: left;
   color: #333;
 `;
 
 const DetailContainer = styled.div`
   background-color: #fafafa;
-  padding: 18px 0 20px 27px;
+  padding: 0 0 20px 27px;
   text-align: center;
 `;
 const DetailBox = styled.div`
@@ -63,18 +59,13 @@ const DetailBox = styled.div`
   display: flex;
 `;
 
-const HashtagBtn = styled.div`
-  text-align: center;
-  font-family: "Noto Sans KR", sans-serif;
+const HashtagBtn = styled(FontSpan)`
   align-items: center;
   min-width: 160px;
   height: 20px;
   font-size: 14px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
+  font-weight: regular;
   line-height: 1.43;
-  letter-spacing: normal;
   text-align: left;
   color: #555;
 `;
@@ -123,6 +114,11 @@ const ModalHashtagBtn = styled.button`
 const ModalFooter = styled.div`
   display: flex;
   justify-content: center;
+`;
+
+const BlankSpace = styled.div`
+  width: 100px;
+  height: 200px;
 `;
 
 function Sidebar() {
@@ -192,16 +188,11 @@ function Sidebar() {
       <DetailContainer>
         {hashtags
           ? hashtags.map(hashtag => (
-              <Link to={routes.notYet} key={hashtag}>
-                <Icon
-                  width="18px"
-                  height="23px"
-                  left="-20px"
-                  src="/PictureSrc/LikeBtn.png"
-                />
-                <HashtagBtn key={hashtag}>{hashtag}</HashtagBtn>
+              <MenuBtn sub to={`/hashtag/${hashtag}`} key={hashtag}>
+                <Icon width="18px" height="23px" src="/PictureSrc/IMark.png" />
+                <HashtagBtn key={hashtag}>{`#${hashtag}`}</HashtagBtn>
                 <PassIcon src="/PictureSrc/Pass.png" />
-              </Link>
+              </MenuBtn>
             ))
           : null}
         <DetailBox>
@@ -235,6 +226,7 @@ function Sidebar() {
         </DetailBox>
       </DetailContainer>
       {contestMenu ? <ContestMenu /> : null}
+      <BlankSpace />
     </SidebarContainer>
   );
 }
