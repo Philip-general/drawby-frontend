@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import NestedComments from "./NestedComments";
 import useUser from "../hooks/useUser";
 import { Link } from "react-router-dom";
+import { FontSpan } from "./Common/Commons";
 
 const CommentContainer = styled.div`
   display: flex;
@@ -21,12 +22,31 @@ export const UserInfo = styled.div`
   min-width: 80px;
 `;
 
-export const Payload = styled.div`
+export const Payload = styled(FontSpan)`
   margin-left: 50px;
+  color: #797979;
+  font-size: 14px;
+  line-height: 1.43;
   width: 70%;
 `;
 
-export const DeleteBtn = styled.button``;
+const CommentSpread = styled(FontSpan)`
+  font-size: 14px;
+  margin-right: 5px;
+  font-weight: regular;
+  color: #999;
+  text-align: right;
+  width: 75px;
+`;
+
+export const DeleteBtn = styled(FontSpan)`
+  font-size: 14px;
+  margin-right: 5px;
+  font-weight: regular;
+  color: tomato;
+  text-align: right;
+  width: 35px;
+`;
 
 const CommentBox = styled.input`
   margin-left: 150px;
@@ -200,12 +220,13 @@ export default function Comment({
           </UserInfo>
         </Link>
         <Payload>{payload}</Payload>
-        <button onClick={toggleShowNestedComments}>대댓글보기</button>
-        <button onClick={toggleCommentBox}>대댓글달기</button>
-        {isMine ? (
-          <DeleteBtn onClick={deleteCommentMutation}>댓글삭제</DeleteBtn>
-        ) : null}
         <div onClick={toggleLike2CommentMutation}>{isLiked ? "💖" : "🤍"}</div>
+        <CommentSpread onClick={toggleShowNestedComments}>
+          댓글보기
+        </CommentSpread>
+        {isMine ? (
+          <DeleteBtn onClick={deleteCommentMutation}>삭제</DeleteBtn>
+        ) : null}
       </CommentContainer>
       {showNestedComments
         ? nestedComments

@@ -6,6 +6,7 @@ import UserIcon from "./Common/Avatar";
 import Username from "./Common/Username";
 import { gql, useMutation } from "@apollo/client";
 import { Link } from "react-router-dom";
+import { FontSpan } from "./Common/Commons";
 
 const PictureContainer = styled.div`
   max-width: 680px;
@@ -28,16 +29,27 @@ const UserContainer = styled.div`
   display: flex;
 `;
 
-const PictureTitle = styled.div``;
+const PictureTitle = styled(FontSpan)`
+  margin-top: 5px;
+  font-size: 18px;
+  font-weight: medium;
+  line-height: 1.43;
+  color: #333333;
+`;
 
 const PictureImage = styled.img`
   width: 680px;
   height: 680px;
 `;
 
+const PictureFooter = styled.div`
+  padding: 16px 16px 14px 16px;
+`;
+
 const IconContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 8px;
 `;
 
 const LeftContainer = styled.div`
@@ -49,18 +61,43 @@ const IconAction = styled.div``;
 const Icon = styled.img`
   width: 24px;
   max-height: 24px;
-  margin-left: 5px;
+  margin-right: 20px;
   opacity: ${props => (props.color === "red" ? "1" : "0.3")};
   filter: opacity(0.5) drop-shadow(0 0 0 ${props => props.color});
   color: ${props => props.color};
 `;
 
-const TotalLike = styled.div`
+const TotalLike = styled(FontSpan)`
+  color: #333333;
+  font-size: 15px;
+  font-weight: medium;
+  line-height: 1.2;
   height: 21px;
-  margin: 12px;
+  margin-bottom: 10px;
 `;
 
-const Caption = styled.div``;
+const Caption = styled(FontSpan)`
+  max-width: 642px;
+  font-size: 14px;
+  font-weight: regular;
+  color: #333;
+  line-height: 1.43;
+`;
+
+const CaptionSpread = styled(FontSpan)`
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: #aaa;
+`;
+
+const Hashtags = styled(FontSpan)`
+  font-size: 14px;
+  font-weight: regular;
+  color: #3690f8;
+  margin-bottom: 10px;
+`;
+
+const Hashtag = styled(FontSpan)``;
 
 const TOGGLE_LIKE_2_PICTURE_MUTATION = gql`
   mutation toggleLike2Picture($id: Int!) {
@@ -91,7 +128,8 @@ export default function Picture({
   isBookmarked,
   name,
   totalComment,
-  totalLike
+  totalLike,
+  hashtags
 }) {
   const focusCommentInputRef = useRef(null);
   const focusCommentInput = () => {
@@ -157,34 +195,42 @@ export default function Picture({
             <Username>{author.username}</Username>
           </UserContainer>
         </Link>
-        <PictureTitle>그림 제목: {name}</PictureTitle>
+        <PictureTitle>{name}</PictureTitle>
       </PictureHeader>
       <PictureImage src={file} />
-      <IconContainer>
-        <LeftContainer>
-          <IconAction onClick={toggleLike2Picture}>
-            <Icon
-              src="/PictureSrc/LikeBtn.png"
-              color={isLiked ? "red" : "white"}
-            />
+      <PictureFooter>
+        <IconContainer>
+          <LeftContainer>
+            <IconAction onClick={toggleLike2Picture}>
+              <Icon
+                src="/PictureSrc/LikeBtn.png"
+                color={isLiked ? "red" : "white"}
+              />
+            </IconAction>
+            <IconAction onClick={focusCommentInput}>
+              <Icon src="/PictureSrc/Comment.png" />
+            </IconAction>
+            <Icon src="/PictureSrc/DM.png" />
+          </LeftContainer>
+          <IconAction onClick={toggleBookmark}>
+            <Icon />
           </IconAction>
-          <IconAction onClick={focusCommentInput}>
-            <Icon src="/PictureSrc/Comment.png" />
-          </IconAction>
-          <Icon src="/PictureSrc/DM.png" />
-        </LeftContainer>
-        <IconAction onClick={toggleBookmark}>
-          <Icon />
-        </IconAction>
-      </IconContainer>
-      <TotalLike>좋아요 개수: {totalLike}</TotalLike>
-      <Caption>{caption}</Caption>
-      <Comments
-        pictureId={id}
-        comments={comments}
-        totalComment={totalComment}
-        ref={focusCommentInputRef}
-      />
+        </IconContainer>
+        <TotalLike>좋아요 {totalLike}명</TotalLike>
+        <Caption>{caption}</Caption>
+        <CaptionSpread>더보기</CaptionSpread>
+        <Hashtags>
+          {hashtags.map(hashtag => (
+            <Hashtag key={hashtag.id}>{hashtag.hashtagName}</Hashtag>
+          ))}
+        </Hashtags>
+        <Comments
+          pictureId={id}
+          comments={comments}
+          totalComment={totalComment}
+          ref={focusCommentInputRef}
+        />
+      </PictureFooter>
     </PictureContainer>
   );
 }
@@ -202,5 +248,11 @@ Picture.propTypes = {
   isBookmarked: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   totalComment: PropTypes.number.isRequired,
-  totalLike: PropTypes.number.isRequired
+  totalLike: PropTypes.number.isRequired,
+  hashtags: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      hashtagName: PropTypes.string.isRequired
+    })
+  )
 };

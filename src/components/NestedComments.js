@@ -90,12 +90,12 @@ function NestedComments({
         </UserInfo>
       </Link>
       <Payload>{payload}</Payload>
-      {isMine ? (
-        <DeleteBtn onClick={deleteNestedMutation}>삭제</DeleteBtn>
-      ) : null}
       <div onClick={toggleLike2NestedCommentMutation}>
         {isLiked ? "💖" : "🤍"}
       </div>
+      {isMine ? (
+        <DeleteBtn onClick={deleteNestedMutation}>삭제</DeleteBtn>
+      ) : null}
     </NestedCommentContainer>
   );
 }

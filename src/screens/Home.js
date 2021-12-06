@@ -37,6 +37,10 @@ const FEED_QUERY = gql`
           }
         }
       }
+      hashtags {
+        id
+        hashtagName
+      }
       totalComment
       totalLike
       isMine

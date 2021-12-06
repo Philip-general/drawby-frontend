@@ -5,12 +5,28 @@ import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import useUser from "../hooks/useUser";
 import { forwardRef, useImperativeHandle } from "react";
+import { FontSpan } from "./Common/Commons";
 
 const CommentContainer = styled.div``;
 
-const TotalComment = styled.div``;
+const TotalComment = styled(FontSpan)`
+  color: #333333;
+  font-size: 15px;
+  font-weight: medium;
+  line-height: 1.2;
+  height: 21px;
+  margin-bottom: 10px;
+`;
 
-const CommentBox = styled.input``;
+const CommentBox = styled.input`
+  margin-top: 20px;
+  width: 628px;
+  height: 35px;
+  padding: 4px 16px 4px 4px;
+  border-radius: 24px;
+  border: solid 1px #ccc;
+  background-color: #fafafa;
+`;
 
 export const CREATE_COMMENT_MUTATION = gql`
   mutation createComment($payload: String!, $pictureId: Int!, $commentId: Int) {
@@ -97,7 +113,7 @@ const Comments = forwardRef(({ pictureId, comments, totalComment }, ref) => {
   };
   return (
     <CommentContainer>
-      <TotalComment>댓글 개수: {totalComment}</TotalComment>
+      <TotalComment>댓글 {totalComment}개</TotalComment>
       {comments?.map(comment => (
         <Comment
           key={comment.id}
