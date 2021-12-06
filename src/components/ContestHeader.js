@@ -16,7 +16,7 @@ const HiddenContainer = styled.div`
 const ContestName = styled(FontSpan)`
   margin: 30px 0 16px;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 500;
   line-height: 1.44;
   color: #333;
 `;
