@@ -50,6 +50,7 @@ const FollowBtn = styled(FontSpan)`
 `;
 
 const Bio = styled(FontSpan)`
+  height: 21px;
   margin-bottom: 12px;
   font-size: 15px;
   line-height: 1.2;
@@ -120,6 +121,7 @@ const SEE_PROFILE_QUERY = gql`
         file
         name
         totalLike
+        totalComment
       }
       isMe
       totalFollowers
@@ -252,7 +254,11 @@ function UserProfile() {
           <UserIcon size="140px" />
           <UserInfo>
             <Username>{username}</Username>
-            <Bio>{data?.seeProfile?.bio}</Bio>
+            {data?.seeProfile?.bio ? (
+              <Bio>{data?.seeProfile?.bio}</Bio>
+            ) : (
+              <Bio />
+            )}
             <FollowContainer>
               <FollowText>팔로워 {data?.seeProfile?.totalFollowers}</FollowText>
               <FollowText>
