@@ -4,49 +4,7 @@ import React from "react";
 import styled from "styled-components";
 import { FontSpan } from "./Common/Commons";
 import PropTypes from "prop-types";
-
-const Grid = styled.div`
-  margin-top: 40px;
-  display: grid;
-  grid-auto-rows: 228.3px;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-`;
-
-const SmallPicture = styled.div`
-  background-image: url(${props => props.bg});
-  background-size: cover;
-  width: 213.3px;
-  height: 213.3px;
-  border-radius: 8px;
-`;
-
-const Icons = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 213.3px;
-  height: 213.3px;
-  border-radius: 8px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  opacity: 0;
-  &:hover {
-    opacity: 1;
-  }
-`;
-
-const Icon = styled.div`
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  margin: 0px 5px;
-  svg {
-    font-size: 14px;
-    margin-right: 5px;
-  }
-`;
+import { Grid, SmallPicture, Icons, Icon } from "./Common/GridPictures";
 
 function Gallery({ pictures }) {
   return (
@@ -55,7 +13,7 @@ function Gallery({ pictures }) {
         <SmallPicture key={picture.id} bg={picture.file}>
           <Icons>
             <Icon>
-              <FontAwesomeIcon icon={faHeart} color="#f65b71" />
+              <FontAwesomeIcon icon={faHeart} color="#ff2b57" />
               <FontSpan>{picture.totalLike}</FontSpan>
             </Icon>
             <Icon>
