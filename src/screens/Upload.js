@@ -4,7 +4,7 @@ import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import { FontSpan } from "../components/Common/Commons";
 import { useForm } from "react-hook-form";
-import Input from "../auth/Input";
+import { Input, Textarea } from "../auth/Input";
 import { useNavigate } from "react-router";
 
 // just some styled components for the image upload area
@@ -23,16 +23,17 @@ const getColor = props => {
 
 const BackGround = styled.div`
   background-color: #717171;
+  padding: 50px;
 `;
 const ModalBox = styled.div`
-  width: 500px;
+  width: 1000px;
   height: auto;
   margin: 0 64px 66px 0;
   flex: 1;
   display: flex;
   flex-direction: column;
   /* align-items: center; */
-  padding: 12px 12px 12px 16px;
+  padding: 30px 12px 12px 16px;
   border-radius: 10px;
   border-color: ${props => getColor(props)};
   background-color: #fff;
@@ -40,30 +41,39 @@ const ModalBox = styled.div`
   transition: border 0.24s ease-in-out;
 `;
 
+const ModalHeader = styled.div`
+  display: flex;
+  margin-right: 10px;
+  justify-content: space-between;
+  color: #333333;
+  div {
+    font-weight: 500;
+  }
+`;
+
+const ModalBody = styled.div`
+  display: flex;
+  margin-top: 20px;
+`;
+
 const ThumbsContainer = styled.div`
   width: 468px;
   height: 468px;
-  margin: 20px 16px 16px 16px;
+  display: flex;
+  margin: 0 22px 21px 0px;
   border-radius: 10px;
   background-color: #f5f5f5;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #c2c2c2;
 `;
 
-const ThumbStyle = styled.div`
-  display: inline-flex;
-  border-radius: 2;
-  border: 1px solid #eaeaea;
-  margin-bottom: 8;
-  margin-right: 8;
-  width: 100;
-  height: 100;
-  padding: 4;
-`;
-
-const ThumbInner = styled.div`
-  display: flex;
-  min-width: 0;
-  overflow: hidden;
+const ImgIcon = styled.img`
+  margin-bottom: 10px;
+  width: ${props => (props.exit === "true" ? "26px" : "70px")};
+  height: ${props => (props.exit === "true" ? "26px" : "70px")};
 `;
 
 const Img = styled.img`
@@ -77,10 +87,9 @@ const ErrorMessage = styled(FontSpan)`
   color: #c45e5e;
 `;
 
-const SubmitBtn = styled.button`
-  width: 60px;
+const BlueBtn = styled.button`
   height: 32px;
-  padding: 6px 12px;
+  padding: 0 12px;
   justify-content: center;
   align-items: center;
   border-radius: 16px;
@@ -89,6 +98,25 @@ const SubmitBtn = styled.button`
   font-size: 14px;
 `;
 
+const NameInput = styled(Input)`
+  border-color: #cccccc;
+  ::placeholder {
+    color: #cccccc;
+  }
+  margin-bottom: 20px;
+  min-width: 468px;
+`;
+
+const CaptionInput = styled(Textarea)`
+  border-color: #cccccc;
+  height: 365px;
+  resize: none;
+  width: 468px;
+  ::placeholder {
+    color: #cccccc;
+  }
+  margin-bottom: 20px;
+`;
 // relevant code starts here
 const UPLOAD_PICTURE_MUTATION = gql`
   mutation Mutation($file: Upload!, $name: String!, $caption: String) {
@@ -129,6 +157,11 @@ const Upload = ({ register: uploadRegister }) => {
   });
   const navigate = useNavigate();
 
+  const deletePicture = () => {
+    setPreview(null);
+    setUploadFile(null);
+  };
+
   const { register, handleSubmit, getValues } = useForm();
 
   const onValid = () => {
@@ -146,34 +179,55 @@ const Upload = ({ register: uploadRegister }) => {
   return (
     <BackGround>
       <ModalBox>
-        <span>그림 업로드</span>
-        <ThumbsContainer
-          {...getRootProps({ isDragActive, isDragAccept, isDragReject })}
-        >
-          {!preview ? (
-            <>
-              <input {...getInputProps()} />
-              {isDragActive ? (
-                <FontSpan>그림을 이곳에 놓으세요.</FontSpan>
-              ) : (
-                <FontSpan>이곳을 클릭하거나 그림을 드래그 하세요.</FontSpan>
-              )}
-            </>
-          ) : (
-            <Img src={preview} />
-          )}
-          {errors && <ErrorMessage>{errors}</ErrorMessage>}
-        </ThumbsContainer>
-        <form onSubmit={handleSubmit(onValid)}>
-          <Input
-            {...register("name", { required: "제목을 입력해주세요." })}
-            placeholder="그림 제목"
+        <ModalHeader>
+          <FontSpan>그림 업로드</FontSpan>
+          <ImgIcon
+            exit="true"
+            src="/PictureSrc/Exit.png"
+            onClick={() => navigate(-1)}
           />
-          <Input {...register("caption")} placeholder="그림 설명" />
-          <SubmitBtn type="submit">
-            <FontSpan>다음</FontSpan>
-          </SubmitBtn>
-        </form>
+        </ModalHeader>
+        <ModalBody>
+          <div>
+            <ThumbsContainer
+              {...getRootProps({ isDragActive, isDragAccept, isDragReject })}
+            >
+              {!preview ? (
+                <>
+                  <input {...getInputProps()} />
+                  <ImgIcon src="/PictureSrc/Image.png" />
+                  {!isDragActive ? (
+                    errors ? (
+                      <ErrorMessage>{errors}</ErrorMessage>
+                    ) : (
+                      <FontSpan>
+                        이곳을 클릭하거나 그림을 드래그 하세요.
+                      </FontSpan>
+                    )
+                  ) : (
+                    <FontSpan>그림을 이곳에 놓으세요.</FontSpan>
+                  )}
+                </>
+              ) : (
+                <Img src={preview} />
+              )}
+            </ThumbsContainer>
+            <BlueBtn onClick={() => deletePicture()}>그림 지우기</BlueBtn>
+          </div>
+          <form onSubmit={handleSubmit(onValid)}>
+            <NameInput
+              {...register("name", { required: "제목을 입력해주세요." })}
+              placeholder="그림의 제목을 입력해주세요."
+            />
+            <CaptionInput
+              {...register("caption")}
+              placeholder="그림의 설명을 입력해주세요."
+            />
+            <BlueBtn type="submit">
+              <FontSpan>다음</FontSpan>
+            </BlueBtn>
+          </form>
+        </ModalBody>
       </ModalBox>
     </BackGround>
   );
