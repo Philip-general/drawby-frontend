@@ -33,7 +33,7 @@ const PassIcon = styled.img`
 const MenuBtn = styled(Link)`
   text-decoration-line: none;
   height: 50px;
-  margin-left: ${props => (props.sub ? "0px" : "20px")};
+  margin-left: ${props => (props.sub === "true" ? "0px" : "20px")};
   margin-right: 10px;
   display: flex;
   align-items: center;
@@ -188,7 +188,7 @@ function Sidebar() {
       <DetailContainer>
         {hashtags
           ? hashtags.map(hashtag => (
-              <MenuBtn sub to={`/hashtag/${hashtag}`} key={hashtag}>
+              <MenuBtn sub="true" to={`/hashtag/${hashtag}`} key={hashtag}>
                 <Icon width="18px" height="23px" src="/PictureSrc/IMark.png" />
                 <HashtagBtn key={hashtag}>{`#${hashtag}`}</HashtagBtn>
                 <PassIcon src="/PictureSrc/Pass.png" />
