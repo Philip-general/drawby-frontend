@@ -3,7 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { logUserIn } from "../Apollo";
-import Input from "../auth/Input";
+import { Input } from "../auth/Input";
 import routes from "../routes";
 import { useLocation } from "react-router";
 import Facebook from "../auth/Facebook";

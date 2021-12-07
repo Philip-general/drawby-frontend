@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import Input from "../auth/Input";
+import { Input } from "../auth/Input";
 import routes from "../routes";
 import { useLocation, useNavigate } from "react-router";
 
