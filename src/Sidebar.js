@@ -7,7 +7,9 @@ import routes from "./routes";
 
 const SidebarContainer = styled.div`
   width: 240px;
-
+  position: fixed;
+  top: 61px;
+  z-index: 1000;
   max-height: 1400px;
   margin: 0 180px 0 0;
   padding: 20px 0 200px;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import routes from "./routes";
@@ -6,7 +6,11 @@ import { useNavigate } from "react-router";
 import { isLoggedInVar, logUserOut } from "./Apollo";
 import useUser from "./hooks/useUser";
 import { useReactiveVar } from "@apollo/client";
+import UserIcon from "./components/Common/Avatar";
 const SHeader = styled.header`
+  position: fixed;
+  top: 0px;
+  z-index: 1000;
   width: 100%;
   max-width: 1440px;
   height: 36px;
@@ -36,8 +40,9 @@ const BtnContainer = styled.div`
   margin-right: 40px;
 `;
 
-const Button = styled.div`
+const Button = styled.img`
   cursor: pointer;
+  width: 36px;
   margin-right: 10px;
 `;
 
@@ -48,10 +53,13 @@ export default function Header() {
   const goUpload = () => {
     navigate(routes.uploadPhoto);
   };
-  const logout = () => {
-    logUserOut();
-    navigate(routes.home);
+
+  const goMyProfile = () => {
+    // navigate(`/profile/${data?.me?.username}`);
+    setUserMenu(true);
   };
+  const [userMenu, setUserMenu] = useState(false);
+
   return (
     <SHeader>
       <Wrapper>
@@ -66,12 +74,10 @@ export default function Header() {
         {isLoggedIn ? (
           <Column>
             <BtnContainer>
-              <Button onClick={goUpload}>업로드</Button>
-              <Button>DM</Button>
-              <Link to={`/profile/${data?.me?.username}`}>
-                <Button>내 프로필</Button>
-              </Link>
-              <Button onClick={logout}>로그아웃</Button>
+              <Button onClick={goUpload} src="/PictureSrc/Upload.png" />
+              <Button src="/PictureSrc/DMHeader.png" />
+              <UserIcon onClick={goMyProfile} size="36px" />
+              {userMenu ? <div>asdf</div> : null}
             </BtnContainer>
           </Column>
         ) : (
@@ -83,3 +89,11 @@ export default function Header() {
     </SHeader>
   );
 }
+
+// {
+//   const logout = () => {
+//     logUserOut();
+//     navigate(routes.home);
+//   };
+//   <Button onClick={logout} />
+// }

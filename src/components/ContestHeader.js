@@ -43,7 +43,7 @@ const SlideBtn = styled.img`
   width: 66px;
   height: 66px;
   position: absolute;
-  top: ${props => (props.y ? props.y : "183px")};
+  top: ${props => (props.y ? props.y : "108px")};
   z-index: 1;
   left: ${props => props.x};
 `;
@@ -92,7 +92,7 @@ function ContestHeader() {
       <PictureContainer>
         <SlideBtn
           onClick={prevSlide}
-          x="390px"
+          x="-35px"
           src="/PictureSrc/LeftArrow.png"
         />
         <HiddenContainer>
@@ -107,8 +107,8 @@ function ContestHeader() {
         </HiddenContainer>
         <SlideBtn
           onClick={nextSlide}
-          x="1078px"
-          y="188px"
+          x="650px"
+          y="113px"
           src="/PictureSrc/RightArrow.png"
         />
       </PictureContainer>
