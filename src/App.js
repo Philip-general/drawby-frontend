@@ -11,6 +11,7 @@ import SignUp from "./screens/SignUp";
 import SocialSignUp from "./screens/SocialSignUp";
 import Upload from "./screens/Upload";
 import UserProfile from "./screens/UserProfile";
+import HashtagFeed from "./screens/HashtagFeed";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -24,6 +25,7 @@ function App() {
               element={
                 isLoggedIn ? (
                   <Layout>
+                    {"#f1f2f3"}
                     <Home />
                   </Layout>
                 ) : (
@@ -39,7 +41,17 @@ function App() {
               path={routes.profile}
               element={
                 <Layout>
+                  {"#fff"}
                   <UserProfile />
+                </Layout>
+              }
+            />
+            <Route
+              path={routes.hashtag}
+              element={
+                <Layout>
+                  {"#f1f2f3"}
+                  <HashtagFeed />
                 </Layout>
               }
             />

@@ -3,16 +3,19 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import routes from "./routes";
 import { useNavigate } from "react-router";
-import { logUserOut } from "./Apollo";
+import { isLoggedInVar, logUserOut } from "./Apollo";
+import useUser from "./hooks/useUser";
+import { useReactiveVar } from "@apollo/client";
 const SHeader = styled.header`
   width: 100%;
-  height: 60px;
-  padding: 12px 40px 12px 19px;
-  background-color: #fff;
-  box-shadow: 0 10px 0px 0 rgba(0, 0, 0, 0.06);
+  max-width: 1440px;
+  height: 36px;
+  padding: 12px 0 12px;
+  background: #fff;
 `;
 
 const Wrapper = styled.div`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -21,7 +24,7 @@ const Wrapper = styled.div`
 const Logo = styled.img`
   width: 102.7px;
   height: 30.3px;
-  margin: 2.8px 678.3px 2.8px 0;
+  margin-left: 19px;
 `;
 
 const Column = styled.div``;
@@ -30,6 +33,7 @@ const SearchBox = styled.div``;
 
 const BtnContainer = styled.div`
   display: flex;
+  margin-right: 40px;
 `;
 
 const Button = styled.div`
@@ -38,7 +42,8 @@ const Button = styled.div`
 `;
 
 export default function Header() {
-  const isLoggedIn = true;
+  const isLoggedIn = useReactiveVar(isLoggedInVar);
+  const { data } = useUser();
   const navigate = useNavigate();
   const goUpload = () => {
     navigate(routes.uploadPhoto);
@@ -46,9 +51,6 @@ export default function Header() {
   const logout = () => {
     logUserOut();
     navigate(routes.home);
-  };
-  const goProfile = () => {
-    navigate(routes.profile);
   };
   return (
     <SHeader>
@@ -66,7 +68,9 @@ export default function Header() {
             <BtnContainer>
               <Button onClick={goUpload}>업로드</Button>
               <Button>DM</Button>
-              <Button onClick={goProfile}>내 프로필</Button>
+              <Link to={`/profile/${data?.me?.username}`}>
+                <Button>내 프로필</Button>
+              </Link>
               <Button onClick={logout}>로그아웃</Button>
             </BtnContainer>
           </Column>

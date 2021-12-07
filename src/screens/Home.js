@@ -1,8 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import React, { Fragment } from "react";
 import ContestHeader from "../components/ContestHeader";
-import styled from "styled-components";
-import { isLoggedInVar } from "../Apollo";
 import PageTitle from "../components/PageTitle";
 import Picture from "../components/Picture";
 
@@ -38,6 +36,10 @@ const FEED_QUERY = gql`
             username
           }
         }
+      }
+      hashtags {
+        id
+        hashtagName
       }
       totalComment
       totalLike

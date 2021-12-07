@@ -4,8 +4,14 @@ import styled from "styled-components";
 import Sidebar from "./Sidebar";
 
 const Main = styled.main`
-  background-color: #f2f3f4;
+  background-color: ${props => (props.color ? props.color : "#fff")};
   display: flex;
+`;
+
+const Line = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #eee;
 `;
 
 const Feed = styled.div``;
@@ -14,9 +20,10 @@ export default function Layout({ children }) {
   return (
     <Fragment>
       <Header />
-      <Main>
+      <Line />
+      <Main color={children[0]}>
         <Sidebar />
-        <Feed>{children}</Feed>
+        <Feed>{children[1]}</Feed>
       </Main>
     </Fragment>
   );
