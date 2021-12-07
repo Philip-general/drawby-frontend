@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { FontSpan } from "./Common/Commons";
+import { SmallPicture } from "./Common/GridPictures";
 
 const ContestHeaderContainer = styled.div``;
 
@@ -27,14 +28,15 @@ const PictureContainer = styled.div`
   width: 680px;
 `;
 
-const RankedPicture = styled.div`
-  min-width: 150px;
-  max-width: 150px;
-  min-height: 150px;
-  max-height: 150px;
+const RankedPictureContainer = styled.div`
+  min-width: 137px;
+  max-width: 137px;
+  min-height: 137px;
+  max-height: 137px;
   border-radius: 8px;
   background-color: skyblue;
   margin-right: 10px;
+  overflow-wrap: break-word;
 `;
 
 const SlideBtn = styled.img`
@@ -65,23 +67,24 @@ function ContestHeader() {
     }
   };
   useEffect(() => {
-    const space = currentSlide * 160;
+    const space = currentSlide * 152;
     slideRef.current.style.transition = "all 0.5s ease-in-out";
     slideRef.current.style.transform = `translateX(-${space}px)`;
   }, [currentSlide]);
 
+  // test contest array
   const rankedPictures = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "더보기"
+    { id: "1", file: "/PictureSrc/BookmarkOff.png", caption: "First" },
+    { id: "2", file: "/PictureSrc/BookmarkOn.png", caption: "Second" },
+    { id: "3", file: "/PictureSrc/Calender.png", caption: "Third" },
+    { id: "4", file: "/PictureSrc/Comment.png", caption: "Ohyeah" },
+    { id: "5", file: "/PictureSrc/ContestBtn.png", caption: "Caption!" },
+    { id: "6", file: "/PictureSrc/ContestGalleryOff.png", caption: "qwerty" },
+    { id: "7", file: "/PictureSrc/ContestGalleryOn.png", caption: "asdfgg" },
+    { id: "8", file: "/PictureSrc/DM.png", caption: "eighhhht" },
+    { id: "9", file: "/PictureSrc/Imark.png", caption: "NINE!!" },
+    { id: "10", file: "/PictureSrc/Pass.png", caption: "Teeeeeeeen" },
+    { id: "더보기", file: "", caption: "" }
   ];
   return (
     <ContestHeaderContainer>
@@ -95,7 +98,10 @@ function ContestHeader() {
         <HiddenContainer>
           <RankedPictures ref={slideRef}>
             {rankedPictures.map(picture => (
-              <RankedPicture key={picture}>{picture}</RankedPicture>
+              <RankedPictureContainer key={picture.id}>
+                <SmallPicture small bg={`${picture.file}`} />
+                <FontSpan>{picture.caption}</FontSpan>
+              </RankedPictureContainer>
             ))}
           </RankedPictures>
         </HiddenContainer>
