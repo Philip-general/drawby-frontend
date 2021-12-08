@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FontSpan } from "./components/Common/Commons";
+import { ModalBackground } from "./components/Common/Modal";
 import useUser from "./hooks/useUser";
 import routes from "./routes";
 
@@ -44,7 +45,7 @@ const MenuBtn = styled(Link)`
 const SidebarBtn = styled(FontSpan)`
   padding: 10px 14px 10px 0;
   font-size: 15px;
-  font-weight: 300;
+  font-weight: regular;
   line-height: 1.4;
   text-align: left;
   color: #333;
@@ -70,15 +71,6 @@ const HashtagBtn = styled(FontSpan)`
   line-height: 1.43;
   text-align: left;
   color: #555;
-`;
-
-const ModalContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const Modal = styled.div`
@@ -162,7 +154,7 @@ function Sidebar({ openModal }) {
   };
   function HashtagMenu() {
     return (
-      <ModalContainer onClick={closeHashtagMenu}>
+      <ModalBackground black="true" onClick={closeHashtagMenu}>
         <Modal>
           <ModalHeader>
             <ModalName>HashtagMenu</ModalName>
@@ -179,12 +171,12 @@ function Sidebar({ openModal }) {
             <CloseBtn onClick={closeHashtagMenu}>Save!</CloseBtn>
           </ModalFooter>
         </Modal>
-      </ModalContainer>
+      </ModalBackground>
     );
   }
   function ContestMenu() {
     return (
-      <ModalContainer onClick={closeContestMenu}>
+      <ModalBackground black="true" onClick={closeContestMenu}>
         <Modal>
           <ModalHeader>
             <ModalName>ContestMenu</ModalName>
@@ -192,7 +184,7 @@ function Sidebar({ openModal }) {
           </ModalHeader>
           <ModalBody>여기는 달력이 들어갈 자리입니다.</ModalBody>
         </Modal>
-      </ModalContainer>
+      </ModalBackground>
     );
   }
   return (
