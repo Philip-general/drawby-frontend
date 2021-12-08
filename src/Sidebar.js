@@ -44,7 +44,7 @@ const MenuBtn = styled(Link)`
 const SidebarBtn = styled(FontSpan)`
   padding: 10px 14px 10px 0;
   font-size: 15px;
-  font-weight: regular;
+  font-weight: 300;
   line-height: 1.4;
   text-align: left;
   color: #333;
@@ -72,7 +72,17 @@ const HashtagBtn = styled(FontSpan)`
   color: #555;
 `;
 
+const ModalContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
 const Modal = styled.div`
+  opacity: 1;
   box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.2);
   position: fixed;
   z-index: 2;
@@ -123,7 +133,7 @@ const BlankSpace = styled.div`
   height: 200px;
 `;
 
-function Sidebar() {
+function Sidebar({ openModal }) {
   const { data } = useUser();
   // user가 follow 하는 hashtag 목록 (사이드바에 고정하는 것과 아닌 것들을 분리해야함)
   const hashtags = data?.me?.followHashtags.map(
@@ -137,44 +147,52 @@ function Sidebar() {
   const openHashtagMenu = () => {
     setHashtagMenu(true);
   };
-  const closeHashtagMenu = () => {
-    setHashtagMenu(false);
+  const closeHashtagMenu = e => {
+    if (e.target === e.currentTarget) {
+      setHashtagMenu(false);
+    }
   };
   const openContestMenu = () => {
     setContestMenu(true);
   };
-  const closeContestMenu = () => {
-    setContestMenu(false);
+  const closeContestMenu = e => {
+    if (e.target === e.currentTarget) {
+      setContestMenu(false);
+    }
   };
   function HashtagMenu() {
     return (
-      <Modal>
-        <ModalHeader>
-          <ModalName>HashtagMenu</ModalName>
-          <CloseBtn onClick={closeHashtagMenu}>X</CloseBtn>
-        </ModalHeader>
-        <ModalBody>
-          {modalHashtags
-            ? modalHashtags.map(hashtag => (
-                <ModalHashtagBtn key={hashtag}>{hashtag}</ModalHashtagBtn>
-              ))
-            : null}
-        </ModalBody>
-        <ModalFooter>
-          <CloseBtn onClick={closeHashtagMenu}>Save!</CloseBtn>
-        </ModalFooter>
-      </Modal>
+      <ModalContainer onClick={closeHashtagMenu}>
+        <Modal>
+          <ModalHeader>
+            <ModalName>HashtagMenu</ModalName>
+            <CloseBtn onClick={closeHashtagMenu}>X</CloseBtn>
+          </ModalHeader>
+          <ModalBody>
+            {modalHashtags
+              ? modalHashtags.map(hashtag => (
+                  <ModalHashtagBtn key={hashtag}>{hashtag}</ModalHashtagBtn>
+                ))
+              : null}
+          </ModalBody>
+          <ModalFooter>
+            <CloseBtn onClick={closeHashtagMenu}>Save!</CloseBtn>
+          </ModalFooter>
+        </Modal>
+      </ModalContainer>
     );
   }
   function ContestMenu() {
     return (
-      <Modal>
-        <ModalHeader>
-          <ModalName>ContestMenu</ModalName>
-          <CloseBtn onClick={closeContestMenu}>X</CloseBtn>
-        </ModalHeader>
-        <ModalBody>여기는 달력이 들어갈 자리입니다.</ModalBody>
-      </Modal>
+      <ModalContainer onClick={closeContestMenu}>
+        <Modal>
+          <ModalHeader>
+            <ModalName>ContestMenu</ModalName>
+            <CloseBtn onClick={closeContestMenu}>X</CloseBtn>
+          </ModalHeader>
+          <ModalBody>여기는 달력이 들어갈 자리입니다.</ModalBody>
+        </Modal>
+      </ModalContainer>
     );
   }
   return (
@@ -203,7 +221,7 @@ function Sidebar() {
           <PassIcon src="/PictureSrc/Pass.png" />
         </DetailBox>
       </DetailContainer>
-      {hashtagMenu ? <HashtagMenu /> : null}
+      {hashtagMenu && <HashtagMenu />}
       <MenuBtn to={routes.notYet}>
         <Icon src="/PictureSrc/ContestBtn.png" />
         <SidebarBtn>콘테스트 피드</SidebarBtn>
