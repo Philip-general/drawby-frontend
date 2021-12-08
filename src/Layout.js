@@ -28,8 +28,8 @@ export default function Layout({ children }) {
     <Fragment>
       <Header />
       <Line />
+      <Sidebar />
       <Main color={children[0]}>
-        <Sidebar />
         <Feed>{children[1]}</Feed>
       </Main>
     </Fragment>
