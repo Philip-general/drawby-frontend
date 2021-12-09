@@ -12,6 +12,7 @@ import SocialSignUp from "./screens/SocialSignUp";
 import Upload from "./screens/Upload";
 import UserProfile from "./screens/UserProfile";
 import HashtagFeed from "./screens/HashtagFeed";
+import ProfileEdit from "./screens/ProfileEdit";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -47,6 +48,15 @@ function App() {
               }
             />
             <Route
+              path={routes.editProfile}
+              element={
+                <Layout>
+                  {"#fff"}
+                  <ProfileEdit />
+                </Layout>
+              }
+            />
+            <Route
               path={routes.hashtag}
               element={
                 <Layout>
@@ -55,6 +65,7 @@ function App() {
                 </Layout>
               }
             />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

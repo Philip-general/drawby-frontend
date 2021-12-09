@@ -6,7 +6,8 @@ const routes = {
   socialSignUp: "/social-sign-up",
   uploadPhoto: "/uploadPhoto",
   profile: "/profile/:username",
-  hashtag: "/hashtag/:hashtagName"
+  hashtag: "/hashtag/:hashtagName",
+  editProfile: "/profile/:username/edit"
 };
 
 export default routes;
