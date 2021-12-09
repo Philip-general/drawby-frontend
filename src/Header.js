@@ -113,6 +113,22 @@ export default function Header() {
     setUserMenu(false);
     navigate(`/profile/${data?.me?.username}`);
   };
+  const goUserProfileEdit = () => {
+    setUserMenu(false);
+    navigate(`/profile/${data?.me?.username}/edit`);
+  };
+
+  const goSetting = () => {
+    setUserMenu(false);
+    navigate(`/setting`);
+  };
+
+  const goLogOut = () => {
+    setUserMenu(false);
+    logUserOut();
+    navigate(`/`);
+  };
+
   const [userMenu, setUserMenu] = useState(false);
   const toggleUserMenu = () => {
     setUserMenu(!userMenu);
@@ -130,21 +146,21 @@ export default function Header() {
               </Column>
               <UserMenuArrow src="/PictureSrc/Pass.png" />
             </UserMenuBtn>
-            <UserMenuBtn>
+            <UserMenuBtn onClick={() => goUserProfileEdit()}>
               <Column>
                 <UserMenuIcon src={"/PictureSrc/UserIcon.png"} />
                 <UserMenuText>프로필 수정</UserMenuText>
               </Column>
               <UserMenuArrow src="/PictureSrc/Pass.png" />
             </UserMenuBtn>
-            <UserMenuBtn>
+            <UserMenuBtn onClick={() => goSetting()}>
               <Column>
                 <UserMenuIcon src={"/PictureSrc/Setting.png"} />
                 <UserMenuText>설정</UserMenuText>
               </Column>
               <UserMenuArrow src="/PictureSrc/Pass.png" />
             </UserMenuBtn>
-            <UserMenuBtn>
+            <UserMenuBtn onClick={() => goLogOut()}>
               <Column>
                 <UserMenuIcon src={"/PictureSrc/LogOut.png"} />
                 <UserMenuText>로그아웃</UserMenuText>
