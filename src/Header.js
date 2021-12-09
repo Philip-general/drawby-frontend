@@ -9,6 +9,7 @@ import { useReactiveVar } from "@apollo/client";
 import UserIcon from "./components/Common/Avatar";
 import { FontSpan } from "./components/Common/Commons";
 import { ModalBackground } from "./components/Common/Modal";
+import SearchBox from "./components/Header/SearchBar";
 const SHeader = styled.header`
   position: fixed;
   top: 0px;
@@ -37,8 +38,6 @@ const Column = styled.div`
   display: flex;
   align-items: center;
 `;
-
-const SearchBox = styled.div``;
 
 const BtnContainer = styled.div`
   display: flex;
@@ -202,11 +201,3 @@ export default function Header() {
     </SHeader>
   );
 }
-
-// {
-//   const logout = () => {
-//     logUserOut();
-//     navigate(routes.home);
-//   };
-//   <Button onClick={logout} />
-// }
