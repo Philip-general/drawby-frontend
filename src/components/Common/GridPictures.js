@@ -12,8 +12,8 @@ export const Grid = styled.div`
 export const SmallPicture = styled.div`
   background-image: url(${props => props.bg});
   background-size: cover;
-  width: ${props => (props.small ? "155.8px" : "213.3px")};
-  height: ${props => (props.small ? "155.8px" : "213.3px")};
+  width: ${props => (props.small ? "137px" : "213.3px")};
+  height: ${props => (props.small ? "137px" : "213.3px")};
   border-radius: 8px;
 `;
 

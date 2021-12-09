@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+import { gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
+import useDate from "../hooks/useDate";
 import { FontSpan } from "./Common/Commons";
 import { SmallPicture } from "./Common/GridPictures";
 
@@ -29,27 +31,99 @@ const PictureContainer = styled.div`
 `;
 
 const RankedPictureContainer = styled.div`
+  position: relative;
   min-width: 137px;
   max-width: 137px;
   min-height: 137px;
   max-height: 137px;
   border-radius: 8px;
-  background-color: skyblue;
   margin-right: 10px;
   overflow-wrap: break-word;
+`;
+
+const SmallPictureShade = styled.img`
+  background-size: cover;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.4)
+  );
+  width: 137px;
+  height: 137px;
+  border-radius: 8px;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
+const SeeMoreBox = styled.div`
+  background-color: black;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 137px;
+  height: 137px;
+  border-radius: 8px;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.4;
+`;
+
+const RankedPictureName = styled(FontSpan)`
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+`;
+
+const RankedPictureHashtags = styled.div`
+  display: flex;
+`;
+
+const RankedPictureHashtag = styled(FontSpan)`
+  font-size: 12px;
+  font-weight: light;
+  color: #3690f8;
 `;
 
 const SlideBtn = styled.img`
   width: 66px;
   height: 66px;
   position: absolute;
-  top: ${props => (props.y ? props.y : "183px")};
+  top: ${props => (props.y ? props.y : "108px")};
   z-index: 1;
   left: ${props => props.x};
 `;
 
+const SEE_CONTEST_RANK_QUERY = gql`
+  query seeContestRank($hashtagName: String!) {
+    seeContestRank(hashtagName: $hashtagName) {
+      id
+      name
+      totalLike
+      file
+      hashtags {
+        hashtagName
+      }
+    }
+  }
+`;
+
 function ContestHeader() {
-  const TOTAL_SLIDE = 7;
+  const { year, month, weekNo } = useDate(new Date());
+  const contestDate = `#${year}년_${month}월_${weekNo}주차`;
+  const contestHeaderName = `#${year}년 ${month}월 ${weekNo}주차`;
+  // const contestDate = "#Bicycle";
+  const { data: rankedData } = useQuery(SEE_CONTEST_RANK_QUERY, {
+    variables: { hashtagName: contestDate }
+  });
+  console.log(rankedData?.seeContestRank);
+  const picturesLen = rankedData?.seeContestRank.length;
+
+  const TOTAL_SLIDE = picturesLen > 4 ? picturesLen - 4 : 0;
   const [currentSlide, setCurrentSlide] = useState(0);
   const slideRef = useRef(null);
   const nextSlide = () => {
@@ -67,50 +141,58 @@ function ContestHeader() {
     }
   };
   useEffect(() => {
-    const space = currentSlide * 152;
+    const space = currentSlide * 147;
     slideRef.current.style.transition = "all 0.5s ease-in-out";
     slideRef.current.style.transform = `translateX(-${space}px)`;
   }, [currentSlide]);
 
   // test contest array
-  const rankedPictures = [
-    { id: "1", file: "/PictureSrc/BookmarkOff.png", caption: "First" },
-    { id: "2", file: "/PictureSrc/BookmarkOn.png", caption: "Second" },
-    { id: "3", file: "/PictureSrc/Calender.png", caption: "Third" },
-    { id: "4", file: "/PictureSrc/Comment.png", caption: "Ohyeah" },
-    { id: "5", file: "/PictureSrc/ContestBtn.png", caption: "Caption!" },
-    { id: "6", file: "/PictureSrc/ContestGalleryOff.png", caption: "qwerty" },
-    { id: "7", file: "/PictureSrc/ContestGalleryOn.png", caption: "asdfgg" },
-    { id: "8", file: "/PictureSrc/DM.png", caption: "eighhhht" },
-    { id: "9", file: "/PictureSrc/Imark.png", caption: "NINE!!" },
-    { id: "10", file: "/PictureSrc/Pass.png", caption: "Teeeeeeeen" },
-    { id: "더보기", file: "", caption: "" }
-  ];
+  const rankedPictures = rankedData?.seeContestRank;
   return (
     <ContestHeaderContainer>
-      <ContestName>#12월 첫째주</ContestName>
+      <ContestName>{contestHeaderName}</ContestName>
       <PictureContainer>
-        <SlideBtn
-          onClick={prevSlide}
-          x="390px"
-          src="/PictureSrc/LeftArrow.png"
-        />
+        {picturesLen > 4 && (
+          <SlideBtn
+            onClick={prevSlide}
+            x="-35px"
+            src="/PictureSrc/LeftArrow.png"
+          />
+        )}
+
         <HiddenContainer>
           <RankedPictures ref={slideRef}>
-            {rankedPictures.map(picture => (
-              <RankedPictureContainer key={picture.id}>
-                <SmallPicture small bg={`${picture.file}`} />
-                <FontSpan>{picture.caption}</FontSpan>
-              </RankedPictureContainer>
-            ))}
+            {rankedPictures &&
+              rankedPictures.map(picture => (
+                <RankedPictureContainer key={picture.id}>
+                  <SmallPicture small bg={`${picture.file}`} />
+                  <SmallPictureShade src="/PictureSrc/PictureShader.png" />
+                  <RankedPictureName>{picture.name}</RankedPictureName>
+                  <RankedPictureHashtags>
+                    {picture.hashtags.map(hashtag =>
+                      hashtag.hashtagName !== contestDate ? (
+                        <RankedPictureHashtag>
+                          {hashtag.hashtagName}
+                        </RankedPictureHashtag>
+                      ) : null
+                    )}
+                  </RankedPictureHashtags>
+                </RankedPictureContainer>
+              ))}
+            <RankedPictureContainer>
+              <SeeMoreBox />
+              <FontSpan>더보기</FontSpan>
+            </RankedPictureContainer>
           </RankedPictures>
         </HiddenContainer>
-        <SlideBtn
-          onClick={nextSlide}
-          x="1078px"
-          y="188px"
-          src="/PictureSrc/RightArrow.png"
-        />
+        {picturesLen > 4 && (
+          <SlideBtn
+            onClick={nextSlide}
+            x="650px"
+            y="113px"
+            src="/PictureSrc/RightArrow.png"
+          />
+        )}
       </PictureContainer>
     </ContestHeaderContainer>
   );

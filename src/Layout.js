@@ -11,18 +11,25 @@ const Main = styled.main`
 const Line = styled.div`
   width: 100%;
   height: 1px;
+  z-index: 1000;
+  position: fixed;
+  top: 60px;
   background-color: #eee;
 `;
 
-const Feed = styled.div``;
+const Feed = styled.div`
+  position: relative;
+  top: 61px;
+  left: 400px;
+`;
 
 export default function Layout({ children }) {
   return (
     <Fragment>
       <Header />
       <Line />
+      <Sidebar />
       <Main color={children[0]}>
-        <Sidebar />
         <Feed>{children[1]}</Feed>
       </Main>
     </Fragment>
