@@ -36,11 +36,9 @@ const SearchInput = styled.input`
 const SearchModal = styled.div`
   padding: 16px;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   position: fixed;
   width: 520px;
-  height: 400px;
+  min-height: 30px;
   margin-top: 21px;
   border-radius: 10px;
   background-color: #fff;
@@ -50,17 +48,27 @@ const SearchModal = styled.div`
 const SearchResultContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 160px;
+  margin-right: 20px;
   min-height: 100px;
 `;
 
 const SearchResults = styled.div`
   display: flex;
+  flex-direction: column;
 `;
 
 const SearchResult = styled.div`
-  margin: 10px;
+  margin-top: 10px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+`;
+
+const SearchText = styled(Username)`
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.4;
+  color: #333;
 `;
 
 const SearchPicture = styled.img`
@@ -167,8 +175,8 @@ function SearchBox() {
                     onClick={() => goProfile(user.username)}
                     key={user.id}
                   >
-                    <UserIcon size="46px" />
-                    <Username key={user.id}>{user.username}</Username>
+                    <UserIcon size="36px" />
+                    <SearchText key={user.id}>{user.username}</SearchText>
                   </SearchResult>
                 ))}
             </SearchResults>
@@ -185,7 +193,9 @@ function SearchBox() {
                     key={hashtag.id}
                   >
                     <SearchPicture src={hashtag.pictures[0].file} />
-                    <FontSpan key={hashtag.id}>{hashtag.hashtagName}</FontSpan>
+                    <SearchText key={hashtag.id}>
+                      {hashtag.hashtagName}
+                    </SearchText>
                   </SearchResult>
                 ))}
             </SearchResults>
@@ -202,7 +212,7 @@ function SearchBox() {
                     key={picture.id}
                   >
                     <SearchPicture src={picture.file} />
-                    <FontSpan key={picture.id}>{picture.name}</FontSpan>
+                    <SearchText key={picture.id}>{picture.name}</SearchText>
                   </SearchResult>
                 ))}
             </SearchResults>
