@@ -121,6 +121,7 @@ const SEE_CONTEST_RANK_QUERY = gql`
       file
       rank
       hashtags {
+        id
         hashtagName
       }
     }
@@ -135,7 +136,6 @@ function ContestHeader() {
   const { data: rankedData } = useQuery(SEE_CONTEST_RANK_QUERY, {
     variables: { hashtagName: contestDate }
   });
-  console.log(rankedData?.seeContestRank);
   const picturesLen = rankedData?.seeContestRank.length;
 
   const TOTAL_SLIDE = picturesLen > 4 ? picturesLen - 4 : 0;
