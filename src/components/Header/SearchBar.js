@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { gql, useQuery } from "@apollo/client";
 import { FontSpan } from "../Common/Commons";
@@ -64,6 +63,12 @@ const SearchResult = styled.div`
   flex-direction: column;
 `;
 
+const SearchPicture = styled.img`
+  width: 55px;
+  height: 55px;
+  border-radius: 10px;
+`;
+
 const SEARCH_USER_QUERY = gql`
   query searchUser($keyword: String) {
     searchUser(keyword: $keyword) {
@@ -99,7 +104,6 @@ const SEARCH_HASHTAG_QUERY = gql`
 function SearchBox() {
   const [searchModal, setSearchModal] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState();
-  const [contentClicked, setContentClicked] = useState();
   const { data: userData } = useQuery(SEARCH_USER_QUERY, {
     variables: { keyword: searchKeyword },
     skip: !searchKeyword
@@ -121,19 +125,20 @@ function SearchBox() {
   };
 
   const closeSearchModal = () => {
-    if (contentClicked) {
-      console.log("blur");
-      setSearchModal(false);
-      setContentClicked(false);
-    }
+    setSearchModal(false);
   };
-  console.log(contentClicked);
   const navigate = useNavigate();
-  const goProfile = () => {
-    console.log("click");
-    setContentClicked(true);
-    closeSearchModal();
-    navigate(`/profile/${userData?.searchUser?.username}`);
+  const goProfile = username => {
+    setSearchModal(false);
+    navigate(`/profile/${username}`);
+  };
+  const goHashtag = hashtagName => {
+    const hashtag = hashtagName.split("#")[1];
+    setSearchModal(false);
+    navigate(`/hashtag/${hashtag}`);
+  };
+  const goPicture = () => {
+    setSearchModal(false);
   };
   return (
     <div>
@@ -144,7 +149,7 @@ function SearchBox() {
           onChange={e => {
             searching(e.target.value);
           }}
-          onBlur={() => closeSearchModal()}
+          onBlur={e => closeSearchModal(e)}
           type="text"
           placeholder="검색어를 입력하세요.."
         />
@@ -157,7 +162,11 @@ function SearchBox() {
               {searchKeyword &&
                 userData?.searchUser &&
                 userData?.searchUser.map(user => (
-                  <SearchResult onClick={e => goProfile(e)} key={user.id}>
+                  <SearchResult
+                    onMouseDown={e => e.preventDefault()}
+                    onClick={() => goProfile(user.username)}
+                    key={user.id}
+                  >
                     <UserIcon size="46px" />
                     <Username key={user.id}>{user.username}</Username>
                   </SearchResult>
@@ -170,7 +179,14 @@ function SearchBox() {
               {searchKeyword &&
                 hashtagData?.searchHashtag &&
                 hashtagData?.searchHashtag.map(hashtag => (
-                  <FontSpan key={hashtag.id}>{hashtag.hashtagName}</FontSpan>
+                  <SearchResult
+                    onMouseDown={e => e.preventDefault()}
+                    onClick={() => goHashtag(hashtag.hashtagName)}
+                    key={hashtag.id}
+                  >
+                    <SearchPicture src={hashtag.pictures[0].file} />
+                    <FontSpan key={hashtag.id}>{hashtag.hashtagName}</FontSpan>
+                  </SearchResult>
                 ))}
             </SearchResults>
           </SearchResultContainer>
@@ -180,7 +196,14 @@ function SearchBox() {
               {searchKeyword &&
                 pictureData?.searchPicture &&
                 pictureData?.searchPicture.map(picture => (
-                  <FontSpan key={picture.id}>{picture.name}</FontSpan>
+                  <SearchResult
+                    onMouseDown={e => e.preventDefault()}
+                    onClick={() => goPicture()}
+                    key={picture.id}
+                  >
+                    <SearchPicture src={picture.file} />
+                    <FontSpan key={picture.id}>{picture.name}</FontSpan>
+                  </SearchResult>
                 ))}
             </SearchResults>
           </SearchResultContainer>
