@@ -87,6 +87,7 @@ const RankedPictureHashtag = styled(FontSpan)`
   font-size: 12px;
   font-weight: light;
   color: #3690f8;
+  margin-right: 5px;
 `;
 
 const SlideBtn = styled.img`
