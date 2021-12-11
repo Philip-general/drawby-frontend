@@ -41,7 +41,7 @@ const RankedPictureContainer = styled.div`
   overflow-wrap: break-word;
 `;
 
-const SmallPictureShade = styled.img`
+const SmallPictureShade = styled.div`
   background-size: cover;
   background-image: linear-gradient(
     to bottom,
@@ -87,6 +87,7 @@ const RankedPictureHashtag = styled(FontSpan)`
   font-size: 12px;
   font-weight: light;
   color: #3690f8;
+  margin-right: 5px;
 `;
 
 const SlideBtn = styled.img`
@@ -98,6 +99,20 @@ const SlideBtn = styled.img`
   left: ${props => props.x};
 `;
 
+const RobotoFont = styled.span`
+  @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 10000;
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  font-style: italic;
+  line-height: 0.9;
+  color: #fff;
+  font-weight: bold;
+`;
+
 const SEE_CONTEST_RANK_QUERY = gql`
   query seeContestRank($hashtagName: String!) {
     seeContestRank(hashtagName: $hashtagName) {
@@ -105,7 +120,9 @@ const SEE_CONTEST_RANK_QUERY = gql`
       name
       totalLike
       file
+      rank
       hashtags {
+        id
         hashtagName
       }
     }
@@ -120,7 +137,6 @@ function ContestHeader() {
   const { data: rankedData } = useQuery(SEE_CONTEST_RANK_QUERY, {
     variables: { hashtagName: contestDate }
   });
-  console.log(rankedData?.seeContestRank);
   const picturesLen = rankedData?.seeContestRank.length;
 
   const TOTAL_SLIDE = picturesLen > 4 ? picturesLen - 4 : 0;
@@ -159,22 +175,23 @@ function ContestHeader() {
             src="/PictureSrc/LeftArrow.png"
           />
         )}
-
         <HiddenContainer>
           <RankedPictures ref={slideRef}>
             {rankedPictures &&
               rankedPictures.map(picture => (
                 <RankedPictureContainer key={picture.id}>
                   <SmallPicture small bg={`${picture.file}`} />
-                  <SmallPictureShade src="/PictureSrc/PictureShader.png" />
+                  <SmallPictureShade />
+                  <RobotoFont>{picture.rank}</RobotoFont>
                   <RankedPictureName>{picture.name}</RankedPictureName>
                   <RankedPictureHashtags>
-                    {picture.hashtags.map(hashtag =>
-                      hashtag.hashtagName !== contestDate ? (
-                        <RankedPictureHashtag>
-                          {hashtag.hashtagName}
-                        </RankedPictureHashtag>
-                      ) : null
+                    {picture.hashtags.map(
+                      hashtag =>
+                        hashtag.hashtagName !== contestDate && (
+                          <RankedPictureHashtag key={hashtag.id}>
+                            {hashtag.hashtagName}
+                          </RankedPictureHashtag>
+                        )
                     )}
                   </RankedPictureHashtags>
                 </RankedPictureContainer>
