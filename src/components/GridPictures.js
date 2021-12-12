@@ -1,15 +1,10 @@
 import React, { Fragment } from "react";
 import { useParams } from "react-router";
 import { gql, useQuery } from "@apollo/client";
-import {
-  Grid,
-  Icon,
-  Icons,
-  SmallPicture
-} from "../components/Common/GridPictures";
+import { Grid, Icon, Icons, SmallPicture } from "./Common/GridPictures";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { FontSpan } from "../components/Common/Commons";
+import { FontSpan } from "./Common/Commons";
 import styled from "styled-components";
 
 const HashtagName = styled(FontSpan)`
