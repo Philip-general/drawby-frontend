@@ -129,10 +129,16 @@ const SEE_CONTEST_RANK_QUERY = gql`
   }
 `;
 
-function ContestHeader() {
+function ContestHeader({ customYear, customMonth, customWeekNo }) {
   const { year, month, weekNo } = useDate(new Date());
-  const contestDate = `#${year}년_${month}월_${weekNo}주차`;
-  const contestHeaderName = `#${year}년 ${month}월 ${weekNo}주차`;
+  const contestDate =
+    customYear !== undefined
+      ? `#${customYear}_${customMonth}_${customWeekNo}`
+      : `#${year}년_${month}월_${weekNo}주차`;
+  const contestHeaderName =
+    customYear !== undefined
+      ? `#${customYear} ${customMonth} ${customWeekNo}`
+      : `#${year}년 ${month}월 ${weekNo}주차`;
   // const contestDate = "#Bicycle";
   const { data: rankedData } = useQuery(SEE_CONTEST_RANK_QUERY, {
     variables: { hashtagName: contestDate }
