@@ -6,6 +6,7 @@ import Sidebar from "./Sidebar";
 const Main = styled.main`
   background-color: ${props => (props.color ? props.color : "#fff")};
   display: flex;
+  min-height: 1000vh;
 `;
 
 const Line = styled.div`
@@ -18,7 +19,7 @@ const Line = styled.div`
 `;
 
 const Feed = styled.div`
-  position: relative;
+  position: absolute;
   top: 61px;
   left: 400px;
 `;

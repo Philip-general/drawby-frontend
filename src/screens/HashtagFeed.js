@@ -1,18 +1,11 @@
+import { gql, useQuery } from "@apollo/client";
 import React, { Fragment } from "react";
 import { useParams } from "react-router";
-import { gql, useQuery } from "@apollo/client";
-import {
-  Grid,
-  Icon,
-  Icons,
-  SmallPicture
-} from "../components/Common/GridPictures";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { FontSpan } from "../components/Common/Commons";
 import styled from "styled-components";
+import { FontSpan } from "../components/Common/Commons";
+import Picture from "../components/Picture";
 
-const HashtagName = styled(FontSpan)`
+const HashtagTitle = styled(FontSpan)`
   margin: 30px 0 16px;
   font-size: 18px;
   font-weight: 500;
@@ -25,8 +18,43 @@ const SEE_HASHTAG_PICTURES = gql`
     seeHashtagPictures(hashtagName: $hashtagName) {
       id
       file
-      totalLike
+      name
+      author {
+        username
+        avatar
+      }
+      caption
+      comments {
+        id
+        payload
+        isMine
+        isLiked
+        createdAt
+        author {
+          username
+          avatar
+        }
+        nestedComments {
+          id
+          payload
+          isMine
+          createdAt
+          isLiked
+          author {
+            avatar
+            username
+          }
+        }
+      }
+      hashtags {
+        id
+        hashtagName
+      }
       totalComment
+      totalLike
+      isMine
+      isLiked
+      isBookmarked
     }
   }
 `;
@@ -34,29 +62,14 @@ const SEE_HASHTAG_PICTURES = gql`
 function HashtagFeed() {
   const { hashtagName } = useParams();
   const { data } = useQuery(SEE_HASHTAG_PICTURES, {
-    variables: { hashtagName: `#${hashtagName}` }
+    variables: { hashtagName: "#" + hashtagName }
   });
   return (
     <Fragment>
-      <HashtagName>{`#${hashtagName}`}</HashtagName>
-      <Grid small>
-        {data
-          ? data?.seeHashtagPictures.map(picture => (
-              <SmallPicture key={picture.id} small bg={picture.file}>
-                <Icons small>
-                  <Icon>
-                    <FontAwesomeIcon icon={faHeart} color="#ff2b57" />
-                    <FontSpan>{picture.totalLike}</FontSpan>
-                  </Icon>
-                  <Icon>
-                    <FontAwesomeIcon icon={faComment} />
-                    <FontSpan>{picture.totalComment}</FontSpan>
-                  </Icon>
-                </Icons>
-              </SmallPicture>
-            ))
-          : null}
-      </Grid>
+      <HashtagTitle>#{hashtagName}</HashtagTitle>
+      {data?.seeHashtagPictures?.map(picture => (
+        <Picture key={picture.id} {...picture} />
+      ))}
     </Fragment>
   );
 }
