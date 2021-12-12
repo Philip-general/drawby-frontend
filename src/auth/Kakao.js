@@ -6,25 +6,32 @@ import { useNavigate } from "react-router";
 import { useMutation } from "@apollo/client";
 import routes from "../routes";
 import { logUserIn } from "../Apollo";
+import { FontSpan } from "../components/Common/Commons";
 
 const buttonBlock = {
   border: "none",
-  borderRadius: "9px",
+  borderRadius: "12px",
   fontSize: "17px",
   width: "284px",
   fontWeight: "500",
-  height: "32px",
+  height: "40px",
   cursor: "pointer",
-  background: "#fae101",
+  background: "#fee500",
   alignItems: "center",
   display: "flex",
   justifyContent: "center",
   padding: "4px 0px"
 };
 
-const ButtoninnerText = styled.h3`
+const KakaoIcon = styled.img`
+  width: 22px;
+  margin-right: 5px;
+`;
+
+const ButtoninnerText = styled(FontSpan)`
   margin: 0;
   font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
 `;
 
 const SOCIAL_LOGIN_MUTATION = gql`
@@ -67,7 +74,8 @@ const Kakao = () => {
         onLogout={console.info}
         style={buttonBlock}
       >
-        <ButtoninnerText>카카오 계정으로 로그인</ButtoninnerText>
+        <KakaoIcon src="/PictureSrc/KakaoIcon.png" />
+        <ButtoninnerText>카카오 로그인</ButtoninnerText>
       </KakaoLogin>
     </>
   );
