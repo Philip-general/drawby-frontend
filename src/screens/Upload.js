@@ -6,6 +6,7 @@ import { FontSpan } from "../components/Common/Commons";
 import { useForm } from "react-hook-form";
 import { Input, Textarea } from "../auth/Input";
 import { useNavigate } from "react-router";
+import useUser from "../hooks/useUser";
 
 // just some styled components for the image upload area
 const getColor = props => {
@@ -123,8 +124,25 @@ const CaptionInput = styled(Textarea)`
 `;
 // relevant code starts here
 const UPLOAD_PICTURE_MUTATION = gql`
-  mutation Mutation($file: Upload!, $name: String!, $caption: String) {
+  mutation uploadPicture($file: Upload!, $name: String!, $caption: String) {
     uploadPicture(file: $file, name: $name, caption: $caption) {
+      ok
+      id
+      error
+      file
+      caption
+      name
+      hashtags {
+        id
+        hashtagName
+      }
+    }
+  }
+`;
+
+const CREATE_FEED_MUTATION = gql`
+  mutation createFeed($pictureId: Int!) {
+    createFeed(pictureId: $pictureId) {
       ok
       error
     }
@@ -135,13 +153,13 @@ const Upload = ({ register: uploadRegister }) => {
   const [preview, setPreview] = useState();
   const [errors, setErrors] = useState();
   const [uploadFile, setUploadFile] = useState();
-  const [uploadPicture, { data }] = useMutation(UPLOAD_PICTURE_MUTATION);
+  const [uploadPicture, { loading }] = useMutation(UPLOAD_PICTURE_MUTATION);
+  const [createFeed] = useMutation(CREATE_FEED_MUTATION);
   const onDrop = useCallback(
     async ([file]) => {
       if (file) {
         setPreview(URL.createObjectURL(file));
         setUploadFile(file);
-        // uploadPicture({ variables: { file, name: "asdf", caption: "asdfasdf" } });
       } else {
         setErrors("Something went wrong. Check file type");
       }
@@ -165,9 +183,86 @@ const Upload = ({ register: uploadRegister }) => {
     setPreview(null);
     setUploadFile(null);
   };
-
+  const { data: userData } = useUser();
   const { register, handleSubmit, getValues } = useForm();
-
+  const createFeedUpdate = (
+    cache,
+    result,
+    id,
+    file,
+    caption,
+    name,
+    hashtags
+  ) => {
+    const {
+      data: {
+        createFeed: { ok }
+      }
+    } = result;
+    if (ok && id && file && caption && name && userData?.me) {
+      const newPicture = {
+        __typename: "Picture",
+        createdAt: Date.now() + "",
+        id,
+        isMine: true,
+        author: { ...userData.me },
+        file,
+        name,
+        caption,
+        hashtags,
+        totalLike: 0,
+        isLiked: false,
+        isBookmarked: false,
+        totalComment: 0,
+        comments: []
+      };
+      console.log(newPicture);
+      const newCachePicture = cache.writeFragment({
+        data: newPicture,
+        fragment: gql`
+          fragment picture on Picture {
+            id
+            createdAt
+            isMine
+            author {
+              username
+              avatar
+            }
+            file
+            name
+            hashtags
+            totalLike
+            isLiked
+            isBookmarked
+            totalComment
+            comments
+          }
+        `
+      });
+      console.log(newCachePicture);
+      cache.modify({
+        id: `User:${userData.me.username}`,
+        fields: {
+          pictures(prev) {
+            return [...prev, newCachePicture];
+          }
+        }
+      });
+    }
+  };
+  const onCompletedUploadPicture = result => {
+    const {
+      uploadPicture: { ok, id, file, caption, name, hashtags }
+    } = result;
+    if (ok && id) {
+      createFeed({
+        variables: { pictureId: id },
+        update: (cache, feedResult) =>
+          createFeedUpdate(cache, feedResult, id, file, caption, name, hashtags)
+      });
+    }
+    navigate(`/`);
+  };
   const onValid = () => {
     if (!uploadFile) {
       setErrors("그림을 추가하지 않았습니다. 그림을 추가해주세요.");
@@ -176,7 +271,7 @@ const Upload = ({ register: uploadRegister }) => {
     const { name, caption } = getValues();
     uploadPicture({
       variables: { file: uploadFile, name, caption },
-      onCompleted: () => navigate(`/`)
+      onCompleted: result => onCompletedUploadPicture(result)
     });
   };
 

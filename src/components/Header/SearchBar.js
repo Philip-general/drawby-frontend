@@ -192,7 +192,10 @@ function SearchBox() {
                     onClick={() => goHashtag(hashtag.hashtagName)}
                     key={hashtag.id}
                   >
-                    <SearchPicture src={hashtag.pictures[0].file} />
+                    {hashtag.pictures[0] && (
+                      <SearchPicture src={hashtag.pictures[0]?.file} />
+                    )}
+
                     <SearchText key={hashtag.id}>
                       {hashtag.hashtagName}
                     </SearchText>
