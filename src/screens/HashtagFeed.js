@@ -1,7 +1,17 @@
 import { gql, useQuery } from "@apollo/client";
 import React, { Fragment } from "react";
 import { useParams } from "react-router";
+import styled from "styled-components";
+import { FontSpan } from "../components/Common/Commons";
 import Picture from "../components/Picture";
+
+const HashtagTitle = styled(FontSpan)`
+  margin: 30px 0 16px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.44;
+  color: #333;
+`;
 
 const SEE_HASHTAG_PICTURES = gql`
   query seeHashtagPictures($hashtagName: String!) {
@@ -56,6 +66,7 @@ function HashtagFeed() {
   });
   return (
     <Fragment>
+      <HashtagTitle>#{hashtagName}</HashtagTitle>
       {data?.seeHashtagPictures?.map(picture => (
         <Picture key={picture.id} {...picture} />
       ))}
