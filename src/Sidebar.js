@@ -131,7 +131,7 @@ function Sidebar({ openModal }) {
   const hashtags = data?.me?.followHashtags.map(
     hashtag => hashtag.hashtagName.split("#")[1]
   );
-  const contests = ["11월 첫째주", "11월 둘째주", "11월 셋째주"];
+  const contests = ["2021년 12월 1주차"];
   // user가 follow하는 모든 hashtag들
   const modalHashtags = [];
   const [hashtagMenu, setHashtagMenu] = useState(false);
@@ -220,13 +220,8 @@ function Sidebar({ openModal }) {
       </MenuBtn>
       <DetailContainer>
         {contests.map(contest => (
-          <MenuBtn to={routes.notYet} key={contest}>
-            <Icon
-              width="18px"
-              height="23px"
-              left="-20px"
-              src="/PictureSrc/Calender.png"
-            />
+          <MenuBtn sub="true" to={`/contest/${contest}`} key={contest}>
+            <Icon width="18px" height="23px" src="/PictureSrc/Calender.png" />
             <HashtagBtn key={contest}>{contest}</HashtagBtn>
             <PassIcon src="/PictureSrc/Pass.png" />
           </MenuBtn>

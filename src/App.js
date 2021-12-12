@@ -11,8 +11,10 @@ import SignUp from "./screens/SignUp";
 import SocialSignUp from "./screens/SocialSignUp";
 import Upload from "./screens/Upload";
 import UserProfile from "./screens/UserProfile";
-import HashtagFeed from "./screens/HashtagFeed";
+import GridPictures from "./screens/GridPictures";
 import ProfileEdit from "./screens/ProfileEdit";
+import Test from "./screens/infiniteTest";
+import ContestFeed from "./screens/ContestFeed";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -56,12 +58,22 @@ function App() {
                 </Layout>
               }
             />
+            <Route path={`/test`} element={<Test />} />
             <Route
               path={routes.hashtag}
               element={
                 <Layout>
                   {"#f1f2f3"}
-                  <HashtagFeed />
+                  <GridPictures />
+                </Layout>
+              }
+            />
+            <Route
+              path={routes.contest}
+              element={
+                <Layout>
+                  {"#f1f2f3"}
+                  <ContestFeed />
                 </Layout>
               }
             />
