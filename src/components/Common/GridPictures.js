@@ -22,8 +22,8 @@ export const Icons = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${props => (props.small ? "155.8px" : "213.3px")};
-  height: ${props => (props.small ? "155.8px" : "213.3px")};
+  width: ${props => (props.small ? "137px" : "213.3px")};
+  height: ${props => (props.small ? "137px" : "213.3px")};
   border-radius: 8px;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
