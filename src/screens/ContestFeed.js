@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { useParams } from "react-router-dom";
 import ContestHeader from "../components/ContestHeader";
-import GridPictures from "./GridPictures";
+import GridPictures from "../components/GridPictures";
 
 function ContestFeed() {
   const { hashtagName } = useParams();
