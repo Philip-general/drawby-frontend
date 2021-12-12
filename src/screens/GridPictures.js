@@ -31,14 +31,14 @@ const SEE_HASHTAG_PICTURES = gql`
   }
 `;
 
-function HashtagFeed() {
+function GridPictures({ noTitle }) {
   const { hashtagName } = useParams();
   const { data } = useQuery(SEE_HASHTAG_PICTURES, {
     variables: { hashtagName: `#${hashtagName}` }
   });
   return (
     <Fragment>
-      <HashtagName>{`#${hashtagName}`}</HashtagName>
+      {!noTitle && <HashtagName>{`#${hashtagName}`}</HashtagName>}
       <Grid small>
         {data
           ? data?.seeHashtagPictures.map(picture => (
@@ -61,4 +61,4 @@ function HashtagFeed() {
   );
 }
 
-export default HashtagFeed;
+export default GridPictures;
