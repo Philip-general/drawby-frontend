@@ -6,7 +6,7 @@ import Sidebar from "./Sidebar";
 const Main = styled.main`
   background-color: ${props => (props.color ? props.color : "#fff")};
   display: flex;
-  min-height: 1000px;
+  min-height: 1000vh;
 `;
 
 const Line = styled.div`
