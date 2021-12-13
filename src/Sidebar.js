@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FontSpan } from "./components/Common/Commons";
 import { ModalBackground } from "./components/Common/Modal";
+import useDate from "./hooks/useDate";
 import useUser from "./hooks/useUser";
 import routes from "./routes";
 
@@ -131,7 +132,19 @@ function Sidebar({ openModal }) {
   const hashtags = data?.me?.followHashtags.map(
     hashtag => hashtag.hashtagName.split("#")[1]
   );
-  const contests = ["2021년 12월 1주차"];
+
+  const weekTime = 7 * 24 * 60 * 60 * 1000;
+  const date = new Date();
+  const today = useDate(date.getTime());
+  const lastWeek1 = useDate(date.getTime() - weekTime);
+  const lastWeek2 = useDate(date.getTime() - weekTime * 2);
+  const lastWeek3 = useDate(date.getTime() - weekTime * 3);
+  const weekList = [today, lastWeek1, lastWeek2, lastWeek3];
+  const contests = weekList.map(
+    weekInfo => `${weekInfo.year}년 ${weekInfo.month}월 ${weekInfo.weekNo}주차`
+  );
+  console.log(weekList);
+  console.log(contests);
   // user가 follow하는 모든 hashtag들
   const modalHashtags = [];
   const [hashtagMenu, setHashtagMenu] = useState(false);
