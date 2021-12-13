@@ -36,15 +36,6 @@ const FollowBtn = styled(FontSpan)`
   line-height: 1.29;
 `;
 
-const CHECK_FOLLOW_HASHTAG_QUERY = gql`
-  query checkFollowHashtag($hashtagName: String!) {
-    checkFollowHashtag(hashtagName: $hashtagName) {
-      countPictures
-      isFollowing
-    }
-  }
-`;
-
 const SEE_HASHTAG = gql`
   query seeHashtag($hashtagName: String!) {
     seeHashtag(hashtagName: $hashtagName) {
