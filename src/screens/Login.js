@@ -142,7 +142,9 @@ export default function Login() {
       <LoginLogo src="/PictureSrc/LoginLogo.png" />
       <LoginContainer>
         <LoginBox>
-          {createAccountSuccess ? <div>{createAccountSuccess}</div> : null}
+          {createAccountSuccess ? (
+            <FontSpan>{createAccountSuccess}</FontSpan>
+          ) : null}
           <form onSubmit={handleSubmit(onSubmit)}>
             <LoginInput placeholder="유저이름" {...register("username")} />
             <LoginInput
