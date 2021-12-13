@@ -101,6 +101,9 @@ export const client = new ApolloClient({
     typePolicies: {
       User: {
         keyFields: obj => `User:${obj.username}`
+      },
+      Hashtag: {
+        keyFields: obj => `Hashtag:${obj.hashtagName}`
       }
     }
   })
