@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FontSpan } from "./components/Common/Commons";
 import { ModalBackground } from "./components/Common/Modal";
+import useDate from "./hooks/useDate";
 import useUser from "./hooks/useUser";
 import routes from "./routes";
 
@@ -79,9 +80,9 @@ const Modal = styled.div`
   position: fixed;
   z-index: 2;
   top: 20%;
-  left: 36%;
+  left: 33%;
   width: 500px;
-  height: 60%;
+  height: 424px;
   padding: 12px 12px 12px 16px;
   justify-content: center;
   align-items: center;
@@ -91,24 +92,26 @@ const Modal = styled.div`
 
 const ModalHeader = styled.div`
   justify-content: space-between;
-  margin-top: 10px;
+  margin: 10px 0 30px;
   display: flex;
 `;
-const ModalName = styled.div`
-  margin-left: 10px;
-`;
+const ModalName = styled(FontSpan)``;
 
-const CloseBtn = styled.div`
-  background-color: red;
-  width: 50px;
-  height: 20px;
+const CloseBtn = styled.img`
+  cursor: pointer;
+  width: 26px;
+  height: 26px;
 `;
 
 const ModalBody = styled.div`
   background-color: white;
-  width: 94%;
-  height: 60%;
-  margin: 3%;
+`;
+
+const CalanderHeader = styled.div`
+  height: 44px;
+  background-color: #fafafa;
+  border-radius: 10px;
+  padding: 10px 8px;
 `;
 
 const ModalHashtagBtn = styled.button`
@@ -131,7 +134,17 @@ function Sidebar({ openModal }) {
   const hashtags = data?.me?.followHashtags.map(
     hashtag => hashtag.hashtagName.split("#")[1]
   );
-  const contests = ["2021년 12월 1주차"];
+
+  const weekTime = 7 * 24 * 60 * 60 * 1000;
+  const date = new Date();
+  const today = useDate(date.getTime());
+  const lastWeek1 = useDate(date.getTime() - weekTime);
+  const lastWeek2 = useDate(date.getTime() - weekTime * 2);
+  const lastWeek3 = useDate(date.getTime() - weekTime * 3);
+  const weekList = [today, lastWeek1, lastWeek2, lastWeek3];
+  const contests = weekList.map(
+    weekInfo => `${weekInfo.year}년 ${weekInfo.month}월 ${weekInfo.weekNo}주차`
+  );
   // user가 follow하는 모든 hashtag들
   const modalHashtags = [];
   const [hashtagMenu, setHashtagMenu] = useState(false);
@@ -158,7 +171,7 @@ function Sidebar({ openModal }) {
         <Modal>
           <ModalHeader>
             <ModalName>HashtagMenu</ModalName>
-            <CloseBtn onClick={closeHashtagMenu}>X</CloseBtn>
+            <CloseBtn src="/PictureSrc/Exit.png" onClick={closeHashtagMenu} />
           </ModalHeader>
           <ModalBody>
             {modalHashtags
@@ -168,7 +181,7 @@ function Sidebar({ openModal }) {
               : null}
           </ModalBody>
           <ModalFooter>
-            <CloseBtn onClick={closeHashtagMenu}>Save!</CloseBtn>
+            <CloseBtn src="/PictureSrc/Exit.png" onClick={closeHashtagMenu} />
           </ModalFooter>
         </Modal>
       </ModalBackground>
@@ -179,10 +192,12 @@ function Sidebar({ openModal }) {
       <ModalBackground black="true" onClick={closeContestMenu}>
         <Modal>
           <ModalHeader>
-            <ModalName>ContestMenu</ModalName>
-            <CloseBtn onClick={closeContestMenu}>X</CloseBtn>
+            <ModalName>콘테스트 선택</ModalName>
+            <CloseBtn src="/PictureSrc/Exit.png" onClick={closeContestMenu} />
           </ModalHeader>
-          <ModalBody>여기는 달력이 들어갈 자리입니다.</ModalBody>
+          <ModalBody>
+            <CalanderHeader />
+          </ModalBody>
         </Modal>
       </ModalBackground>
     );

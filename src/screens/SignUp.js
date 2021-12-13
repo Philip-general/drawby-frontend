@@ -151,20 +151,20 @@ export default function SignUp() {
         <SignUpBox>
           <form onSubmit={handleSubmit(onValid)}>
             <SignUpInput
-              placeholder="username"
-              {...register("유저이름", {
+              placeholder="유저이름"
+              {...register("username", {
                 required: "username이 필요합니다."
               })}
             />
             <SignUpInput
-              placeholder="password"
-              {...register("비밀번호", {
+              placeholder="비밀번호"
+              {...register("password", {
                 required: "password가 필요합니다."
               })}
             />
             <SignUpInput
-              placeholder="email"
-              {...register("이메일", {
+              placeholder="이메일"
+              {...register("email", {
                 required: "email이 필요합니다."
               })}
             />
