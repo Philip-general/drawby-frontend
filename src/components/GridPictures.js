@@ -15,30 +15,73 @@ const HashtagName = styled(FontSpan)`
   color: #333;
 `;
 
-const SEE_HASHTAG_PICTURES = gql`
-  query seeHashtagPictures($hashtagName: String!) {
-    seeHashtagPictures(hashtagName: $hashtagName) {
+const SEE_HASHTAG = gql`
+  query seeHashtag($hashtagName: String!) {
+    seeHashtag(hashtagName: $hashtagName) {
       id
-      file
-      totalLike
-      totalComment
+      hashtagName
+      isFollowing
+      pictures {
+        id
+        file
+        name
+        author {
+          username
+          avatar
+        }
+        caption
+        comments {
+          id
+          payload
+          isMine
+          isLiked
+          createdAt
+          author {
+            username
+            avatar
+          }
+          nestedComments {
+            id
+            payload
+            isMine
+            createdAt
+            isLiked
+            author {
+              avatar
+              username
+            }
+          }
+        }
+        hashtags {
+          id
+          hashtagName
+        }
+        totalComment
+        totalLike
+        isMine
+        isLiked
+        isBookmarked
+      }
     }
   }
 `;
 
 function GridPictures({ noTitle }) {
   const { hashtagName } = useParams();
-  const { data } = useQuery(SEE_HASHTAG_PICTURES, {
-    variables: { hashtagName: `#${hashtagName}` }
+  const contestArr = hashtagName.split(" ");
+  const contestName =
+    "#" + contestArr[0] + "_" + contestArr[1] + "_" + contestArr[2];
+  const { data } = useQuery(SEE_HASHTAG, {
+    variables: { hashtagName: contestName }
   });
   return (
     <Fragment>
       {!noTitle && <HashtagName>{`#${hashtagName}`}</HashtagName>}
       <Grid small>
         {data
-          ? data?.seeHashtagPictures.map(picture => (
-              <SmallPicture key={picture.id} small bg={picture.file}>
-                <Icons small>
+          ? data?.seeHashtag?.pictures.map(picture => (
+              <SmallPicture key={picture.id} small="158.8px" bg={picture.file}>
+                <Icons small="158.8px">
                   <Icon>
                     <FontAwesomeIcon icon={faHeart} color="#ff2b57" />
                     <FontSpan>{picture.totalLike}</FontSpan>
