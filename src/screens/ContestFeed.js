@@ -13,7 +13,7 @@ function ContestFeed() {
         customMonth={contestArr[1]}
         customWeekNo={contestArr[2]}
       />
-      <GridPictures noTitle="true" />
+      <GridPictures noTitle="true" contest="true" />
     </Fragment>
   );
 }

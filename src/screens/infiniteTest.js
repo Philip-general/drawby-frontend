@@ -1,13 +1,21 @@
 import { gql, useQuery } from "@apollo/client";
 import React from "react";
+import styled from "styled-components";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const INFINITE_TEST_QUERY = gql`
   query infiniteTest($skip: Int!, $take: Int!) {
     infiniteTest(skip: $skip, take: $take) {
       id
-      payload
+      file
+      name
     }
   }
+`;
+
+const Picture = styled.img`
+  height: 400px;
+  width: 400px;
 `;
 
 function Test() {
@@ -32,12 +40,28 @@ function Test() {
 
   return (
     <div>
-      <button onClick={onLoadMore}>더 불러오기</button>
-      {data?.infiniteTest?.map(test => (
-        <div key={test.id}>{test.payload}</div>
-      ))}
+      {!loading && data && data.infiniteTest && (
+        <InfiniteScroll
+          dataLength={data.infiniteTest.length}
+          next={onLoadMore}
+          hasMore={true}
+        >
+          {data.infiniteTest.map(test => (
+            <Picture src={test.file} />
+          ))}
+        </InfiniteScroll>
+      )}
     </div>
   );
 }
 
 export default Test;
+
+{
+  /* <button onClick={onLoadMore}>더 불러오기</button>
+      <div>
+        {data?.infiniteTest?.map(test => (
+          <Picture src={test.file} />
+        ))}
+      </div> */
+}

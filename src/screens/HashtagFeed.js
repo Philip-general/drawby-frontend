@@ -1,11 +1,11 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { update } from "lodash";
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
 import { FontSpan } from "../components/Common/Commons";
 import Picture from "../components/Picture";
 import useUser from "../hooks/useUser";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const HashtagTitle = styled(FontSpan)`
   font-size: 18px;
@@ -37,8 +37,8 @@ const FollowBtn = styled(FontSpan)`
 `;
 
 const SEE_HASHTAG = gql`
-  query seeHashtag($hashtagName: String!) {
-    seeHashtag(hashtagName: $hashtagName) {
+  query seeHashtag($hashtagName: String!, $skip: Int!, $take: Int!) {
+    seeHashtag(hashtagName: $hashtagName, skip: $skip, take: $take) {
       id
       hashtagName
       isFollowing
@@ -108,10 +108,24 @@ const UNFOLLOW_HASHTAG = gql`
 function HashtagFeed() {
   const { hashtagName } = useParams();
   const { data: userData } = useUser();
-  const { isFollow, setIsFollow } = useState();
-  const { data } = useQuery(SEE_HASHTAG, {
-    variables: { hashtagName: "#" + hashtagName }
+  const { data, loading, fetchMore } = useQuery(SEE_HASHTAG, {
+    variables: { hashtagName: "#" + hashtagName, skip: 0, take: 5 }
   });
+  const onLoadMore = () => {
+    fetchMore({
+      variables: {
+        skip: data.seeHashtag.length,
+        take: 5
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return Object.assign({}, prev, {
+          seeHashtag: [...prev.seeHashtag, ...fetchMoreResult.seeHashtag]
+        });
+      }
+    });
+  };
+
   const [followHashtagMutation] = useMutation(FOLLOW_HASHTAG);
   const [unfollowHashtagMutation] = useMutation(UNFOLLOW_HASHTAG);
   const followHashtagUpdate = (cache, result) => {
@@ -204,10 +218,19 @@ function HashtagFeed() {
           </FollowBtn>
         </FollowBox>
       </HashtagHeader>
-      {data?.seeHashtag?.pictures.length !== 0 ? (
-        data?.seeHashtag?.pictures.map(picture => (
-          <Picture key={picture.id} {...picture} />
-        ))
+      {!loading &&
+      data &&
+      data.seeHashtag &&
+      data?.seeHashtag?.pictures.length !== 0 ? (
+        <InfiniteScroll
+          dataLength={data.seeHashtag.pictures.length}
+          next={onLoadMore}
+          hasMore={true}
+        >
+          {data?.seeHashtag?.pictures.map(picture => (
+            <Picture key={picture.id} {...picture} />
+          ))}
+        </InfiniteScroll>
       ) : (
         <FontSpan>그림을 업로드 해주세요.</FontSpan>
       )}
