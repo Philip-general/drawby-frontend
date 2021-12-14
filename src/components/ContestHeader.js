@@ -3,7 +3,9 @@ import { gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
 import useDate from "../hooks/useDate";
 import { FontSpan } from "./Common/Commons";
-import { SmallPicture } from "./Common/GridPictures";
+import { Icon, SmallPicture } from "./Common/GridPictures";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 const ContestHeaderContainer = styled.div``;
 
@@ -99,6 +101,26 @@ const SlideBtn = styled.img`
   left: ${props => props.x};
 `;
 
+const RankedPictureLikeBox = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  bottom: 8px;
+  right: 5px;
+`;
+
+const RankedPictureLikeIcon = styled(FontAwesomeIcon)`
+  width: 11px;
+  height: 11px;
+`;
+
+const RankedPictureLike = styled(FontSpan)`
+  color: #fff;
+  font-size: 13px;
+`;
+
 const RobotoFont = styled.span`
   @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
   position: absolute;
@@ -186,8 +208,14 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
             {rankedPictures &&
               rankedPictures.map(picture => (
                 <RankedPictureContainer key={picture.id}>
-                  <SmallPicture small bg={`${picture.file}`} />
+                  <SmallPicture small="137px" bg={`${picture.file}`} />
                   <SmallPictureShade />
+                  <RankedPictureLikeBox>
+                    <Icon>
+                      <RankedPictureLikeIcon icon={faHeart} color="#ff2b57" />
+                      <RankedPictureLike>{picture.totalLike}</RankedPictureLike>
+                    </Icon>
+                  </RankedPictureLikeBox>
                   <RobotoFont>{picture.rank}</RobotoFont>
                   <RankedPictureName>{picture.name}</RankedPictureName>
                   <RankedPictureHashtags>
