@@ -3,10 +3,10 @@ import styled from "styled-components";
 export const Grid = styled.div`
   margin-top: 40px;
   display: grid;
-  grid-auto-rows: 158.8px;
+  grid-auto-rows: ${props => (props.small ? "158.8px" : "213.3px")};
   grid-template-columns: ${props =>
     props.small ? "repeat(4, 1fr)" : "repeat(3, 1fr)"};
-  gap: 15px;
+  gap: 10px;
 `;
 
 export const SmallPicture = styled.div`
