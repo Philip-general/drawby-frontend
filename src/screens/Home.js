@@ -54,7 +54,6 @@ export default function Home() {
   const { data, loading, fetchMore } = useQuery(FEED_QUERY, {
     variables: { skip: 0, take: 5 }
   });
-  console.log(data);
   const onLoadMore = () => {
     fetchMore({
       variables: {
