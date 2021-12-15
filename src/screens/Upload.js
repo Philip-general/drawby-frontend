@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { Input, Textarea } from "../auth/Input";
 import { useNavigate } from "react-router";
 import useUser from "../hooks/useUser";
-
+import useDate from "../hooks/useDate.js";
 // just some styled components for the image upload area
 const getColor = props => {
   if (props.isDragAccept) {
@@ -93,14 +93,19 @@ const ErrorMessage = styled(FontSpan)`
 `;
 
 const BlueBtn = styled.button`
+  cursor: pointer;
   height: 32px;
   padding: 0 12px;
+  border: solid 1px #ccc;
   justify-content: center;
   align-items: center;
   border-radius: 16px;
   background-color: #0e3870;
   color: #fff;
   font-size: 14px;
+  &:active {
+    background-color: #3e68a0;
+  }
 `;
 
 const NameInput = styled(Input)`
@@ -122,6 +127,26 @@ const CaptionInput = styled(Textarea)`
   }
   margin-bottom: 20px;
 `;
+
+const ModalFooter = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ContestCheckbox = styled.button`
+  cursor: pointer;
+  display: flex;
+  padding: 2px 12px;
+  background-color: ${props => (props.clicked ? "#0e3870" : "#f1f1f1")};
+  color: ${props => (props.clicked ? "#fff" : "black")};
+  border: solid 1px #ccc;
+  border-radius: 10px;
+  &:active {
+    background-color: ${props => (props.clicked ? "#3e68a0" : "#ccc")};
+  }
+`;
+
 // relevant code starts here
 const UPLOAD_PICTURE_MUTATION = gql`
   mutation uploadPicture($file: Upload!, $name: String!, $caption: String) {
@@ -150,9 +175,11 @@ const CREATE_FEED_MUTATION = gql`
 `;
 
 const Upload = ({ register: uploadRegister }) => {
+  const { year, month, weekNo } = useDate(new Date());
   const [preview, setPreview] = useState();
   const [errors, setErrors] = useState();
   const [uploadFile, setUploadFile] = useState();
+  const [uploadContest, setUploadContest] = useState(false);
   const [uploadPicture, { loading }] = useMutation(UPLOAD_PICTURE_MUTATION);
   const [createFeed] = useMutation(CREATE_FEED_MUTATION);
   const onDrop = useCallback(
@@ -239,7 +266,6 @@ const Upload = ({ register: uploadRegister }) => {
           }
         `
       });
-      console.log(newCachePicture);
       cache.modify({
         id: `User:${userData.me.username}`,
         fields: {
@@ -269,11 +295,16 @@ const Upload = ({ register: uploadRegister }) => {
       return;
     }
     const { name, caption } = getValues();
+    let captions = caption;
+    if (uploadContest) {
+      captions += " #" + year + "년_" + month + "월_" + weekNo + "주차";
+    }
     uploadPicture({
-      variables: { file: uploadFile, name, caption },
+      variables: { file: uploadFile, name, caption: captions },
       onCompleted: result => onCompletedUploadPicture(result)
     });
   };
+  console.log(uploadContest);
 
   return (
     <BackGround>
@@ -322,9 +353,17 @@ const Upload = ({ register: uploadRegister }) => {
               {...register("caption")}
               placeholder="그림의 설명을 입력해주세요."
             />
-            <BlueBtn type="submit">
-              <FontSpan>다음</FontSpan>
-            </BlueBtn>
+            <ModalFooter>
+              <BlueBtn type="submit">
+                <FontSpan>다음</FontSpan>
+              </BlueBtn>
+              <ContestCheckbox
+                clicked={uploadContest}
+                onClick={() => setUploadContest(!uploadContest)}
+              >
+                <FontSpan>이번주 콘테스트 참가</FontSpan>
+              </ContestCheckbox>
+            </ModalFooter>
           </form>
         </ModalBody>
       </ModalBox>
