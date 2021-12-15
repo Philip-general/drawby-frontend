@@ -298,7 +298,22 @@ function UserProfile() {
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return Object.assign({}, prev, {
-          seeProfile: [...prev.seeProfile, ...fetchMoreResult.seeProfile]
+          seeProfile: {
+            id: prev.seeProfile.id,
+            username: prev.seeProfile.username,
+            email: prev.seeProfile.email,
+            avatar: prev.seeProfile.avatar,
+            bio: prev.seeProfile.bio,
+            pictures: prev.seeProfile.pictures,
+            isMe: prev.seeProfile.isMe,
+            totalFollowers: prev.seeProfile.totalFollowers,
+            totalFollowings: prev.seeProfile.totalFollowings,
+            isFollowing: prev.seeProfile.isFollowing,
+            contestPictures: [
+              ...prev.seeProfile.contestPictures,
+              ...fetchMoreResult.seeProfile.contestPictures
+            ]
+          }
         });
       }
     });
@@ -400,7 +415,6 @@ function UserProfile() {
             dataLength={data.seeProfile.pictures.length}
             next={onLoadMorePictures}
             hasMore={true}
-            // style={{ height: "auto" }}
           >
             <Gallery pictures={data?.seeProfile?.pictures} />
           </InfiniteScroll>
@@ -410,7 +424,6 @@ function UserProfile() {
             dataLength={data.seeProfile.contestPictures.length}
             next={onLoadMoreContestPictures}
             hasMore={true}
-            style={{ height: "auto" }}
           >
             <Gallery pictures={data?.seeProfile?.contestPictures} />
           </InfiniteScroll>
