@@ -6,6 +6,7 @@ import useUser from "../hooks/useUser";
 import Gallery from "../components/Gallery";
 import { useParams } from "react-router";
 import { FontSpan } from "../components/Common/Commons";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const SUserProfile = styled.div`
   display: flex;
@@ -108,8 +109,8 @@ const GalleryText = styled(FontSpan)`
 `;
 
 const SEE_PROFILE_QUERY = gql`
-  query seeProfile($username: String!) {
-    seeProfile(username: $username) {
+  query seeProfile($username: String!, $skip: Int!, $take: Int!) {
+    seeProfile(username: $username, skip: $skip, take: $take) {
       id
       username
       email
@@ -151,9 +152,11 @@ const UNFOLLOW_USER_MUTATION = gql`
 function UserProfile() {
   const { username } = useParams();
   const { data: userData } = useUser();
-  const { data } = useQuery(SEE_PROFILE_QUERY, {
+  const { data, loading, fetchMore } = useQuery(SEE_PROFILE_QUERY, {
     variables: {
-      username
+      username,
+      skip: 0,
+      take: 12
     }
   });
 
@@ -247,6 +250,22 @@ function UserProfile() {
   };
 
   const [gallery, setGallery] = useState(0);
+
+  const onLoadMorePictures = () => {
+    fetchMore({
+      variables: {
+        skip: data.seeProfile.pictures.length,
+        take: 12
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return Object.assign({}, prev, {
+          seeProfile: [...prev.seeProfile, ...fetchMoreResult.seeProfile]
+        });
+      }
+    });
+  };
+
   return (
     <Fragment>
       <SUserProfile>
@@ -338,9 +357,16 @@ function UserProfile() {
             )}
           </div>
         </GalleryBtns>
-        {data && gallery === 0 ? (
-          <Gallery pictures={data?.seeProfile?.pictures} />
-        ) : null}
+        {!loading && data && data.seeProfile && gallery === 0 && (
+          <InfiniteScroll
+            dataLength={data.seeProfile.pictures.length}
+            next={onLoadMorePictures}
+            hasMore={true}
+            style={{ height: "auto" }}
+          >
+            <Gallery pictures={data?.seeProfile?.pictures} />
+          </InfiniteScroll>
+        )}
       </UserPictureContainer>
     </Fragment>
   );

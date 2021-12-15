@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontSpan } from "./Common/Commons";
 import styled from "styled-components";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const HashtagName = styled(FontSpan)`
   margin: 30px 0 16px;
@@ -15,30 +16,98 @@ const HashtagName = styled(FontSpan)`
   color: #333;
 `;
 
-const SEE_HASHTAG_PICTURES = gql`
-  query seeHashtagPictures($hashtagName: String!) {
-    seeHashtagPictures(hashtagName: $hashtagName) {
+const SEE_HASHTAG = gql`
+  query seeHashtag($hashtagName: String!, $skip: Int!, $take: Int!) {
+    seeHashtag(hashtagName: $hashtagName, skip: $skip, take: $take) {
       id
-      file
-      totalLike
-      totalComment
+      hashtagName
+      isFollowing
+      pictures {
+        id
+        file
+        name
+        author {
+          username
+          avatar
+        }
+        caption
+        comments {
+          id
+          payload
+          isMine
+          isLiked
+          createdAt
+          author {
+            username
+            avatar
+          }
+          nestedComments {
+            id
+            payload
+            isMine
+            createdAt
+            isLiked
+            author {
+              avatar
+              username
+            }
+          }
+        }
+        hashtags {
+          id
+          hashtagName
+        }
+        totalComment
+        totalLike
+        isMine
+        isLiked
+        isBookmarked
+      }
     }
   }
 `;
 
-function GridPictures({ noTitle }) {
+function GridPictures({ noTitle, contest }) {
   const { hashtagName } = useParams();
-  const { data } = useQuery(SEE_HASHTAG_PICTURES, {
-    variables: { hashtagName: `#${hashtagName}` }
+  let hashtagTopic;
+  if (contest) {
+    const contestArr = hashtagName.split(" ");
+    hashtagTopic =
+      "#" + contestArr[0] + "_" + contestArr[1] + "_" + contestArr[2];
+  } else {
+    hashtagTopic = hashtagName;
+  }
+  const { data, loading, fetchMore } = useQuery(SEE_HASHTAG, {
+    variables: { hashtagName: hashtagTopic, skip: 0, take: 12 }
   });
+  const onLoadMore = () => {
+    fetchMore({
+      variables: {
+        skip: data.seeHashtag.length,
+        take: 12
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return Object.assign({}, prev, {
+          seeHashtag: [...prev.seeHashtag, ...fetchMoreResult.seeHashtag]
+        });
+      }
+    });
+  };
   return (
     <Fragment>
       {!noTitle && <HashtagName>{`#${hashtagName}`}</HashtagName>}
-      <Grid small>
-        {data
-          ? data?.seeHashtagPictures.map(picture => (
-              <SmallPicture key={picture.id} small bg={picture.file}>
-                <Icons small>
+
+      {!loading && data && data.seeHashtag && (
+        <InfiniteScroll
+          dataLength={data.seeHashtag.pictures}
+          next={onLoadMore}
+          hasMore={true}
+        >
+          <Grid small>
+            {data?.seeHashtag?.pictures.map(picture => (
+              <SmallPicture key={picture.id} small="158.8px" bg={picture.file}>
+                <Icons small="158.8px">
                   <Icon>
                     <FontAwesomeIcon icon={faHeart} color="#ff2b57" />
                     <FontSpan>{picture.totalLike}</FontSpan>
@@ -49,9 +118,10 @@ function GridPictures({ noTitle }) {
                   </Icon>
                 </Icons>
               </SmallPicture>
-            ))
-          : null}
-      </Grid>
+            ))}
+          </Grid>
+        </InfiniteScroll>
+      )}
     </Fragment>
   );
 }

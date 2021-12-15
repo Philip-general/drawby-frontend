@@ -3,17 +3,17 @@ import styled from "styled-components";
 export const Grid = styled.div`
   margin-top: 40px;
   display: grid;
-  grid-auto-rows: 228.3px;
+  grid-auto-rows: ${props => (props.small ? "158.8px" : "213.3px")};
   grid-template-columns: ${props =>
     props.small ? "repeat(4, 1fr)" : "repeat(3, 1fr)"};
-  gap: 20px;
+  gap: 10px;
 `;
 
 export const SmallPicture = styled.div`
   background-image: url(${props => props.bg});
   background-size: cover;
-  width: ${props => (props.small ? "137px" : "213.3px")};
-  height: ${props => (props.small ? "137px" : "213.3px")};
+  width: ${props => (props.small ? props.small : "213.3px")};
+  height: ${props => (props.small ? props.small : "213.3px")};
   border-radius: 8px;
 `;
 
@@ -22,8 +22,8 @@ export const Icons = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${props => (props.small ? "137px" : "213.3px")};
-  height: ${props => (props.small ? "137px" : "213.3px")};
+  width: ${props => (props.small ? props.small : "213.3px")};
+  height: ${props => (props.small ? props.small : "213.3px")};
   border-radius: 8px;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
