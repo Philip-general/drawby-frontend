@@ -124,6 +124,14 @@ const SEE_PROFILE_QUERY = gql`
         totalLike
         totalComment
       }
+      contestPictures {
+        id
+        caption
+        file
+        name
+        totalLike
+        totalComment
+      }
       isMe
       totalFollowers
       totalFollowings
@@ -196,7 +204,6 @@ function UserProfile() {
     });
 
   const unfollowUserUpdate = (cache, result) => {
-    console.log("here");
     const {
       data: {
         unfollowUser: { ok }
@@ -255,6 +262,21 @@ function UserProfile() {
     fetchMore({
       variables: {
         skip: data.seeProfile.pictures.length,
+        take: 12
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return Object.assign({}, prev, {
+          seeProfile: [...prev.seeProfile, ...fetchMoreResult.seeProfile]
+        });
+      }
+    });
+  };
+
+  const onLoadMoreContestPictures = () => {
+    fetchMore({
+      variables: {
+        skip: data.seeProfile.contestPictures.length,
         take: 12
       },
       updateQuery: (prev, { fetchMoreResult }) => {
@@ -365,6 +387,16 @@ function UserProfile() {
             style={{ height: "auto" }}
           >
             <Gallery pictures={data?.seeProfile?.pictures} />
+          </InfiniteScroll>
+        )}
+        {!loading && data && data.seeProfile && gallery === 1 && (
+          <InfiniteScroll
+            dataLength={data.seeProfile.contestPictures.length}
+            next={onLoadMoreContestPictures}
+            hasMore={true}
+            style={{ height: "auto" }}
+          >
+            <Gallery pictures={data?.seeProfile?.contestPictures} />
           </InfiniteScroll>
         )}
       </UserPictureContainer>
