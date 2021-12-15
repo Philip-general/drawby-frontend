@@ -20,6 +20,7 @@ const Feed = styled.div`
   background-color: ${props => (props.color ? props.color : "#fff")};
   position: relative;
   padding: 61px 400px;
+  min-height: 100vh;
 `;
 
 export default function Layout({ children }) {
