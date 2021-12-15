@@ -110,13 +110,13 @@ const GalleryText = styled(FontSpan)`
 
 const SEE_PROFILE_QUERY = gql`
   query seeProfile($username: String!, $skip: Int!, $take: Int!) {
-    seeProfile(username: $username, skip: $skip, take: $take) {
+    seeProfile(username: $username) {
       id
       username
       email
       avatar
       bio
-      pictures {
+      pictures(skip: $skip, take: $take) {
         id
         caption
         file
@@ -261,13 +261,29 @@ function UserProfile() {
   const onLoadMorePictures = () => {
     fetchMore({
       variables: {
+        username,
         skip: data.seeProfile.pictures.length,
         take: 12
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return Object.assign({}, prev, {
-          seeProfile: [...prev.seeProfile, ...fetchMoreResult.seeProfile]
+          seeProfile: {
+            id: prev.seeProfile.id,
+            username: prev.seeProfile.username,
+            email: prev.seeProfile.email,
+            avatar: prev.seeProfile.avatar,
+            bio: prev.seeProfile.bio,
+            contestPictures: prev.seeProfile.contestPictures,
+            isMe: prev.seeProfile.isMe,
+            totalFollowers: prev.seeProfile.totalFollowers,
+            totalFollowings: prev.seeProfile.totalFollowings,
+            isFollowing: prev.seeProfile.isFollowing,
+            pictures: [
+              ...prev.seeProfile.pictures,
+              ...fetchMoreResult.seeProfile.pictures
+            ]
+          }
         });
       }
     });
@@ -384,7 +400,7 @@ function UserProfile() {
             dataLength={data.seeProfile.pictures.length}
             next={onLoadMorePictures}
             hasMore={true}
-            style={{ height: "auto" }}
+            // style={{ height: "auto" }}
           >
             <Gallery pictures={data?.seeProfile?.pictures} />
           </InfiniteScroll>
