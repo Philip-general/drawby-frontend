@@ -96,7 +96,8 @@ const SlideBtn = styled.img`
   width: 66px;
   height: 66px;
   position: absolute;
-  top: ${props => (props.y ? props.y : "108px")};
+  cursor: pointer;
+  top: ${props => (props.y ? props.y : "168px")};
   z-index: 1;
   left: ${props => props.x};
 `;
@@ -199,7 +200,7 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
         {picturesLen > 4 && (
           <SlideBtn
             onClick={prevSlide}
-            x="-35px"
+            x="365px"
             src="/PictureSrc/LeftArrow.png"
           />
         )}
@@ -239,8 +240,8 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
         {picturesLen > 4 && (
           <SlideBtn
             onClick={nextSlide}
-            x="650px"
-            y="113px"
+            x="1050px"
+            y="173px"
             src="/PictureSrc/RightArrow.png"
           />
         )}

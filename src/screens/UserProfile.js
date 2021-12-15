@@ -110,13 +110,21 @@ const GalleryText = styled(FontSpan)`
 
 const SEE_PROFILE_QUERY = gql`
   query seeProfile($username: String!, $skip: Int!, $take: Int!) {
-    seeProfile(username: $username, skip: $skip, take: $take) {
+    seeProfile(username: $username) {
       id
       username
       email
       avatar
       bio
-      pictures {
+      pictures(skip: $skip, take: $take) {
+        id
+        caption
+        file
+        name
+        totalLike
+        totalComment
+      }
+      contestPictures {
         id
         caption
         file
@@ -196,7 +204,6 @@ function UserProfile() {
     });
 
   const unfollowUserUpdate = (cache, result) => {
-    console.log("here");
     const {
       data: {
         unfollowUser: { ok }
@@ -254,13 +261,59 @@ function UserProfile() {
   const onLoadMorePictures = () => {
     fetchMore({
       variables: {
+        username,
         skip: data.seeProfile.pictures.length,
         take: 12
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return Object.assign({}, prev, {
-          seeProfile: [...prev.seeProfile, ...fetchMoreResult.seeProfile]
+          seeProfile: {
+            id: prev.seeProfile.id,
+            username: prev.seeProfile.username,
+            email: prev.seeProfile.email,
+            avatar: prev.seeProfile.avatar,
+            bio: prev.seeProfile.bio,
+            contestPictures: prev.seeProfile.contestPictures,
+            isMe: prev.seeProfile.isMe,
+            totalFollowers: prev.seeProfile.totalFollowers,
+            totalFollowings: prev.seeProfile.totalFollowings,
+            isFollowing: prev.seeProfile.isFollowing,
+            pictures: [
+              ...prev.seeProfile.pictures,
+              ...fetchMoreResult.seeProfile.pictures
+            ]
+          }
+        });
+      }
+    });
+  };
+
+  const onLoadMoreContestPictures = () => {
+    fetchMore({
+      variables: {
+        skip: data.seeProfile.contestPictures.length,
+        take: 12
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return Object.assign({}, prev, {
+          seeProfile: {
+            id: prev.seeProfile.id,
+            username: prev.seeProfile.username,
+            email: prev.seeProfile.email,
+            avatar: prev.seeProfile.avatar,
+            bio: prev.seeProfile.bio,
+            pictures: prev.seeProfile.pictures,
+            isMe: prev.seeProfile.isMe,
+            totalFollowers: prev.seeProfile.totalFollowers,
+            totalFollowings: prev.seeProfile.totalFollowings,
+            isFollowing: prev.seeProfile.isFollowing,
+            contestPictures: [
+              ...prev.seeProfile.contestPictures,
+              ...fetchMoreResult.seeProfile.contestPictures
+            ]
+          }
         });
       }
     });
@@ -362,9 +415,17 @@ function UserProfile() {
             dataLength={data.seeProfile.pictures.length}
             next={onLoadMorePictures}
             hasMore={true}
-            style={{ height: "auto" }}
           >
             <Gallery pictures={data?.seeProfile?.pictures} />
+          </InfiniteScroll>
+        )}
+        {!loading && data && data.seeProfile && gallery === 1 && (
+          <InfiniteScroll
+            dataLength={data.seeProfile.contestPictures.length}
+            next={onLoadMoreContestPictures}
+            hasMore={true}
+          >
+            <Gallery pictures={data?.seeProfile?.contestPictures} />
           </InfiniteScroll>
         )}
       </UserPictureContainer>
