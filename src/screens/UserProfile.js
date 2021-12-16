@@ -110,7 +110,13 @@ const GalleryText = styled(FontSpan)`
 `;
 
 const SEE_PROFILE_QUERY = gql`
-  query seeProfile($username: String!, $skip: Int!, $take: Int!) {
+  query seeProfile(
+    $username: String!
+    $skip: Int!
+    $take: Int!
+    $contestSkip: Int!
+    $contestTake: Int!
+  ) {
     seeProfile(username: $username) {
       id
       username
@@ -125,7 +131,7 @@ const SEE_PROFILE_QUERY = gql`
         totalLike
         totalComment
       }
-      contestPictures {
+      contestPictures(contestSkip: $contestSkip, contestTake: $contestTake) {
         id
         caption
         file
@@ -166,7 +172,9 @@ function UserProfile() {
     variables: {
       username,
       skip: 0,
-      take: 12
+      take: 12,
+      contestSkip: 0,
+      contestTake: 12
     }
   });
 
@@ -266,7 +274,9 @@ function UserProfile() {
       variables: {
         username,
         skip: data.seeProfile.pictures.length,
-        take: 12
+        take: 12,
+        contestSkip: 0,
+        contestTake: 0
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
@@ -295,8 +305,10 @@ function UserProfile() {
   const onLoadMoreContestPictures = () => {
     fetchMore({
       variables: {
-        skip: data.seeProfile.contestPictures.length,
-        take: 12
+        skip: 0,
+        take: 0,
+        contestSkip: data.seeProfile.contestPictures.length,
+        contestTake: 12
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
