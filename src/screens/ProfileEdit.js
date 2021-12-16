@@ -4,26 +4,40 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { Input, Textarea } from "../auth/Input";
 import UserIcon from "../components/Common/Avatar";
+import { FontLabel } from "../components/Common/Commons";
 import useUser from "../hooks/useUser";
 
 const EditContainer = styled.div`
   display: flex;
-`;
-
-const UserContainer = styled.div`
-  width: 200px;
-  height: 200px;
-  border-radius: 100%;
-`;
-
-const TestView = styled.img`
-  width: inherit;
-  height: inherit;
-  border-radius: inherit;
+  padding: 50px 0;
 `;
 
 const Column = styled.div`
   margin-right: 30px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+`;
+
+const PictureInput = styled(FontLabel)`
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  padding: 3px 10px;
+  height: 20px;
+  background-color: #f2f2f2;
+  border: solid 1px #ccc;
+  &:hover {
+    background-color: #ccc;
+  }
+  &:active {
+    background-color: #f4f4f4;
+  }
 `;
 
 const EDIT_PROFILE_MUTATION = gql`
@@ -51,16 +65,23 @@ function ProfileEdit() {
   const { data } = useUser();
   const [preview, setPreview] = useState();
   const [uploadFile, setUploadFile] = useState();
+  const [editFinish, setEditFinish] = useState(false);
   const { register, handleSubmit, getValues, setValue } = useForm();
   const [editProfileMutation, { data: editData }] = useMutation(
     EDIT_PROFILE_MUTATION,
-    { onCompleted: () => console.log(editData) }
+    { onCompleted: () => setEditFinish(true) }
   );
   const onValid = () => {
     const { username, password, checkPassword, bio } = getValues();
+    const input = {
+      username: username ? username : data.me.useranme,
+      password: password ? password : data.me.password,
+      bio: bio ? bio : data.me.bio,
+      avatar: uploadFile
+    };
     console.log("in onValid");
     editProfileMutation({
-      variables: { username, password, avatar: uploadFile, bio }
+      variables: input
     });
   };
   const showPicture = () => {
@@ -75,14 +96,17 @@ function ProfileEdit() {
   };
   return (
     <Fragment>
+      {editFinish && <div>변경된 내용이 저장되었습니다.</div>}
       <EditContainer>
         <Column>
           {preview ? (
-            <UserIcon size="100px" src={preview} />
+            <UserIcon size="150px" src={preview} />
           ) : (
-            <UserIcon size="100px" src={data?.me?.avatar} />
+            <UserIcon size="150px" src={data?.me?.avatar} />
           )}
-          <Input
+          <PictureInput for="file">프로필 그림 변경</PictureInput>
+          <input
+            style={{ display: "none" }}
             type="file"
             placeholder="그림"
             id="file"
