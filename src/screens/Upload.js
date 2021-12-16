@@ -120,7 +120,6 @@ const NameInput = styled(Input)`
 const CaptionInput = styled(Textarea)`
   border-color: #cccccc;
   height: 365px;
-  resize: none;
   width: 468px;
   ::placeholder {
     color: #cccccc;

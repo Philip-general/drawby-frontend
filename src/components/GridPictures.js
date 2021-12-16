@@ -18,50 +18,15 @@ const HashtagName = styled(FontSpan)`
 
 const SEE_HASHTAG = gql`
   query seeHashtag($hashtagName: String!, $skip: Int!, $take: Int!) {
-    seeHashtag(hashtagName: $hashtagName, skip: $skip, take: $take) {
+    seeHashtag(hashtagName: $hashtagName) {
       id
       hashtagName
       isFollowing
-      pictures {
+      pictures(skip: $skip, take: $take) {
         id
         file
-        name
-        author {
-          username
-          avatar
-        }
-        caption
-        comments {
-          id
-          payload
-          isMine
-          isLiked
-          createdAt
-          author {
-            username
-            avatar
-          }
-          nestedComments {
-            id
-            payload
-            isMine
-            createdAt
-            isLiked
-            author {
-              avatar
-              username
-            }
-          }
-        }
-        hashtags {
-          id
-          hashtagName
-        }
         totalComment
         totalLike
-        isMine
-        isLiked
-        isBookmarked
       }
     }
   }
@@ -83,13 +48,22 @@ function GridPictures({ noTitle, contest }) {
   const onLoadMore = () => {
     fetchMore({
       variables: {
-        skip: data.seeHashtag.length,
+        hashtagName: hashtagTopic,
+        skip: data.seeHashtag.pictures.length,
         take: 12
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return Object.assign({}, prev, {
-          seeHashtag: [...prev.seeHashtag, ...fetchMoreResult.seeHashtag]
+          seeHashtag: {
+            id: prev.seeHashtag.id,
+            hashtagName: prev.seeHashtag.hashtagName,
+            isFollowing: prev.seeHashtag.isFollowing,
+            pictures: [
+              ...prev.seeHashtag.pictures,
+              ...fetchMoreResult.seeHashtag.pictures
+            ]
+          }
         });
       }
     });

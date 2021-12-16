@@ -8,3 +8,11 @@ export const FontSpan = styled.div`
   letter-spacing: normal;
   text-align: left;
 `;
+
+export const FontLabel = styled.label`
+  font-family: "Noto Sans KR";
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: left;
+`;

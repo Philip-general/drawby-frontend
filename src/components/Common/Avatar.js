@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-export const UserIcon = styled.div`
-  background-color: ${props => (props.color ? props.color : "blue")};
+export const UserIcon = styled.img`
+  background-color: ${props => (props.color ? props.color : "#f1f2f3")};
   width: ${props => (props.size ? props.size : "25px")};
   height: ${props => (props.size ? props.size : "25px")};
   border-radius: 50%;
