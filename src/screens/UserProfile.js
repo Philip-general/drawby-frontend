@@ -5,6 +5,7 @@ import UserIcon from "../components/Common/Avatar";
 import useUser from "../hooks/useUser";
 import Gallery from "../components/Gallery";
 import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { FontSpan } from "../components/Common/Commons";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -160,6 +161,7 @@ const UNFOLLOW_USER_MUTATION = gql`
 function UserProfile() {
   const { username } = useParams();
   const { data: userData } = useUser();
+  const navigate = useNavigate();
   const { data, loading, fetchMore } = useQuery(SEE_PROFILE_QUERY, {
     variables: {
       username,
@@ -243,6 +245,7 @@ function UserProfile() {
   const followEditClick = () => {
     if (data?.seeProfile?.isMe) {
       console.log("Profile Edit");
+      navigate(`/profile/${username}/edit`);
     } else if (data?.seeProfile?.isFollowing) {
       unfollowUserMutation({
         variables: { username }
@@ -323,7 +326,7 @@ function UserProfile() {
     <Fragment>
       <SUserProfile>
         <UserContainer>
-          <UserIcon size="140px" />
+          <UserIcon size="140px" src={userData?.me?.avatar} />
           <UserInfo>
             <Username>{username}</Username>
             {data?.seeProfile?.bio ? (

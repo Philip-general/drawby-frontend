@@ -191,7 +191,7 @@ export default function Picture({
       <PictureHeader>
         <Link to={`/profile/${author.username}`}>
           <UserContainer>
-            <UserIcon size="46px" />
+            <UserIcon size="46px" src={author.avatar} />
             <Username>{author.username}</Username>
           </UserContainer>
         </Link>

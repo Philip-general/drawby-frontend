@@ -188,7 +188,11 @@ export default function Header() {
             <BtnContainer>
               <Button onClick={goUpload} src="/PictureSrc/Upload.png" />
               <Button src="/PictureSrc/DMHeader.png" />
-              <UserIcon onClick={toggleUserMenu} size="36px" />
+              <UserIcon
+                onClick={toggleUserMenu}
+                size="36px"
+                src={data?.me?.avatar}
+              />
             </BtnContainer>
           </Column>
         ) : (
