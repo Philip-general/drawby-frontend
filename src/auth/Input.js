@@ -26,6 +26,7 @@ export const Textarea = styled.textarea`
   border-radius: 12px;
   border: solid 1px #ccc;
   padding: 14.5px;
+  resize: none;
   &:focus {
     border-color: aqua;
   }
