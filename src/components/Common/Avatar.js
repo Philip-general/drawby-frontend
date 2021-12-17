@@ -5,7 +5,6 @@ export const UserIcon = styled.img`
   width: ${props => (props.size ? props.size : "25px")};
   height: ${props => (props.size ? props.size : "25px")};
   border-radius: 50%;
-  cursor: pointer;
 `;
 // 유저 아바타 받아와서 표현해야함
 export default UserIcon;
