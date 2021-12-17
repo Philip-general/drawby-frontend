@@ -57,17 +57,15 @@ const IconContainer = styled.div`
 
 const LeftContainer = styled.div`
   display: flex;
+  gap: 10px;
 `;
 
 const IconAction = styled.div``;
 
 const Icon = styled.img`
   cursor: pointer;
-  width: 24px;
   max-height: 24px;
-  margin-right: 20px;
-  opacity: ${props => (props.color === "red" ? "1" : "0.3")};
-  filter: opacity(0.5) drop-shadow(0 0 0 ${props => props.color});
+  filter: brightness(${props => props.color});
   color: ${props => props.color};
 `;
 
@@ -186,7 +184,7 @@ export default function Picture({
   const onClickHashtag = hashtagName => {
     navigate(`/hashtag/${hashtagName.slice(1)}/search`);
   };
-  const onClickPicture = pictureId => {
+  const onClickPicture = () => {
     setShowBigPicture(true);
   };
   return (
@@ -200,14 +198,14 @@ export default function Picture({
         </NoLineLink>
         <PictureTitle>{name}</PictureTitle>
       </PictureHeader>
-      <PictureImage src={file} onClick={() => onClickPicture(id)} />
+      <PictureImage src={file} onClick={() => onClickPicture()} />
       <PictureFooter>
         <IconContainer>
           <LeftContainer>
             <IconAction onClick={toggleLike2Picture}>
               <Icon
                 src="/PictureSrc/LikeBtn.png"
-                color={isLiked ? "red" : "white"}
+                color={isLiked ? "1" : "2.5"}
               />
             </IconAction>
             <IconAction onClick={focusCommentInput}>
@@ -216,7 +214,11 @@ export default function Picture({
             <Icon src="/PictureSrc/DM.png" />
           </LeftContainer>
           <IconAction onClick={toggleBookmark}>
-            <Icon />
+            {isBookmarked ? (
+              <Icon src="/PictureSrc/BookmarkOn.png" />
+            ) : (
+              <Icon src="/PictureSrc/BookmarkOff.png" />
+            )}
           </IconAction>
         </IconContainer>
         <TotalLike>좋아요 {totalLike}명</TotalLike>
