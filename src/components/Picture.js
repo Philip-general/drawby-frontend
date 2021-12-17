@@ -59,6 +59,7 @@ const LeftContainer = styled.div`
 const IconAction = styled.div``;
 
 const Icon = styled.img`
+  cursor: pointer;
   width: 24px;
   max-height: 24px;
   margin-right: 20px;
