@@ -252,18 +252,15 @@ function UserProfile() {
 
   const followEditClick = () => {
     if (data?.seeProfile?.isMe) {
-      console.log("Profile Edit");
       navigate(`/profile/${username}/edit`);
     } else if (data?.seeProfile?.isFollowing) {
       unfollowUserMutation({
         variables: { username }
       });
-      console.log("unfollow button");
     } else {
       followUserMutation({
         variables: { username }
       });
-      console.log("follow button");
     }
   };
 
@@ -333,12 +330,11 @@ function UserProfile() {
       }
     });
   };
-
   return (
     <Fragment>
       <SUserProfile>
         <UserContainer>
-          <UserIcon size="140px" src={userData?.me?.avatar} />
+          <UserIcon size="140px" src={data?.seeProfile?.avatar} />
           <UserInfo>
             <Username>{username}</Username>
             {data?.seeProfile?.bio ? (
