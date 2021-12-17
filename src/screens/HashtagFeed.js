@@ -16,7 +16,7 @@ const HashtagTitle = styled(FontSpan)`
 `;
 
 const HashtagHeader = styled.div`
-  margin: 30px 0 16px;
+  margin: 30px 0 0px;
   display: flex;
   justify-content: space-between;
 `;

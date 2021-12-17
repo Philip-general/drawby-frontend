@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Grid = styled.div`
-  margin-top: 40px;
+  margin-top: 20px;
   display: grid;
   grid-auto-rows: ${props => (props.small ? "158.8px" : "213.3px")};
   grid-template-columns: ${props =>
