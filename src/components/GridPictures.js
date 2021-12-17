@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { useParams } from "react-router";
 import { gql, useQuery } from "@apollo/client";
 import { Grid, Icon, Icons, SmallPicture } from "./Common/GridPictures";
@@ -7,6 +7,7 @@ import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontSpan } from "./Common/Commons";
 import styled from "styled-components";
 import InfiniteScroll from "react-infinite-scroll-component";
+import PictureModal from "./PictureModal";
 
 const HashtagName = styled(FontSpan)`
   margin: 30px 0 16px;
@@ -34,6 +35,8 @@ const SEE_HASHTAG = gql`
 
 function GridPictures({ noTitle, contest }) {
   const { hashtagName } = useParams();
+  const [showBigPicture, setShowBigPicture] = useState();
+  const [bigPictureId, setBigPictureId] = useState();
   let hashtagTopic;
   if (contest) {
     const contestArr = hashtagName.split(" ");
@@ -68,6 +71,12 @@ function GridPictures({ noTitle, contest }) {
       }
     });
   };
+
+  const onClickSmallPicture = id => {
+    setShowBigPicture(true);
+    setBigPictureId(id);
+  };
+
   return (
     <Fragment>
       {!noTitle && <HashtagName>{`#${hashtagName}`}</HashtagName>}
@@ -80,7 +89,12 @@ function GridPictures({ noTitle, contest }) {
         >
           <Grid small>
             {data?.seeHashtag?.pictures.map(picture => (
-              <SmallPicture key={picture.id} small="158.8px" bg={picture.file}>
+              <SmallPicture
+                onClick={() => onClickSmallPicture(picture.id)}
+                key={picture.id}
+                small="158.8px"
+                bg={picture.file}
+              >
                 <Icons small="158.8px">
                   <Icon>
                     <FontAwesomeIcon icon={faHeart} color="#ff2b57" />
@@ -94,6 +108,12 @@ function GridPictures({ noTitle, contest }) {
               </SmallPicture>
             ))}
           </Grid>
+          {showBigPicture && (
+            <PictureModal
+              id={bigPictureId}
+              setShowBigPicture={setShowBigPicture}
+            />
+          )}
         </InfiniteScroll>
       )}
     </Fragment>

@@ -8,6 +8,7 @@ import { gql, useMutation } from "@apollo/client";
 import { FontSpan, NoLineLink } from "./Common/Commons";
 import ResizeText from "./ResizeText";
 import { useNavigate } from "react-router-dom";
+import PictureModal from "./PictureModal";
 
 const PictureContainer = styled.div`
   max-width: 680px;
@@ -30,10 +31,10 @@ const UserContainer = styled.div`
   display: flex;
 `;
 
-const PictureTitle = styled(FontSpan)`
+export const PictureTitle = styled(FontSpan)`
   margin-top: 10px;
   font-size: 18px;
-  font-weight: medium;
+  font-weight: 500;
   line-height: 1.43;
   color: #333333;
 `;
@@ -79,7 +80,7 @@ const TotalLike = styled(FontSpan)`
   margin-bottom: 10px;
 `;
 
-const Hashtags = styled(FontSpan)`
+export const Hashtags = styled(FontSpan)`
   display: flex;
   gap: 5px;
   font-size: 14px;
@@ -88,7 +89,7 @@ const Hashtags = styled(FontSpan)`
   margin-bottom: 10px;
 `;
 
-const Hashtag = styled(FontSpan)`
+export const Hashtag = styled(FontSpan)`
   cursor: pointer;
 `;
 
@@ -125,6 +126,7 @@ export default function Picture({
   hashtags
 }) {
   const navigate = useNavigate();
+  const [showBigPicture, setShowBigPicture] = useState();
   const focusCommentInputRef = useRef(null);
   const focusCommentInput = () => {
     focusCommentInputRef.current.focusCommentInput();
@@ -184,6 +186,9 @@ export default function Picture({
   const onClickHashtag = hashtagName => {
     navigate(`/hashtag/${hashtagName.slice(1)}/search`);
   };
+  const onClickPicture = pictureId => {
+    setShowBigPicture(true);
+  };
   return (
     <PictureContainer>
       <PictureHeader>
@@ -195,7 +200,7 @@ export default function Picture({
         </NoLineLink>
         <PictureTitle>{name}</PictureTitle>
       </PictureHeader>
-      <PictureImage src={file} />
+      <PictureImage src={file} onClick={() => onClickPicture(id)} />
       <PictureFooter>
         <IconContainer>
           <LeftContainer>
@@ -233,6 +238,9 @@ export default function Picture({
           ref={focusCommentInputRef}
         />
       </PictureFooter>
+      {showBigPicture && (
+        <PictureModal id={id} setShowBigPicture={setShowBigPicture} />
+      )}
     </PictureContainer>
   );
 }

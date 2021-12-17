@@ -7,6 +7,7 @@ import { Icon, SmallPicture } from "./Common/GridPictures";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import PictureModal from "./PictureModal";
 
 const ContestHeaderContainer = styled.div``;
 
@@ -45,6 +46,7 @@ const RankedPictureContainer = styled.div`
 `;
 
 const SmallPictureShade = styled.div`
+  cursor: pointer;
   background-size: cover;
   background-image: linear-gradient(
     to bottom,
@@ -170,7 +172,13 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
     variables: { hashtagName: contestDate }
   });
   const picturesLen = rankedData?.seeContestRank.length;
-
+  const [showBigPicture, setShowBigPicture] = useState();
+  const [bigPictureId, setBigPictureId] = useState();
+  const onClickPicture = id => {
+    console.log("clicked");
+    setShowBigPicture(true);
+    setBigPictureId(id);
+  };
   const TOTAL_SLIDE = picturesLen > 4 ? picturesLen - 4 : 0;
   const [currentSlide, setCurrentSlide] = useState(0);
   const slideRef = useRef(null);
@@ -207,7 +215,7 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
         {picturesLen > 4 && (
           <SlideBtn
             onClick={prevSlide}
-            x="365px"
+            x="355px"
             src="/PictureSrc/LeftArrow.png"
           />
         )}
@@ -217,7 +225,9 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
               rankedPictures.map(picture => (
                 <RankedPictureContainer key={picture.id}>
                   <SmallPicture small="137px" bg={`${picture.file}`} />
-                  <SmallPictureShade />
+                  <SmallPictureShade
+                    onClick={() => onClickPicture(picture.id)}
+                  />
                   <RankedPictureLikeBox>
                     <Icon>
                       <RankedPictureLikeIcon icon={faHeart} color="#ff2b57" />
@@ -250,12 +260,15 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
         {picturesLen > 4 && (
           <SlideBtn
             onClick={nextSlide}
-            x="1050px"
+            x="1040px"
             y="173px"
             src="/PictureSrc/RightArrow.png"
           />
         )}
       </PictureContainer>
+      {showBigPicture && (
+        <PictureModal id={bigPictureId} setShowBigPicture={setShowBigPicture} />
+      )}
     </ContestHeaderContainer>
   );
 }
