@@ -15,19 +15,20 @@ const HashtagTitle = styled(FontSpan)`
   width: 580px;
 `;
 
-const HashtagHeader = styled.div`
+export const HashtagHeader = styled.div`
   margin: 30px 0 0px;
   display: flex;
   justify-content: space-between;
 `;
-const FollowBox = styled.div`
+export const FollowBox = styled.div`
   display: flex;
   height: 28px;
   padding: 4px 10px;
   border-radius: 17px;
   background-color: #fff;
 `;
-const FollowBtn = styled(FontSpan)`
+export const FollowBtn = styled(FontSpan)`
+  cursor: pointer;
   margin: 4px 10px;
   height: 28px;
   font-size: 14px;
@@ -87,7 +88,7 @@ const SEE_HASHTAG = gql`
   }
 `;
 
-const FOLLOW_HASHTAG = gql`
+export const FOLLOW_HASHTAG = gql`
   mutation followHashtag($hashtagName: String!) {
     followHashtag(hashtagName: $hashtagName) {
       ok
@@ -96,7 +97,7 @@ const FOLLOW_HASHTAG = gql`
   }
 `;
 
-const UNFOLLOW_HASHTAG = gql`
+export const UNFOLLOW_HASHTAG = gql`
   mutation unfollowHashtag($hashtagName: String!) {
     unfollowHashtag(hashtagName: $hashtagName) {
       ok
