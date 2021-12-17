@@ -134,7 +134,14 @@ function ProfileEdit() {
   const [uploadFile, setUploadFile] = useState();
   const [editFinish, setEditFinish] = useState(false);
   const [possiblePw, setPossiblePw] = useState(0);
+  const [inputPw, setInputPw] = useState();
+  const [samePw, setSamePw] = useState(0);
   const { register, handleSubmit, getValues, setValue } = useForm();
+  const setInitialValue = () => {
+    setValue("username", data?.me?.username);
+    setValue("bio", data?.me?.bio);
+  };
+  setInitialValue();
   const [editProfileMutation, { data: editData }] = useMutation(
     EDIT_PROFILE_MUTATION,
     { onCompleted: () => setEditFinish(true) }
@@ -166,12 +173,28 @@ function ProfileEdit() {
     const isOk = pw.match(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/
     );
+    setInputPw(pw);
     if (isOk) {
       setPossiblePw(true);
     } else {
       setPossiblePw(pw.length);
     }
   };
+
+  const onChangeCheckPassword = checkPw => {
+    console.log(checkPw, inputPw);
+    const isSame = checkPw === inputPw;
+    if (isSame) {
+      if (possiblePw === true) {
+        setSamePw(true);
+      } else {
+        setSamePw(1);
+      }
+    } else {
+      setSamePw(checkPw.length);
+    }
+  };
+
   return (
     <Fragment>
       {editFinish && <FontSpan>변경된 내용이 저장되었습니다.</FontSpan>}
@@ -244,14 +267,17 @@ function ProfileEdit() {
                 <EditInput
                   placeholder="비밀번호 확인"
                   {...register("checkPassword")}
+                  onChange={e => onChangeCheckPassword(e.target.value)}
                 />
               </InputBox>
+              {samePw !== 0 && samePw !== true && (
+                <InputWarning>일치하지 않습니다.</InputWarning>
+              )}
+              {samePw === true && (
+                <InputWarning color="blue">비밀번호가 일치합니다!</InputWarning>
+              )}
               <InputExplanation>
-                유저 이름은 DrawBy 아이디와 동일하게 여겨집니다.
-              </InputExplanation>
-              <InputExplanation>
-                보안성이 높으면서 작가님의 특징을 잘 담을 수 있는 이름을
-                추천합니다.
+                동일한 비밀번호를 입력해주세요.
               </InputExplanation>
             </InputContainer>
             <InputContainer>

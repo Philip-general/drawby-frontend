@@ -13,6 +13,7 @@ const ME_QUERY = gql`
       followHashtags {
         hashtagName
       }
+      bio
     }
   }
 `;
