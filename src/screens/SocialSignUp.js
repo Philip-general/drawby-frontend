@@ -7,7 +7,7 @@ import routes from "../routes";
 import { useLocation, useNavigate } from "react-router";
 import { NoLineLink } from "../components/Common/Commons";
 
-const CREATE_ACCOUNT_MUTATION = gql`
+export const CREATE_ACCOUNT_MUTATION = gql`
   mutation Mutation(
     $username: String!
     $email: String!
