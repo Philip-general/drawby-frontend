@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { useParams } from "react-router-dom";
 import ContestHeader from "../components/ContestHeader";
+import { DivisionLine } from "../components/DivisionLine";
 import GridPictures from "../components/GridPictures";
 
 function ContestFeed() {
@@ -13,6 +14,7 @@ function ContestFeed() {
         customMonth={contestArr[1]}
         customWeekNo={contestArr[2]}
       />
+      <DivisionLine />
       <GridPictures noTitle="true" contest="true" />
     </Fragment>
   );
