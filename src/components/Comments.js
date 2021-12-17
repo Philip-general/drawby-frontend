@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import useUser from "../hooks/useUser";
 import { forwardRef, useImperativeHandle } from "react";
 import { FontSpan } from "./Common/Commons";
+import UserIcon from "./Common/Avatar";
 
 const CommentContainer = styled.div``;
 
@@ -18,14 +19,26 @@ const TotalComment = styled(FontSpan)`
   margin-bottom: 10px;
 `;
 
-const CommentBox = styled.input`
+const CommentBox = styled.div`
+  display: flex;
+  align-items: center;
   margin-top: 20px;
   width: 628px;
   height: 35px;
-  padding: 4px 16px 4px 4px;
+  padding: 4px 16px 4px 10px;
   border-radius: 24px;
   border: solid 1px #ccc;
   background-color: #fafafa;
+`;
+
+const CommentInput = styled.input`
+  margin-left: 10px;
+  background-color: inherit;
+  border: none;
+  width: 90%;
+  :focus {
+    outline: none;
+  }
 `;
 
 export const CREATE_COMMENT_MUTATION = gql`
@@ -127,10 +140,14 @@ const Comments = forwardRef(({ pictureId, comments, totalComment }, ref) => {
         />
       ))}
       <form onSubmit={handleSubmit(onVaild)}>
-        <CommentBox
-          placeholder="댓글 작성하기"
-          {...register("payload", { required: true })}
-        />
+        <CommentBox>
+          <UserIcon src={userData?.me?.avatar} />
+          <CommentInput
+            autoComplete="off"
+            placeholder="댓글 작성하기"
+            {...register("payload", { required: true })}
+          />
+        </CommentBox>
       </form>
     </CommentContainer>
   );
