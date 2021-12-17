@@ -11,6 +11,9 @@ import NestedComments from "./NestedComments";
 import useUser from "../hooks/useUser";
 import { FontSpan, NoLineLink } from "./Common/Commons";
 import ResizeText from "./ResizeText";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faLineHeart } from "@fortawesome/free-regular-svg-icons";
 
 const CommentContainer = styled.div`
   display: flex;
@@ -28,15 +31,26 @@ export const Payload = styled.div`
 `;
 
 const CommentSpread = styled(FontSpan)`
+  cursor: pointer;
   font-size: 14px;
   margin-right: 5px;
   font-weight: regular;
   color: #999;
   text-align: right;
-  width: 75px;
+  width: 100px;
+`;
+
+export const HeartIcon = styled.div`
+  cursor: pointer;
+  margin-top: 3px;
+  margin-right: 3px;
+  :active {
+    filter: brightness(70%);
+  }
 `;
 
 export const DeleteBtn = styled(FontSpan)`
+  cursor: pointer;
   font-size: 14px;
   margin-right: 5px;
   font-weight: regular;
@@ -212,7 +226,7 @@ export default function Comment({
       <CommentContainer>
         <NoLineLink to={`/profile/${author.username}`}>
           <UserInfo>
-            <UserIcon color="orange" />
+            <UserIcon src={author.avatar} />
             <Username>{author.username}</Username>
           </UserInfo>
         </NoLineLink>
@@ -220,28 +234,31 @@ export default function Comment({
           <ResizeText caption={payload} fontColor={"#797979"} />
         </Payload>
         <CommentSpread onClick={toggleShowNestedComments}>
-          댓글보기
+          {showNestedComments ? "댓글숨기기" : "댓글보기"}
         </CommentSpread>
-        <div onClick={toggleLike2CommentMutation}>{isLiked ? "💖" : "🤍"}</div>
-        {isMine ? (
-          <DeleteBtn onClick={deleteCommentMutation}>삭제</DeleteBtn>
-        ) : null}
+        <HeartIcon onClick={toggleLike2CommentMutation}>
+          {isLiked ? (
+            <FontAwesomeIcon icon={faHeart} color="#ff2b57" />
+          ) : (
+            <FontAwesomeIcon icon={faLineHeart} color="#ccc" />
+          )}
+        </HeartIcon>
+        {isMine && <DeleteBtn onClick={deleteCommentMutation}>삭제</DeleteBtn>}
       </CommentContainer>
-      {showNestedComments
-        ? nestedComments
-          ? nestedComments.map(nestedComment => (
-              <NestedComments
-                key={nestedComment.id}
-                commentId={commentId}
-                {...nestedComment}
-              />
-            ))
-          : null
-        : null}
+      {showNestedComments &&
+        nestedComments &&
+        nestedComments.map(nestedComment => (
+          <NestedComments
+            key={nestedComment.id}
+            commentId={commentId}
+            {...nestedComment}
+          />
+        ))}
 
       {showCommentBox ? (
         <form onSubmit={handleSubmit(onValid)}>
           <CommentBox
+            autoComplete="off"
             {...register("payload", { required: true })}
             placeholder="대댓글 작성하기"
           />
