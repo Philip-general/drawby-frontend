@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Comments from "./Comments";
@@ -6,6 +6,7 @@ import UserIcon from "./Common/Avatar";
 import Username from "./Common/Username";
 import { gql, useMutation } from "@apollo/client";
 import { FontSpan, NoLineLink } from "./Common/Commons";
+import ResizeText from "./ResizeText";
 
 const PictureContainer = styled.div`
   max-width: 680px;
@@ -75,21 +76,9 @@ const TotalLike = styled(FontSpan)`
   margin-bottom: 10px;
 `;
 
-const Caption = styled(FontSpan)`
-  max-width: 642px;
-  font-size: 14px;
-  font-weight: regular;
-  color: #333;
-  line-height: 1.43;
-`;
-
-const CaptionSpread = styled(FontSpan)`
-  font-size: 13px;
-  margin-bottom: 10px;
-  color: #aaa;
-`;
-
 const Hashtags = styled(FontSpan)`
+  display: flex;
+  gap: 5px;
   font-size: 14px;
   font-weight: regular;
   color: #3690f8;
@@ -216,8 +205,7 @@ export default function Picture({
           </IconAction>
         </IconContainer>
         <TotalLike>좋아요 {totalLike}명</TotalLike>
-        <Caption>{caption}</Caption>
-        <CaptionSpread>더보기</CaptionSpread>
+        <ResizeText caption={caption} size={45} />
         <Hashtags>
           {hashtags.map(hashtag => (
             <Hashtag key={hashtag.id}>{hashtag.hashtagName}</Hashtag>

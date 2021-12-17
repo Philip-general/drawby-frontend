@@ -6,6 +6,7 @@ import Username from "./Common/Username";
 import { DeleteBtn, Payload, UserInfo } from "./Comment";
 import { gql, useMutation } from "@apollo/client";
 import { NoLineLink } from "./Common/Commons";
+import ResizeText from "./ResizeText";
 
 const NestedCommentContainer = styled.div`
   display: flex;
@@ -89,7 +90,9 @@ function NestedComments({
           <Username>{author.username}</Username>
         </UserInfo>
       </NoLineLink>
-      <Payload>{payload}</Payload>
+      <Payload>
+        <ResizeText caption={payload} fontColor={"#797979"} size={15} />
+      </Payload>
       <div onClick={toggleLike2NestedCommentMutation}>
         {isLiked ? "💖" : "🤍"}
       </div>

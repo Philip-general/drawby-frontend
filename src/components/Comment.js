@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import NestedComments from "./NestedComments";
 import useUser from "../hooks/useUser";
 import { FontSpan, NoLineLink } from "./Common/Commons";
+import ResizeText from "./ResizeText";
 
 const CommentContainer = styled.div`
   display: flex;
@@ -17,16 +18,13 @@ const CommentContainer = styled.div`
 
 export const UserInfo = styled.div`
   display: flex;
-  width: 15%;
   min-width: 80px;
 `;
 
-export const Payload = styled(FontSpan)`
-  margin-left: 50px;
-  color: #797979;
-  font-size: 14px;
-  line-height: 1.43;
+export const Payload = styled.div`
+  margin-bottom: 15px;
   width: 70%;
+  margin-left: 50px;
 `;
 
 const CommentSpread = styled(FontSpan)`
@@ -218,11 +216,13 @@ export default function Comment({
             <Username>{author.username}</Username>
           </UserInfo>
         </NoLineLink>
-        <Payload>{payload}</Payload>
-        <div onClick={toggleLike2CommentMutation}>{isLiked ? "💖" : "🤍"}</div>
+        <Payload>
+          <ResizeText caption={payload} fontColor={"#797979"} />
+        </Payload>
         <CommentSpread onClick={toggleShowNestedComments}>
           댓글보기
         </CommentSpread>
+        <div onClick={toggleLike2CommentMutation}>{isLiked ? "💖" : "🤍"}</div>
         {isMine ? (
           <DeleteBtn onClick={deleteCommentMutation}>삭제</DeleteBtn>
         ) : null}
