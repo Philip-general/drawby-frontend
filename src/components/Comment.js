@@ -21,6 +21,7 @@ const CommentContainer = styled.div`
 
 export const UserInfo = styled.div`
   display: flex;
+  align-items: center;
   min-width: 80px;
 `;
 

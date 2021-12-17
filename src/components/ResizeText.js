@@ -2,9 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import styled from "styled-components";
 import { FontSpan } from "./Common/Commons";
 
-const CaptionContainer = styled.div`
-  display: flex;
-`;
+const CaptionContainer = styled.div``;
 
 const Caption = styled(FontSpan)`
   max-width: 642px;
