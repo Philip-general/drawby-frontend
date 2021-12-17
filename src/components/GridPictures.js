@@ -1,15 +1,24 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { useParams } from "react-router";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { Grid, Icon, Icons, SmallPicture } from "./Common/GridPictures";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontSpan } from "./Common/Commons";
 import styled from "styled-components";
 import InfiniteScroll from "react-infinite-scroll-component";
+import PictureModal from "./PictureModal";
+import {
+  FollowBox,
+  FollowBtn,
+  FOLLOW_HASHTAG,
+  HashtagHeader,
+  UNFOLLOW_HASHTAG
+} from "../screens/HashtagFeed";
+import useUser from "../hooks/useUser";
 
 const HashtagName = styled(FontSpan)`
-  margin: 30px 0 16px;
+  margin-bottom: 16px;
   font-size: 18px;
   font-weight: 500;
   line-height: 1.44;
@@ -34,6 +43,9 @@ const SEE_HASHTAG = gql`
 
 function GridPictures({ noTitle, contest }) {
   const { hashtagName } = useParams();
+  const { data: userData } = useUser();
+  const [showBigPicture, setShowBigPicture] = useState();
+  const [bigPictureId, setBigPictureId] = useState();
   let hashtagTopic;
   if (contest) {
     const contestArr = hashtagName.split(" ");
@@ -68,9 +80,107 @@ function GridPictures({ noTitle, contest }) {
       }
     });
   };
+
+  const onClickSmallPicture = id => {
+    setShowBigPicture(true);
+    setBigPictureId(id);
+  };
+
+  const [followHashtagMutation] = useMutation(FOLLOW_HASHTAG);
+  const [unfollowHashtagMutation] = useMutation(UNFOLLOW_HASHTAG);
+  const followHashtagUpdate = (cache, result) => {
+    const {
+      data: {
+        followHashtag: { ok }
+      }
+    } = result;
+    if (!ok) {
+      return;
+    }
+    const newHashtag = {
+      __typename: "Hashtag",
+      isFollowing: true,
+      hashtagName: "#" + hashtagName
+    };
+    const newCacheHashtag = cache.writeFragment({
+      data: newHashtag,
+      fragment: gql`
+        fragment hashtag on Hashtag {
+          isFollowing
+          hashtagName
+        }
+      `
+    });
+    cache.modify({
+      id: `User:${userData.me.username}`,
+      fields: {
+        followHashtags(prev) {
+          return [...prev, newCacheHashtag];
+        }
+      }
+    });
+  };
+  const unfollowHashtagUpdate = (cache, result) => {
+    const {
+      data: {
+        unfollowHashtag: { ok }
+      }
+    } = result;
+    if (!ok) {
+      return;
+    }
+    const newHashtag = {
+      __typename: "Hashtag",
+      isFollowing: false,
+      hashtagName: "#" + hashtagName
+    };
+    const newCacheHashtag = cache.writeFragment({
+      data: newHashtag,
+      fragment: gql`
+        fragment hashtag on Hashtag {
+          isFollowing
+          hashtagName
+        }
+      `
+    });
+    cache.modify({
+      id: `User:${userData.me.username}`,
+      fields: {
+        followHashtags(prev) {
+          let filtered = prev.filter(
+            hashtag => hashtag.__ref !== `Hashtag:#${hashtagName}`
+          );
+          return filtered;
+        }
+      }
+    });
+  };
+  const followEditClick = () => {
+    if (data?.seeHashtag?.isFollowing) {
+      unfollowHashtagMutation({
+        variables: { hashtagName: "#" + hashtagName },
+        update: unfollowHashtagUpdate
+      });
+    } else {
+      followHashtagMutation({
+        variables: { hashtagName: "#" + hashtagName },
+        update: followHashtagUpdate
+      });
+    }
+  };
+
   return (
     <Fragment>
-      {!noTitle && <HashtagName>{`#${hashtagName}`}</HashtagName>}
+      {!noTitle && (
+        <HashtagHeader>
+          <HashtagName>{`#${hashtagName}`}</HashtagName>
+          <FollowBox>
+            <FollowBtn onClick={() => followEditClick()}>
+              {data?.seeHashtag?.isFollowing ? "Unfollow" : "Follow"}
+            </FollowBtn>
+          </FollowBox>
+        </HashtagHeader>
+      )}
 
       {!loading && data && data.seeHashtag && (
         <InfiniteScroll
@@ -80,7 +190,12 @@ function GridPictures({ noTitle, contest }) {
         >
           <Grid small>
             {data?.seeHashtag?.pictures.map(picture => (
-              <SmallPicture key={picture.id} small="158.8px" bg={picture.file}>
+              <SmallPicture
+                onClick={() => onClickSmallPicture(picture.id)}
+                key={picture.id}
+                small="158.8px"
+                bg={picture.file}
+              >
                 <Icons small="158.8px">
                   <Icon>
                     <FontAwesomeIcon icon={faHeart} color="#ff2b57" />
@@ -94,6 +209,12 @@ function GridPictures({ noTitle, contest }) {
               </SmallPicture>
             ))}
           </Grid>
+          {showBigPicture && (
+            <PictureModal
+              id={bigPictureId}
+              setShowBigPicture={setShowBigPicture}
+            />
+          )}
         </InfiniteScroll>
       )}
     </Fragment>

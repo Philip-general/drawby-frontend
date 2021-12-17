@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Comments from "./Comments";
@@ -6,6 +6,9 @@ import UserIcon from "./Common/Avatar";
 import Username from "./Common/Username";
 import { gql, useMutation } from "@apollo/client";
 import { FontSpan, NoLineLink } from "./Common/Commons";
+import ResizeText from "./ResizeText";
+import { useNavigate } from "react-router-dom";
+import PictureModal from "./PictureModal";
 
 const PictureContainer = styled.div`
   max-width: 680px;
@@ -28,15 +31,16 @@ const UserContainer = styled.div`
   display: flex;
 `;
 
-const PictureTitle = styled(FontSpan)`
-  margin-top: 5px;
+export const PictureTitle = styled(FontSpan)`
+  margin-top: 10px;
   font-size: 18px;
-  font-weight: medium;
+  font-weight: 500;
   line-height: 1.43;
   color: #333333;
 `;
 
 const PictureImage = styled.img`
+  margin-top: 5px;
   width: 680px;
   height: 680px;
 `;
@@ -53,16 +57,15 @@ const IconContainer = styled.div`
 
 const LeftContainer = styled.div`
   display: flex;
+  gap: 10px;
 `;
 
 const IconAction = styled.div``;
 
 const Icon = styled.img`
-  width: 24px;
+  cursor: pointer;
   max-height: 24px;
-  margin-right: 20px;
-  opacity: ${props => (props.color === "red" ? "1" : "0.3")};
-  filter: opacity(0.5) drop-shadow(0 0 0 ${props => props.color});
+  filter: brightness(${props => props.color});
   color: ${props => props.color};
 `;
 
@@ -75,28 +78,18 @@ const TotalLike = styled(FontSpan)`
   margin-bottom: 10px;
 `;
 
-const Caption = styled(FontSpan)`
-  max-width: 642px;
-  font-size: 14px;
-  font-weight: regular;
-  color: #333;
-  line-height: 1.43;
-`;
-
-const CaptionSpread = styled(FontSpan)`
-  font-size: 13px;
-  margin-bottom: 10px;
-  color: #aaa;
-`;
-
-const Hashtags = styled(FontSpan)`
+export const Hashtags = styled(FontSpan)`
+  display: flex;
+  gap: 5px;
   font-size: 14px;
   font-weight: regular;
   color: #3690f8;
   margin-bottom: 10px;
 `;
 
-const Hashtag = styled(FontSpan)``;
+export const Hashtag = styled(FontSpan)`
+  cursor: pointer;
+`;
 
 const TOGGLE_LIKE_2_PICTURE_MUTATION = gql`
   mutation toggleLike2Picture($id: Int!) {
@@ -130,6 +123,8 @@ export default function Picture({
   totalLike,
   hashtags
 }) {
+  const navigate = useNavigate();
+  const [showBigPicture, setShowBigPicture] = useState();
   const focusCommentInputRef = useRef(null);
   const focusCommentInput = () => {
     focusCommentInputRef.current.focusCommentInput();
@@ -185,6 +180,13 @@ export default function Picture({
     variables: { pictureId: id },
     update: toggleBookmarkUpdate
   });
+
+  const onClickHashtag = hashtagName => {
+    navigate(`/hashtag/${hashtagName.slice(1)}/search`);
+  };
+  const onClickPicture = () => {
+    setShowBigPicture(true);
+  };
   return (
     <PictureContainer>
       <PictureHeader>
@@ -196,14 +198,14 @@ export default function Picture({
         </NoLineLink>
         <PictureTitle>{name}</PictureTitle>
       </PictureHeader>
-      <PictureImage src={file} />
+      <PictureImage src={file} onClick={() => onClickPicture()} />
       <PictureFooter>
         <IconContainer>
           <LeftContainer>
             <IconAction onClick={toggleLike2Picture}>
               <Icon
                 src="/PictureSrc/LikeBtn.png"
-                color={isLiked ? "red" : "white"}
+                color={isLiked ? "1" : "2.5"}
               />
             </IconAction>
             <IconAction onClick={focusCommentInput}>
@@ -212,15 +214,23 @@ export default function Picture({
             <Icon src="/PictureSrc/DM.png" />
           </LeftContainer>
           <IconAction onClick={toggleBookmark}>
-            <Icon />
+            {isBookmarked ? (
+              <Icon src="/PictureSrc/BookmarkOn.png" />
+            ) : (
+              <Icon src="/PictureSrc/BookmarkOff.png" />
+            )}
           </IconAction>
         </IconContainer>
         <TotalLike>좋아요 {totalLike}명</TotalLike>
-        <Caption>{caption}</Caption>
-        <CaptionSpread>더보기</CaptionSpread>
+        <ResizeText caption={caption} size={45} />
         <Hashtags>
           {hashtags.map(hashtag => (
-            <Hashtag key={hashtag.id}>{hashtag.hashtagName}</Hashtag>
+            <Hashtag
+              onClick={() => onClickHashtag(hashtag.hashtagName)}
+              key={hashtag.id}
+            >
+              {hashtag.hashtagName}
+            </Hashtag>
           ))}
         </Hashtags>
         <Comments
@@ -230,6 +240,9 @@ export default function Picture({
           ref={focusCommentInputRef}
         />
       </PictureFooter>
+      {showBigPicture && (
+        <PictureModal id={id} setShowBigPicture={setShowBigPicture} />
+      )}
     </PictureContainer>
   );
 }

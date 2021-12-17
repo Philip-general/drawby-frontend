@@ -3,9 +3,13 @@ import UserIcon from "./Common/Avatar";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Username from "./Common/Username";
-import { DeleteBtn, Payload, UserInfo } from "./Comment";
+import { DeleteBtn, HeartIcon, Payload, UserInfo } from "./Comment";
 import { gql, useMutation } from "@apollo/client";
 import { NoLineLink } from "./Common/Commons";
+import ResizeText from "./ResizeText";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faLineHeart } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const NestedCommentContainer = styled.div`
   display: flex;
@@ -85,14 +89,20 @@ function NestedComments({
     <NestedCommentContainer>
       <NoLineLink to={`/profile/${author.username}`}>
         <UserInfo>
-          <UserIcon color="tomato" />
+          <UserIcon src={author.avatar} />
           <Username>{author.username}</Username>
         </UserInfo>
       </NoLineLink>
-      <Payload>{payload}</Payload>
-      <div onClick={toggleLike2NestedCommentMutation}>
-        {isLiked ? "💖" : "🤍"}
-      </div>
+      <Payload>
+        <ResizeText caption={payload} fontColor={"#797979"} size={15} />
+      </Payload>
+      <HeartIcon onClick={toggleLike2NestedCommentMutation}>
+        {isLiked ? (
+          <FontAwesomeIcon icon={faHeart} color="#ff2b57" />
+        ) : (
+          <FontAwesomeIcon icon={faLineHeart} color="#ccc" />
+        )}
+      </HeartIcon>
       {isMine ? (
         <DeleteBtn onClick={deleteNestedMutation}>삭제</DeleteBtn>
       ) : null}

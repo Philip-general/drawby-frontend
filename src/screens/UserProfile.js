@@ -439,6 +439,16 @@ function UserProfile() {
             <Gallery pictures={data?.seeProfile?.contestPictures} />
           </InfiniteScroll>
         )}
+        {/* 북마크 무한스크롤을 위해 북마크 부분 백엔드 작성 필요 */}
+        {!loading && data && data.seeProfile && gallery === 2 && (
+          <InfiniteScroll
+            dataLength={data.seeProfile.contestPictures.length}
+            next={onLoadMoreContestPictures}
+            hasMore={true}
+          >
+            <Gallery pictures={data?.seeProfile?.contestPictures} />
+          </InfiniteScroll>
+        )}
       </UserPictureContainer>
     </Fragment>
   );

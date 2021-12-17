@@ -10,6 +10,7 @@ export const Grid = styled.div`
 `;
 
 export const SmallPicture = styled.div`
+  cursor: pointer;
   background-image: url(${props => props.bg});
   background-size: cover;
   width: ${props => (props.small ? props.small : "213.3px")};

@@ -6,6 +6,8 @@ import { FontSpan } from "./Common/Commons";
 import { Icon, SmallPicture } from "./Common/GridPictures";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import PictureModal from "./PictureModal";
 
 const ContestHeaderContainer = styled.div``;
 
@@ -44,6 +46,7 @@ const RankedPictureContainer = styled.div`
 `;
 
 const SmallPictureShade = styled.div`
+  cursor: pointer;
   background-size: cover;
   background-image: linear-gradient(
     to bottom,
@@ -86,6 +89,7 @@ const RankedPictureHashtags = styled.div`
 `;
 
 const RankedPictureHashtag = styled(FontSpan)`
+  cursor: pointer;
   font-size: 12px;
   font-weight: light;
   color: #3690f8;
@@ -153,6 +157,7 @@ const SEE_CONTEST_RANK_QUERY = gql`
 `;
 
 function ContestHeader({ customYear, customMonth, customWeekNo }) {
+  const navigate = useNavigate();
   const { year, month, weekNo } = useDate(new Date());
   const contestDate =
     customYear !== undefined
@@ -167,7 +172,13 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
     variables: { hashtagName: contestDate }
   });
   const picturesLen = rankedData?.seeContestRank.length;
-
+  const [showBigPicture, setShowBigPicture] = useState();
+  const [bigPictureId, setBigPictureId] = useState();
+  const onClickPicture = id => {
+    console.log("clicked");
+    setShowBigPicture(true);
+    setBigPictureId(id);
+  };
   const TOTAL_SLIDE = picturesLen > 4 ? picturesLen - 4 : 0;
   const [currentSlide, setCurrentSlide] = useState(0);
   const slideRef = useRef(null);
@@ -191,6 +202,10 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
     slideRef.current.style.transform = `translateX(-${space}px)`;
   }, [currentSlide]);
 
+  const onClickHashtag = hashtagName => {
+    navigate(`/hashtag/${hashtagName.slice(1)}/search`);
+  };
+
   // test contest array
   const rankedPictures = rankedData?.seeContestRank;
   return (
@@ -200,7 +215,7 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
         {picturesLen > 4 && (
           <SlideBtn
             onClick={prevSlide}
-            x="365px"
+            x="355px"
             src="/PictureSrc/LeftArrow.png"
           />
         )}
@@ -210,7 +225,9 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
               rankedPictures.map(picture => (
                 <RankedPictureContainer key={picture.id}>
                   <SmallPicture small="137px" bg={`${picture.file}`} />
-                  <SmallPictureShade />
+                  <SmallPictureShade
+                    onClick={() => onClickPicture(picture.id)}
+                  />
                   <RankedPictureLikeBox>
                     <Icon>
                       <RankedPictureLikeIcon icon={faHeart} color="#ff2b57" />
@@ -223,7 +240,10 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
                     {picture.hashtags.map(
                       hashtag =>
                         hashtag.hashtagName !== contestDate && (
-                          <RankedPictureHashtag key={hashtag.id}>
+                          <RankedPictureHashtag
+                            onClick={() => onClickHashtag(hashtag.hashtagName)}
+                            key={hashtag.id}
+                          >
                             {hashtag.hashtagName}
                           </RankedPictureHashtag>
                         )
@@ -240,12 +260,15 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
         {picturesLen > 4 && (
           <SlideBtn
             onClick={nextSlide}
-            x="1050px"
+            x="1040px"
             y="173px"
             src="/PictureSrc/RightArrow.png"
           />
         )}
       </PictureContainer>
+      {showBigPicture && (
+        <PictureModal id={bigPictureId} setShowBigPicture={setShowBigPicture} />
+      )}
     </ContestHeaderContainer>
   );
 }

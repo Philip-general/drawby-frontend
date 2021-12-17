@@ -5,6 +5,7 @@ import Sidebar from "./Sidebar";
 
 const Main = styled.main`
   display: flex;
+  z-index: 1000;
 `;
 
 const Line = styled.div`
@@ -19,7 +20,7 @@ const Line = styled.div`
 const Feed = styled.div`
   background-color: ${props => (props.color ? props.color : "#fff")};
   position: relative;
-  padding: 61px 400px;
+  padding: 61px 390px;
   min-height: 100vh;
 `;
 
