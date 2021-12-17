@@ -7,6 +7,7 @@ import routes from "../routes";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { FontSpan, NoLineLink } from "../components/Common/Commons";
+import { CREATE_ACCOUNT_MUTATION } from "./SocialSignUp";
 
 const Background = styled.div`
   background-color: #fafafa;
@@ -84,28 +85,6 @@ const LoginLogo = styled.img`
   width: 350px;
   height: 300px;
   margin-bottom: 48px;
-`;
-const CREATE_ACCOUNT_MUTATION = gql`
-  mutation Mutation(
-    $username: String!
-    $password: String!
-    $email: String!
-    $phoneNumber: String
-    $avatar: String
-    $bio: String
-  ) {
-    createAccount(
-      username: $username
-      password: $password
-      email: $email
-      phoneNumber: $phoneNumber
-      avatar: $avatar
-      bio: $bio
-    ) {
-      ok
-      error
-    }
-  }
 `;
 
 export default function SignUp() {

@@ -190,6 +190,7 @@ export default function Header() {
               <Button src="/PictureSrc/DMHeader.png" />
               <UserIcon
                 onClick={toggleUserMenu}
+                style={{ cursor: "pointer" }}
                 size="36px"
                 src={data?.me?.avatar}
               />

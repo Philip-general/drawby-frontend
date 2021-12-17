@@ -28,6 +28,7 @@ const SearchInput = styled.input`
   border: none;
   border-radius: 20%;
   background-color: inherit;
+  width: 90%;
   :focus {
     outline: none;
   }
@@ -62,6 +63,7 @@ const SearchResult = styled.div`
   margin-top: 10px;
   display: flex;
   align-items: center;
+  cursor: pointer;
 `;
 
 const SearchText = styled(Username)`
@@ -143,7 +145,7 @@ function SearchBox() {
   const goHashtag = hashtagName => {
     const hashtag = hashtagName.split("#")[1];
     setSearchModal(false);
-    navigate(`/hashtag/${hashtag}`);
+    navigate(`/hashtag/${hashtag}/search`);
   };
   const goPicture = () => {
     setSearchModal(false);

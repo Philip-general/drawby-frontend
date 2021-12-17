@@ -242,7 +242,6 @@ const Upload = ({ register: uploadRegister }) => {
         totalComment: 0,
         comments: []
       };
-      console.log(newPicture);
       const newCachePicture = cache.writeFragment({
         data: newPicture,
         fragment: gql`
@@ -303,7 +302,6 @@ const Upload = ({ register: uploadRegister }) => {
       onCompleted: result => onCompletedUploadPicture(result)
     });
   };
-  console.log(uploadContest);
 
   return (
     <BackGround>
