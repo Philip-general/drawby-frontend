@@ -12,7 +12,7 @@ import SocialSignUp from "./screens/SocialSignUp";
 import Upload from "./screens/Upload";
 import UserProfile from "./screens/UserProfile";
 import ProfileEdit from "./screens/ProfileEdit";
-import Test from "./screens/infiniteTest";
+import Test from "./screens/Test";
 import ContestFeed from "./screens/ContestFeed";
 import HashtagFeed from "./screens/HashtagFeed";
 import GridPictures from "./components/GridPictures";
