@@ -1,7 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import { logUserIn } from "../Apollo";
 import { Input } from "../auth/Input";
 import routes from "../routes";
@@ -10,7 +9,7 @@ import Facebook from "../auth/Facebook";
 import Kakao from "../auth/Kakao";
 import PageTitle from "../components/PageTitle";
 import styled from "styled-components";
-import { FontSpan } from "../components/Common/Commons";
+import { FontSpan, NoLineLink } from "../components/Common/Commons";
 
 const Background = styled.div`
   background-color: #fafafa;
@@ -156,9 +155,9 @@ export default function Login() {
           </form>
           <SignUpContainer>
             <SignUpText>회원이 아니신가요?</SignUpText>
-            <Link style={{ textDecorationLine: "none" }} to={routes.signUp}>
+            <NoLineLink to={routes.signUp}>
               <SignUpText link="true">회원가입하기</SignUpText>
-            </Link>
+            </NoLineLink>
           </SignUpContainer>
         </LoginBox>
         <LoginBox>

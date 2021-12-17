@@ -2,10 +2,10 @@ import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import { Input } from "../auth/Input";
 import routes from "../routes";
 import { useLocation, useNavigate } from "react-router";
+import { NoLineLink } from "../components/Common/Commons";
 
 const CREATE_ACCOUNT_MUTATION = gql`
   mutation Mutation(
@@ -108,7 +108,7 @@ export default function SocialSignUp() {
       </form>
       <div>
         <span>이미 회원이신가요?</span>
-        <Link to={routes.home}>로그인하기</Link>
+        <NoLineLink to={routes.home}>로그인하기</NoLineLink>
       </div>
     </div>
   );

@@ -2,12 +2,11 @@ import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import { Input } from "../auth/Input";
 import routes from "../routes";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import { FontSpan } from "../components/Common/Commons";
+import { FontSpan, NoLineLink } from "../components/Common/Commons";
 
 const Background = styled.div`
   background-color: #fafafa;
@@ -176,9 +175,9 @@ export default function SignUp() {
         </SignUpBox>
         <LoginContainer>
           <LoginText>이미 회원이신가요?</LoginText>
-          <Link to={routes.home}>
+          <NoLineLink to={routes.home}>
             <LoginText link="true">로그인하기</LoginText>
-          </Link>
+          </NoLineLink>
         </LoginContainer>
       </SignUpContainer>
     </Background>

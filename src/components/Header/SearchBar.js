@@ -98,11 +98,11 @@ const SEARCH_PICTURE_QUERY = gql`
 `;
 
 const SEARCH_HASHTAG_QUERY = gql`
-  query searchHashtag($keyword: String) {
+  query searchHashtag($keyword: String, $skip: Int!, $take: Int!) {
     searchHashtag(keyword: $keyword) {
       id
       hashtagName
-      pictures {
+      pictures(skip: $skip, take: $take) {
         file
       }
     }
@@ -117,7 +117,7 @@ function SearchBox() {
     skip: !searchKeyword
   });
   const { data: hashtagData } = useQuery(SEARCH_HASHTAG_QUERY, {
-    variables: { keyword: searchKeyword },
+    variables: { keyword: searchKeyword, skip: 0, take: 4 },
     skip: !searchKeyword
   });
   const { data: pictureData } = useQuery(SEARCH_PICTURE_QUERY, {
