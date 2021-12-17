@@ -5,8 +5,7 @@ import Comments from "./Comments";
 import UserIcon from "./Common/Avatar";
 import Username from "./Common/Username";
 import { gql, useMutation } from "@apollo/client";
-import { Link } from "react-router-dom";
-import { FontSpan } from "./Common/Commons";
+import { FontSpan, NoLineLink } from "./Common/Commons";
 
 const PictureContainer = styled.div`
   max-width: 680px;
@@ -189,12 +188,12 @@ export default function Picture({
   return (
     <PictureContainer>
       <PictureHeader>
-        <Link to={`/profile/${author.username}`}>
+        <NoLineLink to={`/profile/${author.username}`}>
           <UserContainer>
             <UserIcon size="46px" src={author.avatar} />
             <Username>{author.username}</Username>
           </UserContainer>
-        </Link>
+        </NoLineLink>
         <PictureTitle>{name}</PictureTitle>
       </PictureHeader>
       <PictureImage src={file} />

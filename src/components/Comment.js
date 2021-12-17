@@ -9,8 +9,7 @@ import { CREATE_COMMENT_MUTATION } from "./Comments";
 import { useForm } from "react-hook-form";
 import NestedComments from "./NestedComments";
 import useUser from "../hooks/useUser";
-import { Link } from "react-router-dom";
-import { FontSpan } from "./Common/Commons";
+import { FontSpan, NoLineLink } from "./Common/Commons";
 
 const CommentContainer = styled.div`
   display: flex;
@@ -213,12 +212,12 @@ export default function Comment({
   return (
     <Fragment>
       <CommentContainer>
-        <Link to={`/profile/${author.username}`}>
+        <NoLineLink to={`/profile/${author.username}`}>
           <UserInfo>
             <UserIcon color="orange" />
             <Username>{author.username}</Username>
           </UserInfo>
-        </Link>
+        </NoLineLink>
         <Payload>{payload}</Payload>
         <div onClick={toggleLike2CommentMutation}>{isLiked ? "💖" : "🤍"}</div>
         <CommentSpread onClick={toggleShowNestedComments}>
