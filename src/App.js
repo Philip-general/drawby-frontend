@@ -15,6 +15,7 @@ import ProfileEdit from "./screens/ProfileEdit";
 import Test from "./screens/infiniteTest";
 import ContestFeed from "./screens/ContestFeed";
 import HashtagFeed from "./screens/HashtagFeed";
+import GridPictures from "./components/GridPictures";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -65,6 +66,15 @@ function App() {
                 <Layout>
                   {"#f1f2f3"}
                   <HashtagFeed />
+                </Layout>
+              }
+            />
+            <Route
+              path={routes.hashtagSearch}
+              element={
+                <Layout>
+                  {"#f1f2f3"}
+                  <GridPictures />
                 </Layout>
               }
             />

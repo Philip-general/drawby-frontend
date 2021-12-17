@@ -7,6 +7,7 @@ const routes = {
   uploadPhoto: "/uploadPhoto",
   profile: "/profile/:username",
   hashtag: "/hashtag/:hashtagName",
+  hashtagSearch: "/hashtag/:hashtagName/search",
   contest: "/contest/:hashtagName",
   editProfile: "/profile/:username/edit"
 };

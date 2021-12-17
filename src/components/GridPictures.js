@@ -40,7 +40,7 @@ function GridPictures({ noTitle, contest }) {
     hashtagTopic =
       "#" + contestArr[0] + "_" + contestArr[1] + "_" + contestArr[2];
   } else {
-    hashtagTopic = hashtagName;
+    hashtagTopic = "#" + hashtagName;
   }
   const { data, loading, fetchMore } = useQuery(SEE_HASHTAG, {
     variables: { hashtagName: hashtagTopic, skip: 0, take: 12 }
