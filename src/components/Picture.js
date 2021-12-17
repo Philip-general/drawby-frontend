@@ -7,6 +7,7 @@ import Username from "./Common/Username";
 import { gql, useMutation } from "@apollo/client";
 import { FontSpan, NoLineLink } from "./Common/Commons";
 import ResizeText from "./ResizeText";
+import { useNavigate } from "react-router-dom";
 
 const PictureContainer = styled.div`
   max-width: 680px;
@@ -30,7 +31,7 @@ const UserContainer = styled.div`
 `;
 
 const PictureTitle = styled(FontSpan)`
-  margin-top: 5px;
+  margin-top: 10px;
   font-size: 18px;
   font-weight: medium;
   line-height: 1.43;
@@ -38,6 +39,7 @@ const PictureTitle = styled(FontSpan)`
 `;
 
 const PictureImage = styled.img`
+  margin-top: 5px;
   width: 680px;
   height: 680px;
 `;
@@ -86,7 +88,9 @@ const Hashtags = styled(FontSpan)`
   margin-bottom: 10px;
 `;
 
-const Hashtag = styled(FontSpan)``;
+const Hashtag = styled(FontSpan)`
+  cursor: pointer;
+`;
 
 const TOGGLE_LIKE_2_PICTURE_MUTATION = gql`
   mutation toggleLike2Picture($id: Int!) {
@@ -120,6 +124,7 @@ export default function Picture({
   totalLike,
   hashtags
 }) {
+  const navigate = useNavigate();
   const focusCommentInputRef = useRef(null);
   const focusCommentInput = () => {
     focusCommentInputRef.current.focusCommentInput();
@@ -175,6 +180,10 @@ export default function Picture({
     variables: { pictureId: id },
     update: toggleBookmarkUpdate
   });
+
+  const onClickHashtag = hashtagName => {
+    navigate(`/hashtag/${hashtagName.slice(1)}/search`);
+  };
   return (
     <PictureContainer>
       <PictureHeader>
@@ -209,7 +218,12 @@ export default function Picture({
         <ResizeText caption={caption} size={45} />
         <Hashtags>
           {hashtags.map(hashtag => (
-            <Hashtag key={hashtag.id}>{hashtag.hashtagName}</Hashtag>
+            <Hashtag
+              onClick={() => onClickHashtag(hashtag.hashtagName)}
+              key={hashtag.id}
+            >
+              {hashtag.hashtagName}
+            </Hashtag>
           ))}
         </Hashtags>
         <Comments

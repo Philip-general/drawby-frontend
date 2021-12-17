@@ -6,6 +6,7 @@ import { FontSpan } from "./Common/Commons";
 import { Icon, SmallPicture } from "./Common/GridPictures";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const ContestHeaderContainer = styled.div``;
 
@@ -86,6 +87,7 @@ const RankedPictureHashtags = styled.div`
 `;
 
 const RankedPictureHashtag = styled(FontSpan)`
+  cursor: pointer;
   font-size: 12px;
   font-weight: light;
   color: #3690f8;
@@ -153,6 +155,7 @@ const SEE_CONTEST_RANK_QUERY = gql`
 `;
 
 function ContestHeader({ customYear, customMonth, customWeekNo }) {
+  const navigate = useNavigate();
   const { year, month, weekNo } = useDate(new Date());
   const contestDate =
     customYear !== undefined
@@ -191,6 +194,10 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
     slideRef.current.style.transform = `translateX(-${space}px)`;
   }, [currentSlide]);
 
+  const onClickHashtag = hashtagName => {
+    navigate(`/hashtag/${hashtagName.slice(1)}/search`);
+  };
+
   // test contest array
   const rankedPictures = rankedData?.seeContestRank;
   return (
@@ -223,7 +230,10 @@ function ContestHeader({ customYear, customMonth, customWeekNo }) {
                     {picture.hashtags.map(
                       hashtag =>
                         hashtag.hashtagName !== contestDate && (
-                          <RankedPictureHashtag key={hashtag.id}>
+                          <RankedPictureHashtag
+                            onClick={() => onClickHashtag(hashtag.hashtagName)}
+                            key={hashtag.id}
+                          >
                             {hashtag.hashtagName}
                           </RankedPictureHashtag>
                         )
