@@ -10,6 +10,7 @@ import Kakao from "../auth/Kakao";
 import PageTitle from "../components/PageTitle";
 import styled from "styled-components";
 import { FontSpan, NoLineLink } from "../components/Common/Commons";
+import { brandColor } from "../components/shared";
 
 const Background = styled.div`
   background-color: #fafafa;
@@ -52,15 +53,14 @@ const LoginInput = styled(Input)`
   height: 12px;
 `;
 
-const LoginBtn = styled.div`
+const LoginBtn = styled.button`
   cursor: pointer;
   border-radius: 12px;
   border: solid 1px #ccc;
   padding: 14.5px;
   margin-bottom: 10px;
   background-color: #0e3870;
-  width: 250px;
-  height: 12px;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,10 +83,19 @@ const SignUpText = styled(FontSpan)`
 `;
 
 const LoginLogo = styled.img`
-  margin-right: 100px;
-  width: 350px;
-  height: 300px;
+  margin-right: 180px;
+  height: 200px;
   margin-bottom: 30px;
+`;
+const LoginForm = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+const ErrorText = styled.span`
+  display: block;
+  font-size: 0.9em;
+  color: ${brandColor};
+  margin: auto;
 `;
 const LOGIN_MUTATION = gql`
   mutation login($username: String!, $password: String!) {
@@ -104,6 +113,9 @@ export default function Login() {
   const createAccountSuccess = location?.state?.message;
 
   const onCompleted = data => {
+    if (loading) {
+      return;
+    }
     const {
       login: { token, ok, error }
     } = data;
@@ -116,18 +128,19 @@ export default function Login() {
       logUserIn(token);
     }
   };
-  const [login] = useMutation(LOGIN_MUTATION, {
+  const [login, { loading }] = useMutation(LOGIN_MUTATION, {
     onCompleted
   });
   const {
     setError,
     register,
     handleSubmit,
-    formState: { errors, isValid }
+    formState: { errors }
   } = useForm();
 
   const onSubmit = data => {
     const { username, password } = data;
+    console.log(data);
     if (data) {
       login({
         variables: { username, password }
@@ -144,15 +157,32 @@ export default function Login() {
           {createAccountSuccess ? (
             <FontSpan>{createAccountSuccess}</FontSpan>
           ) : null}
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <LoginInput placeholder="유저이름" {...register("username")} />
+          <LoginForm onSubmit={handleSubmit(onSubmit)}>
+            <LoginInput
+              placeholder="유저이름"
+              {...register("username", {
+                required: "유저이름을 입력해주세요."
+              })}
+            />
             <LoginInput
               placeholder="비밀번호"
-              {...register("password")}
-              // type="password"
+              {...register("password", {
+                required: "비밀번호를 입력해주세요"
+              })}
             />
-            <LoginBtn onClick={handleSubmit(onSubmit)}>로그인</LoginBtn>
-          </form>
+            <LoginBtn onClick={handleSubmit(onSubmit)}>
+              {loading ? "로그인 중입니다." : "로그인"}
+            </LoginBtn>
+            {errors?.username ? (
+              <ErrorText>{errors.username.message}</ErrorText>
+            ) : null}
+            {errors?.password ? (
+              <ErrorText>{errors.password.message}</ErrorText>
+            ) : null}
+            {errors?.result ? (
+              <ErrorText>{errors.result.message}</ErrorText>
+            ) : null}
+          </LoginForm>
           <SignUpContainer>
             <SignUpText>회원이 아니신가요?</SignUpText>
             <NoLineLink to={routes.signUp}>
