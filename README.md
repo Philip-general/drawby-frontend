@@ -1,68 +1,73 @@
-# Drawby frontend
+# **그림은 내 취미: DrawBy ✏️**
 
-## setting
+그림을 취미로 갖고 있는 사람들을 위한 SNS 플랫폼입니다.
 
-> --save styled-components
-> react-hook-form
-> react-router-dom
-> @apollo/client graphql
-> react-helmet
-> --save @fortawesome/fontawesome-svg-core
-> --save @fortawesome/free-solid-svg-icons
-> --save @fortawesome/react-fontawesome
-> --save @fortawesome/free-brands-svg-icons
-> --save @fortawesome/free-regular-svg-icons
+ApolloGraphQL과 Prisma, PostgresQL을 활용하여 구성하였습니다.
 
-## 기억할 것
+**광주과학기술원 GSS 프로그램의 지원을 받아 제작하였습니다.**
 
-1. instagram 연동하는법 facebook developers
+## 기능
 
-   [https://developers.facebook.com/docs/permissions/reference/?translation](https://developers.facebook.com/docs/permissions/reference/?translation)
+1. 로그인
+   1. 일반 로그인 ( 아이디 + 비밀번호 )
+   2. 소셜 로그인 ( kakao, facebook 구현)
+2. 이미지
+   1. 이미지 업로드 ( with drag & drop )
+   2. 해시태그 등록
+   3. 그림을 클릭하면 이미지가 팝업 형태로 크게 화면 중앙에 나타남
+3. 피드
+   1. 그 주의 컨테스트 작품들 상단에 전시
+   2. 내가 팔로우한 유저들의 그림들이 피드에 나타남
+   3. 댓글, 대댓글 가능
+   4. 마음에 드는 그림을 북마크에 추가하기
+4. 개인 갤러리
+   1. 개인 갤러리, 콘테스트 작품, 북마크한 작품으로 나누어짐
+   2. 개인갤러리에는 본인이 포스팅한 그림들이 나타난다.
+   3. 콘테스트 작품은 그림 업로드시 콘테스트에 참여했던 것들이 나타난다. (수상여부 추가 필요)
+   4. 북마크한 작품에는 북마크 처리한 그림들이 모아져있다.
+5. 팔로우
+   1. 유저 팔로우 이외에도 해시태그 팔로우를 통해 관심사를 등록할 수 있다.
 
-   [instagram_content_publish](https://developers.facebook.com/docs/permissions/reference/instagram_content_publish) 이게 인스타 게시 권한 허락받는거임
+## Display
 
-   연동하려면 https 주소가 필요하다고 함.
+![로그인 페이지](./readmeImg/login.png)
 
-   ngrok 사용하기
+로그인 페이지
 
-   [https://joshua-dev-story.blogspot.com/2020/10/localhost-https-ngrok.html](https://joshua-dev-story.blogspot.com/2020/10/localhost-https-ngrok.html)
+![메인 페이지](./readmeImg/mainFeed.png)
 
-페이스북으로 로그인
-[https://velog.io/@nomadhash/사이드-프로젝트-리액트에서-카카오-로그인-구현하기](https://velog.io/@nomadhash/%EC%82%AC%EC%9D%B4%EB%93%9C-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%EC%B9%B4%EC%B9%B4%EC%98%A4-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0)
-[https://velog.io/@nomadhash/사이드-프로젝트-리액트에서-페이스북-로그인-구현-하기](https://velog.io/@nomadhash/%EC%82%AC%EC%9D%B4%EB%93%9C-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%ED%8E%98%EC%9D%B4%EC%8A%A4%EB%B6%81-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84-%ED%95%98%EA%B8%B0)
-[https://nachwon.github.io/insta-facebook/](https://nachwon.github.io/insta-facebook/)
+메인 페이지
 
-<참고 카카오 로그인>
-[https://developers.kakao.com/docs/latest/ko/kakaologin/common](https://developers.kakao.com/docs/latest/ko/kakaologin/common)
+![기본적으로 그림을 클릭하면 팝업창으로 크게 띄워짐](./readmeImg/popupPage.png)
 
-- react-facebook-login
-  [https://developers.facebook.com/docs/facebook-login/](https://developers.facebook.com/docs/facebook-login/)
+기본적으로 그림을 클릭하면 팝업창으로 크게 띄워짐
 
-2. 인스타에도 글이 자동게시되도록 만들기 (회의때 얘기하자!)
+![프로필 수정 페이지](./readmeImg/editprofile.png)
 
-3. React에서 .env 사용하는 방법
+프로필 수정 페이지
 
-```jsx
-// .env
-REACT_APP_BLABLA = blabla;
+![그림 업로드 페이지](./readmeImg/upload.png)
 
-// code 에서 활용
-process.env.REACT_APP_BLABLA;
-```
+그림 업로드 페이지,
 
-4. frontend에서 api key 숨기기
+이번주 콘테스트 참가 버튼을 눌러 업로드를 하면 현재 진행되고 있는 컨테스트가 해쉬태그로 달려 이미지가 업로드된다. ex) #2021년12월3주차
 
-기본적으로 숨기는게 불가능
+![피드 형태](./readmeImg/onefeed.png)
 
-> > 대신에 개발할때는 그냥 env파일 안에서 변수로 사용해도 됨
+피드 형태
 
-gitignore에 env 추가해서 서버에 올릴때(ex. Netlify) 서버리스로 구성해서
-API 환경변수를 거기서 관리해주면 된다고 함
+![컨테스트 피드](./readmeImg/contest.png)
 
-## To do
+컨테스트 피드
 
-- [ ] social login mutation 바꾸기 (무조건 social id만 가지고 로그인을 진행한다. 보낼때는 "platform" + socialId 로 보내기)
-- [x] social login (FACEBOOK)
-- [x] social login (KAKAO)
-- [ ] Feed 구성
-- [ ] Upload photo (https://ichi.pro/ko/reacteseo-aws-s3e-pail-eul-eoblodeuhaneun-bangbeob-97986780422494) 다중업로드도 생각해야함
+![해쉬태그 피드](./readmeImg/hashtagFeed.png)
+
+해쉬태그 피드
+
+![검색 화면](./readmeImg/search.png)
+
+검색 화면
+
+![나의 갤러리](./readmeImg/myGallery.png)
+
+나의 갤러리
