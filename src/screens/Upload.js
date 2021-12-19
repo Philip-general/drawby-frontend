@@ -23,17 +23,18 @@ const getColor = props => {
 };
 
 const BackGround = styled.div`
+  height: 100vh;
   background-color: #717171;
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 100%;
 `;
 const ModalBox = styled.div`
   display: inline-block;
   max-width: 1000px;
   margin: 40px 30px 100px;
-  height: auto;
+  height: 580px;
   flex: 1;
   display: flex;
   flex-direction: column;

@@ -205,7 +205,7 @@ export default function Picture({
             <IconAction onClick={toggleLike2Picture}>
               <Icon
                 src="/PictureSrc/LikeBtn.png"
-                color={isLiked ? "1" : "2.5"}
+                color={isLiked ? "1" : "3.3"}
               />
             </IconAction>
             <IconAction onClick={focusCommentInput}>

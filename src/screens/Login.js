@@ -13,6 +13,7 @@ import { FontSpan, NoLineLink } from "../components/Common/Commons";
 
 const Background = styled.div`
   background-color: #fafafa;
+  height: 100vh;
   display: flex;
   padding: 50px 100px;
   justify-content: center;
