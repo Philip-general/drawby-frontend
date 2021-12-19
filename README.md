@@ -32,21 +32,31 @@ ApolloGraphQL과 Prisma, PostgresQL을 활용하여 구성하였습니다.
 
 ### 로그인 페이지
 
+---
+
 ![로그인 페이지](./readmeImg/login.png)
 
 ### 메인 페이지
+
+---
 
 ![메인 페이지](./readmeImg/mainFeed.png)
 
 ### 기본적으로 그림을 클릭하면 팝업창으로 크게 띄워짐
 
+---
+
 ![기본적으로 그림을 클릭하면 팝업창으로 크게 띄워짐](./readmeImg/popupPage.png)
 
 ### 프로필 수정 페이지
 
+---
+
 ![프로필 수정 페이지](./readmeImg/editprofile.png)
 
 ### 그림 업로드 페이지,
+
+---
 
 이번주 콘테스트 참가 버튼을 눌러 업로드를 하면 현재 진행되고 있는 컨테스트가 해쉬태그로 달려 이미지가 업로드된다. ex) #2021년12월3주차
 
@@ -54,21 +64,31 @@ ApolloGraphQL과 Prisma, PostgresQL을 활용하여 구성하였습니다.
 
 ### 피드 형태
 
+---
+
 ![피드 형태](./readmeImg/onefeed.png)
 
 ### 컨테스트 피드
+
+---
 
 ![컨테스트 피드](./readmeImg/contest.png)
 
 ### 해쉬태그 피드
 
+---
+
 ![해쉬태그 피드](./readmeImg/hashtagFeed.png)
 
 ### 검색 화면
 
+---
+
 ![검색 화면](./readmeImg/search.png)
 
 ### 나의 갤러리
+
+---
 
 ![나의 갤러리](./readmeImg/myGallery.png)
 
