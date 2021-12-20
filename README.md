@@ -95,3 +95,5 @@ ApolloGraphQL과 Prisma, PostgresQL을 활용하여 구성하였습니다.
 ## 데모
 
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/78997057/146676130-dabdac69-bc30-42a7-b9b3-fee17eb283bd.gif)
+
+[데모영상 유튜브 링크](https://www.youtube.com/watch?v=QNHwLSS_c7A)
