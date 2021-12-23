@@ -27,7 +27,7 @@ function ResizeText({ caption, size = 20, fontColor = "#333" }) {
     if (caption.length > size) {
       setOverSize(true);
     }
-  }, [caption]);
+  }, [caption, size]);
   return (
     <Fragment>
       {((overSize && readMore) || !overSize) && (
