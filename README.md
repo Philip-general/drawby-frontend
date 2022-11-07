@@ -7,7 +7,7 @@ ApolloGraphQL과 Prisma, PostgresQL을 활용하여 구성하였습니다.
 **광주과학기술원 GSS 프로그램의 지원을 받아 제작하였습니다.**
 
 ## 기능
-- [ ] readme 작성하기
+- [x] readme 작성하기
 1. 로그인
    1. 일반 로그인 ( 아이디 + 비밀번호 )
    2. 소셜 로그인 ( kakao, facebook 구현)
